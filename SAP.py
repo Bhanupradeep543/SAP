@@ -30,7 +30,6 @@ data = pd.read_excel(url)
 data=data[data['Main WorkCtr']!='OPRN']
 data1=data[data['Description'].str.contains('PM ')]
 data=data.drop(data[data['Description'].isin(data1['Description'])].index)
-file_details = {"Filename":data_file.name,"FileType":data_file.type,"FileSize":data_file.size}
 st.subheader('Total notifications')
 st.write(data.shape[0])
 #st.subheader("Max. notifications Reported by")
