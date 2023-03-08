@@ -17,8 +17,8 @@ st.markdown(f"""<style>.stApp {{
              background: url("https://www.intouch-quality.com/hubfs/quality-defects-ft-lg.jpg");
              background-size: cover}}
          </style>""",unsafe_allow_html=True)
-st.write("""# SEIL SAP Notification Dashboard """) # Tittle addition
-st.subheader("Select the date range for notifications") 
+st.write("""# SEIL SAP Notifications """) # Tittle addition
+#st.subheader("Select the date range for notifications") 
 #d = st.date_input("From", )
 #e = st.date_input("TO", )
 st.subheader("Select the Planner group for obtaining repeated notifications")
