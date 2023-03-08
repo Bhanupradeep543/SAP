@@ -26,6 +26,7 @@ options = st.multiselect('Select the planner Group',['CIA','CIB','CIC','CID','CI
 c=options[0]
 st.write(c)
 url="https://github.com/Bhanupradeep543/SAP/blob/a80bbccec834d27d20cc07c1f1a37920de113a3e/SAP%20data.xlsx"
+
 data = pd.read_excel(url)
 data=data[data['Main WorkCtr']!='OPRN']
 data1=data[data['Description'].str.contains('PM ')]
