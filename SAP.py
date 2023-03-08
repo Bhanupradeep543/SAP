@@ -25,7 +25,8 @@ st.subheader("Select the Planner group for obtaining repeated notifications")
 options = st.multiselect('Select the planner Group',['CIA','CIB','CIC','CID','CIN','CIV','CNI','EAP','EBP','EBR','MAP','MBP','MBM','MTM'])
 c=options[0]
 st.write(c)
-data = pd.DataFrame(pd.read_excel(data_file))
+url=
+data = pd.read_excel(url)
 data=data[data['Main WorkCtr']!='OPRN']
 data1=data[data['Description'].str.contains('PM ')]
 data=data.drop(data[data['Description'].isin(data1['Description'])].index)
