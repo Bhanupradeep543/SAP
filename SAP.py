@@ -21,17 +21,17 @@ st.write("""# SEIL SAP Notifications """) # Tittle addition
 #st.subheader("Select the date range for notifications") 
 #d = st.date_input("From", )
 #e = st.date_input("TO", )
-st.subheader("Select the Planner group for obtaining repeated notifications")
-options = st.multiselect('Select the planner Group',['CIA','CIB','CIC','CID','CIN','CIV','CNI','EAP','EBP','EBR','MAP','MBP','MBM','MTM'])
-c=options[0]
-st.write(c)
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/SAPdata.xlsx"
 data = pd.read_excel(url)
 data=data[data['Main WorkCtr']!='OPRN']
 data1=data[data['Description'].str.contains('PM ')]
 data=data.drop(data[data['Description'].isin(data1['Description'])].index)
 st.subheader('Total notifications')
-st.write(data.shape[0])
+st.subheader(data.shape[0])
+st.subheader("Select the Planner group for obtaining repeated notifications")
+options = st.multiselect('Select the planner Group',['CIA','CIB','CIC','CID','CIN','CIV','CNI','EAP','EBP','EBR','MAP','MBP','MBM','MTM'])
+c=options[0]
+st.write(c)
 #st.subheader("Max. notifications Reported by")
 #st.bar_chart(data['Reported by'].value_counts().head(10))
 #st.subheader("Max. notifications Planner group wise")
