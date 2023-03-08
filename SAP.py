@@ -25,7 +25,7 @@ st.subheader("Select the Planner group for obtaining repeated notifications")
 options = st.multiselect('Select the planner Group',['CIA','CIB','CIC','CID','CIN','CIV','CNI','EAP','EBP','EBR','MAP','MBP','MBM','MTM'])
 c=options[0]
 st.write(c)
-url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/SAP data.xlsx"
+url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/SAPdata.xlsx"
 data = pd.read_excel(url)
 data=data[data['Main WorkCtr']!='OPRN']
 data1=data[data['Description'].str.contains('PM ')]
