@@ -58,21 +58,7 @@ st.write(rp)
 cs = convert_df(rp) 
 #adding a download button to download csv file
 st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
-
-for i in range(b.shape[0]):
-   plngrp['Created On']=pd.to_datetime(pd.Series(plngrp['Created On']))
-   plngrp['Created On']=plngrp['Created On'].dt.strftime('%Y/%m')
-   st.bar_chart(plngrp['Created On'].value_counts().head(30))
-   data['Created On']=pd.to_datetime(data['Created On']).dt.date
-   newdata=pd.DataFrame()
-for i in range(data.shape[0]):
-  if (data['Created On'][i]>=d) and (data['Created On'][i]<=e) :
-    newdata=newdata.append(data.iloc[i])
-    st.subheader("Repeated notifications in mentioned dates")
-    a=newdata.iloc[:,13].value_counts().head(300)
-    st.write(a)
-def convert_df(df):
-  return df.to_csv().encode('utf-8')
-csv = convert_df(a) # calling the function to convert the output file into CSV
-#adding a download button to download csv file
-st.download_button(label="Download",data=csv,file_name='Repeated notifications.csv',mime='text/csv')
+st.subheader("Select the Equipment")
+options = st.multiselect('Select the planner Group',['IDF-1A','IDF-1B','IDF-2A','IDF-2B','FDF-1A','FDF-1B','FDF-2A','FDF-2B','EBP','EBR','MAP','MBP','MBM','MTM'])
+c=options[0]
+st.write(c)
