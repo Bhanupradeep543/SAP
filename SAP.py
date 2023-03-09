@@ -66,5 +66,5 @@ options = st.multiselect('Select the planner Group',['IDF-1A','IDF-1B','IDF-2A',
 g=options[0]
 st.write(g)
 
-data2=data[data['System'].str.contains('IDF-2A')]
+data2=data[data['Functional Loc.'].str.contains('1I01-20-HNC10')]
 st.write(data2)
