@@ -28,6 +28,19 @@ data1=data[data['Description'].str.contains('PM ')]
 data=data.drop(data[data['Description'].isin(data1['Description'])].index)
 st.subheader('Total notifications')
 st.subheader(data.shape[0])
+column_name = 'System'
+word_counts = data[column_name].value_counts()
+repeated_words = word_counts[word_counts > 15]
+grouped = data.groupby(column_name)
+repeated_rows = grouped.apply(lambda x: x[x[column_name].isin(repeated_words.index)])
+st.subheader("Top 100 repeated notifications from SEIL P1")
+rp1=repeated_rows['System'].value_counts().head(100)
+st.write(rp1)
+def convert_df(df):
+ return df.to_csv().encode('utf-8')
+cs = convert_df(repeated_rows) 
+#adding a download button to download csv file
+st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
 st.subheader("Select the Planner group for obtaining repeated notifications")
 options = st.multiselect('Select the planner Group',['CIA','CIB','CIC','CID','CIN','CIV','CNI','EAP','EBP','EBR','MAP','MBP','MBM','MTM'])
 c=options[0]
@@ -42,20 +55,10 @@ st.subheader("Repeated notifications Planner group wise")
 b=data[data['Planner group']==c]
 rp=b['System'].value_counts().head(20)
 st.write(rp)
-
-column_name = 'System'
-word_counts = data[column_name].value_counts()
-repeated_words = word_counts[word_counts > 15]
-grouped = data.groupby(column_name)
-repeated_rows = grouped.apply(lambda x: x[x[column_name].isin(repeated_words.index)])
-st.subheader("Top 100 repeated notifications from SEIL P1")
-rp1=repeated_rows['System'].value_counts().head(100)
-st.write(rp1)
-def convert_df(df):
- return df.to_csv().encode('utf-8')
-cs = convert_df(repeated_rows) 
+cs = convert_df(rp) 
 #adding a download button to download csv file
 st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
+
 for i in range(b.shape[0]):
    plngrp['Created On']=pd.to_datetime(pd.Series(plngrp['Created On']))
    plngrp['Created On']=plngrp['Created On'].dt.strftime('%Y/%m')
