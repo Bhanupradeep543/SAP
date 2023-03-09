@@ -65,6 +65,6 @@ options = st.multiselect('Select the planner Group',['IDF-1A','IDF-1B','IDF-2A',
                                                     ,'MILL-2G','MILL-1G','TDBFP-1A','TDBFP-1B','TDBFP-2A','TDBFP-2B','MDBFP'])
 g=options[0]
 st.write(g)
-data = data.fillna("missing")
-data2=data[data['System'].str.contains(g,case=False)]
+
+data2=data[data['System'].str.contains('IDF-2A')]
 st.write(data2)
