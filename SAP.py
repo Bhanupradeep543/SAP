@@ -36,8 +36,8 @@ st.subheader(data.shape[0])
 #st.subheader("Top 100 repeated notifications from SEIL P1")
 #rp1=repeated_rows['System'].value_counts().head(100)
 #st.write(rp1)
-#def convert_df(df):
-# return df.to_csv().encode('utf-8')
+def convert_df(df):
+ return df.to_csv().encode('utf-8')
 #cs = convert_df(repeated_rows) 
 #adding a download button to download csv file
 #st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
