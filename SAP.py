@@ -65,7 +65,9 @@ options = st.multiselect('Select the planner Group',['IDF-1A','IDF-1B','IDF-2A',
                                                     ,'MILL-2G','MILL-1G','TDBFP-1A','TDBFP-1B','TDBFP-2A','TDBFP-2B','MDBFP'])
 g=options[0]
 st.write(g)
-dict={'IDF-2A':'20-HNC10'}
-st.write(dict[g])
-data2=data[data['Functional Loc.'].str.contains(g)]
+dict={'IDF-2A':'20-HNC10','IDF-1A':'20-HNC10'}
+data2=data[data['Functional Loc.'].str.contains(dict[g])]
 st.write(data2)
+cs = convert_df(data2) 
+#adding a download button to download csv file
+st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
