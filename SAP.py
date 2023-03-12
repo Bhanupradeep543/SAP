@@ -69,7 +69,11 @@ data2=data[data['Functional Loc.'].str.contains(dict[g])]
 data2 = data2.drop(columns=['Notification','Order','Priority','User status','Req. start','Required End','Created By','System status','MaintenancePlan','Changed by'
                             ,'Changed On','MaintPlant','Reported by'])
 st.write(data2)
-st.subheader("TOP 5 repeated defects in the g ")
 cs = convert_df(data2) 
-#adding a download button to download csv file
 st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
+st.subheader("TOP 5 repeated defects in the above equipment")
+rp=data2['System'].value_counts().head(5)
+st.write(rp)
+
+#adding a download button to download csv file
+
