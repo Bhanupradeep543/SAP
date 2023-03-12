@@ -67,7 +67,7 @@ g=options[0]
 st.write(g)
 dict={'IDF-2A':'20-HNC10','IDF-1A':'20-HNC10'}
 data2=data[data['Functional Loc.'].str.contains(dict[g])]
-del data2[data2.columns[0,1,2,3]]
+
 st.write(data2)
 cs = convert_df(data2) 
 #adding a download button to download csv file
