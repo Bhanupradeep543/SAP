@@ -70,7 +70,7 @@ dict={'IDF-2A':'20-HNC10','IDF-1A':'10-HNC10','IDF-1B':'10-HNC20','IDF-2B':'20-H
       ,'APH-2B':'20-HLD20','MILL-1A':'10-HFV10','MILL-2A':'20-HFV10','MILL-1B':'10-HFV20','MILL-1C':'10-HFV30'
       ,'MILL-2B':'20-HFV20','MILL-2C':'20-HFV30','MILL-1D':'10-HFV40','MILL-2D':'20-HFV40','MILL-2E':'20-HFV50'
       ,'MILL-1E':'10-HFV50','MILL-1F':'10-HFV60','MILL-2F':'20-HFV60','MILL-2G':'20-HFV70','MILL-1G':'10-HFV70'
-      ,'MILL-2H':'20-HFV80','MILL-1H':'10-HFV80''TDBFP-1A':'10-LAA20','TDBFP-1B':'10-LAA30'
+      ,'MILL-2H':'20-HFV80','MILL-1H':'10-HFV80','TDBFP-1A':'10-LAA20','TDBFP-1B':'10-LAA30'
       ,'TDBFP-2A':'20-LAA20','TDBFP-2B':'20-LAA30','U1 MDBFP':'10-LAA10','U2 MDBFP':'20-LAA10'}
 data2=data[data['Functional Loc.'].str.contains(dict[g])]
 data2 = data2.drop(columns=['Notification','Order','Priority','User status','Req. start','Required End','Created By','System status','MaintenancePlan','Changed by'
