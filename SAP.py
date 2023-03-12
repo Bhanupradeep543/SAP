@@ -69,7 +69,7 @@ dict={'IDF-2A':'20-HNC10','IDF-1A':'20-HNC10'}
 data2=data[data['Functional Loc.'].str.contains(dict[g])]
 data2 = data2.drop(columns=['Notification','Order','Priority','User status','Req. start','Required End','Created By','System status','MaintenancePlan','Changed by'
                             ,'Changed On','MaintPlant','Reported by'])
-
+st.subheader("TOP 5 repeated defects in the ",g)
 st.write(data2)
 cs = convert_df(data2) 
 #adding a download button to download csv file
