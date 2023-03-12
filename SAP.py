@@ -64,13 +64,12 @@ options = st.multiselect('Select the planner Group',['IDF-1A','IDF-1B','IDF-2A',
                                                     ,'MILL-2B','MILL-2C','MILL-1D','MILL-2D','MILL-2E','MILL-1E','MILL-1F','MILL-2F'
                                                     ,'MILL-2G','MILL-1G','TDBFP-1A','TDBFP-1B','TDBFP-2A','TDBFP-2B','MDBFP'])
 g=options[0]
-st.write(g)
 dict={'IDF-2A':'20-HNC10','IDF-1A':'20-HNC10'}
 data2=data[data['Functional Loc.'].str.contains(dict[g])]
 data2 = data2.drop(columns=['Notification','Order','Priority','User status','Req. start','Required End','Created By','System status','MaintenancePlan','Changed by'
                             ,'Changed On','MaintPlant','Reported by'])
-st.subheader("TOP 5 repeated defects in the ",g)
 st.write(data2)
+st.subheader("TOP 5 repeated defects in the g ")
 cs = convert_df(data2) 
 #adding a download button to download csv file
 st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
