@@ -66,6 +66,6 @@ options = st.multiselect('Select the planner Group',['IDF-1A','IDF-1B','IDF-2A',
 g=options[0]
 st.write(g)
 dict={'IDF-2A':'20-HNC10'}
-st.write(dict(g))
+st.write(dict[g])
 data2=data[data['Functional Loc.'].str.contains(g)]
 st.write(data2)
