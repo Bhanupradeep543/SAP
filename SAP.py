@@ -81,7 +81,7 @@ cs = convert_df(data2)
 st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
 st.subheader("TOP 5 repeated defects in the above equipment")
 rp=data2['System'].value_counts().head(5)
-if g='U1 sootblowing system' or 'U2 sootblowing system': 
+if g=='U1 sootblowing system':
     st.write("hello0")
 
 #adding a download button to download csv file
