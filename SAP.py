@@ -82,7 +82,7 @@ st.download_button(label="Download",data=cs,file_name='Repeated notifications.cs
 st.subheader("TOP 5 repeated defects in the above equipment")
 rp=data2['System'].value_counts().head(5)
 if g=='U1 sootblowing system':
-    st.write("hello0")
+    st.write("hello")
 
 #adding a download button to download csv file
 
