@@ -81,8 +81,11 @@ cs = convert_df(data2)
 st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
 st.subheader("TOP 5 repeated defects in the above equipment")
 rp=data2['System'].value_counts().head(5)
+st.write(rp)
+st.subheader("No.of defefcts planner group wise")
+st.write(data2['Main WorkCtr'].value_counts())
 if g=='U1 sootblowing system':
-   data3=data2[data2['Description'].str.contains('struck ')]
+   data3=data2[data2['Description'].str.contains('struck|strucked|stucked')]
    data4=data2[data2['Description'].str.contains('overload ')]
    data5=data2[data2['Description'].str.contains('leak ')]
    st.write("Sootblowers Srtucking defect")
@@ -90,7 +93,17 @@ if g=='U1 sootblowing system':
    st.write("Sootblowers overload defect")
    st.write(data4['System'].value_counts())
    st.write("Sootblowers flange leak")
-   st.write(data5['System'].value_counts()) 
+   st.write(data5['System'].value_counts())
+elif g=='U2 sootblowing system':
+   data3=data2[data2['Description'].str.contains('struck|strucked|stucked')]
+   data4=data2[data2['Description'].str.contains('overload ')]
+   data5=data2[data2['Description'].str.contains('leak ')]
+   st.write("Sootblowers Srtucking defect")
+   st.write(data3['System'].value_counts())
+   st.write("Sootblowers overload defect")
+   st.write(data4['System'].value_counts())
+   st.write("Sootblowers flange leak")
+   st.write(data5['System'].value_counts())
 
 #adding a download button to download csv file
 
