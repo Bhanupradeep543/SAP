@@ -86,24 +86,31 @@ st.subheader("No.of defefcts planner group wise")
 st.write(data2['Main WorkCtr'].value_counts())
 if g=='U1 sootblowing system':
    data3=data2[data2['Description'].str.contains('struck|strucked|stucked, case=False')]
-   data4=data2[data2['Description'].str.contains('overload ')]
-   data5=data2[data2['Description'].str.contains('leak ')]
+   data4=data2[data2['Description'].str.contains('overload|olr, case=False')]
+   data5=data2[data2['Description'].str.contains('leak, case=False')]
+   data6=data2[data2['Description'].str.contains('lance,case=False ')]
    st.write("Sootblowers Srtucking defect")
    st.write(data3['System'].value_counts())
    st.write("Sootblowers overload defect")
    st.write(data4['System'].value_counts())
    st.write("Sootblowers flange leak")
    st.write(data5['System'].value_counts())
+   st.write("Sootblowers lance tube defects")
+   st.write(data6['System'].value_counts())
+  
 elif g=='U2 sootblowing system':
    data3=data2[data2['Description'].str.contains('struck|strucked|stucked', case=False)]
-   data4=data2[data2['Description'].str.contains('overload ')]
-   data5=data2[data2['Description'].str.contains('leak ')]
+   data4=data2[data2['Description'].str.contains('overload|olr, case=False')]
+   data5=data2[data2['Description'].str.contains('leak,case=False ')]
+   data6=data2[data2['Description'].str.contains('lance,case=False ')]
    st.write("Sootblowers Srtucking defect")
    st.write(data3['System'].value_counts())
    st.write("Sootblowers overload defect")
    st.write(data4['System'].value_counts())
    st.write("Sootblowers flange leak")
    st.write(data5['System'].value_counts())
+   st.write("Sootblowers lance tube defects")
+   st.write(data6['System'].value_counts())
 
 #adding a download button to download csv file
 
