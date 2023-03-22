@@ -85,8 +85,12 @@ if g=='U1 sootblowing system':
    data3=data2[data2['Description'].str.contains('struck ')]
    data4=data2[data2['Description'].str.contains('overload ')]
    data5=data2[data2['Description'].str.contains('leak ')]
-   st.write("Total struck")
-   st.write(data3.value_counts())
+   st.write("Sootblowers Srtucking defect")
+   st.write(data3['System'].value_counts())
+   st.write("Sootblowers overload defect")
+   st.write(data4['System'].value_counts())
+   st.write("Sootblowers flange leak")
+   st.write(data5['System'].value_counts()) 
 
 #adding a download button to download csv file
 
