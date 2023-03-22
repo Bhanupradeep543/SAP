@@ -85,7 +85,7 @@ st.write(rp)
 st.subheader("No.of defefcts planner group wise")
 st.write(data2['Main WorkCtr'].value_counts())
 if g=='U1 sootblowing system':
-   data3=data2[data2['Description'].str.contains('struck|strucked|stucked')]
+   data3=data2[data2['Description'].str.contains('struck|strucked|stucked, case=False')]
    data4=data2[data2['Description'].str.contains('overload ')]
    data5=data2[data2['Description'].str.contains('leak ')]
    st.write("Sootblowers Srtucking defect")
@@ -95,7 +95,7 @@ if g=='U1 sootblowing system':
    st.write("Sootblowers flange leak")
    st.write(data5['System'].value_counts())
 elif g=='U2 sootblowing system':
-   data3=data2[data2['Description'].str.contains('struck|strucked|stucked')]
+   data3=data2[data2['Description'].str.contains('struck|strucked|stucked', case=False)]
    data4=data2[data2['Description'].str.contains('overload ')]
    data5=data2[data2['Description'].str.contains('leak ')]
    st.write("Sootblowers Srtucking defect")
