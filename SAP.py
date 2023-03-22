@@ -86,8 +86,8 @@ data2['Created On']=pd.to_datetime(data2['Created On'])
 data2['Created On']=data2['Created On'].dt.strftime('%m/%Y')
 st.write(data2)
 st.subheader("Select the date and year") 
-d = st.date_input("Enter a date in month/year format:", value=datetime.today(), format="MM/YYYY")
-e = st.date_input("Enter a date in month/year format:", value=datetime.today(), format="MM/YYYY")
+d = st.date_input("Enter a date in month/year format:", value=datetime.today())
+e = st.date_input("Enter a date in month/year format:", value=datetime.today())
 for i in range(data2.shape[0]):
   if (data2['Created On'][i]>=d) and (data2['Created On'][i]<=e) :
     newdata=newdata.append(data2.iloc[i])
