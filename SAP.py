@@ -82,11 +82,17 @@ st.write(rp)
 st.subheader("No.of defefcts planner group wise")
 st.write(data2['Main WorkCtr'].value_counts())
 data2['Created On']=pd.to_datetime(data2['Created On'])
-data2['Created On']=data2['Created On'].dt.strftime('%Y/%m')
+data2['Created On']=data2['Created On'].dt.strftime('%m/%Y')
 st.write(data2)
 st.subheader("Select the date and year") 
-d = st.date_input("From", )
-e = st.date_input("TO", )
+d = st.date_input(
+    "Select a date From:",
+    datetime.date.today().replace(day=1),min_value=datetime.date(2016, 1, 1),
+    max_value=datetime.date(2022, 12, 31),format="MMM YYYY")
+e = st.date_input(
+    "Select a date From:",
+    datetime.date.today().replace(day=1),min_value=datetime.date(2016, 1, 1),
+  max_value=datetime.date(2022, 12, 31),format="MMM YYYY")
 for i in range(data2.shape[0]):
   if (data2['Created On'][i]>=d) and (data2['Created On'][i]<=e) :
     newdata=newdata.append(data2.iloc[i])
