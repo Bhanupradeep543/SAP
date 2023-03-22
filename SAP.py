@@ -12,7 +12,7 @@ import seaborn as sb
 import matplotlib.pyplot as plt
 import streamlit as st
 import io
-import datetime
+from datetime import datetime
 # choosing the image for application background directly from web URL
 st.markdown(f"""<style>.stApp {{                        
              background: url("https://www.intouch-quality.com/hubfs/quality-defects-ft-lg.jpg");
@@ -86,14 +86,10 @@ data2['Created On']=pd.to_datetime(data2['Created On'])
 data2['Created On']=data2['Created On'].dt.strftime('%m/%Y')
 st.write(data2)
 st.subheader("Select the date and year") 
-d = st.date_input(
-    "Select a date From:",
-    datetime.date.today().replace(day=1),min_value=datetime.date(2016, 1, 1),
-    max_value=datetime.date(2022, 12, 31),format="MMM YYYY")
-e = st.date_input(
-    "Select a date From:",
-    datetime.date.today().replace(day=1),min_value=datetime.date(2016, 1, 1),
-  max_value=datetime.date(2022, 12, 31),format="MMM YYYY")
+d = st.date_input("Select a month and year", ,min_value=datetime.date(2016, 1, 1),
+  max_value=datetime.date(2022, 12, 31),value=datetime.today(), format="MM/YYYY")
+e = st.date_input("Select a month and year", ,min_value=datetime.date(2016, 1, 1),
+  max_value=datetime.date(2022, 12, 31),value=datetime.today(), format="MM/YYYY")
 for i in range(data2.shape[0]):
   if (data2['Created On'][i]>=d) and (data2['Created On'][i]<=e) :
     newdata=newdata.append(data2.iloc[i])
