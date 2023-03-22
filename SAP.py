@@ -76,14 +76,21 @@ dict={'IDF-2A':'20-HNC10','IDF-1A':'10-HNC10','IDF-1B':'10-HNC20','IDF-2B':'20-H
 data2=data[data['Functional Loc.'].str.contains(dict[g])]
 data2 = data2.drop(columns=['Notification','Order','Priority','User status','Req. start','Required End','Created By','System status','MaintenancePlan','Changed by'
                             ,'Changed On','MaintPlant','Reported by'])
-st.write(data2)
-cs = convert_df(data2) 
-st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
 st.subheader("TOP 5 repeated defects in the above equipment")
 rp=data2['System'].value_counts().head(5)
 st.write(rp)
 st.subheader("No.of defefcts planner group wise")
 st.write(data2['Main WorkCtr'].value_counts())
+st.subheader("Select the date and year") 
+d = st.date_input("From", )
+e = st.date_input("TO", )
+for i in range(data2.shape[0]):
+  if (data2['Created On'][i]>=d) and (data2['Created On'][i]<=e) :
+    newdata=newdata.append(data2.iloc[i])
+st.write(newdata)
+cs = convert_df(newdata) 
+st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
+
 if g=='U1 sootblowing system':
    data3=data2[data2['Description'].str.contains('struck|strucked|stucked|STRUCK|STUCK')]
    data4=data2[data2['Description'].str.contains('overload|olr')]
