@@ -85,7 +85,7 @@ st.write(data2['Main WorkCtr'].value_counts())
 data2['Created On']=pd.to_datetime(data2['Created On'])
 data2['Created On']=data2['Created On'].dt.strftime('%m/%Y')
 
-st.bar_chart(data=data2['Created On'],x=data2['Created On'].value_counts(),y=year)
+st.bar_chart(data2['Created On'].value_counts().head(7))
 st.write(data2)
 cs = convert_df(data2) 
 st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
