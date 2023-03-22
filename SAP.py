@@ -81,6 +81,12 @@ st.subheader("TOP 5 repeated defects in the above equipment")
 rp=data2['System'].value_counts().head(5)
 st.write(rp)
 st.subheader("No.of defefcts planner group wise")
+fig, ax = plt.subplots()
+ax.pie(data2['Main WorkCtr'].value_counts(),autopct='%1.1f%%')
+ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+# Display the chart in Streamlit
+st.pyplot(fig)
 st.write(data2['Main WorkCtr'].value_counts())
 data2['Created On']=pd.to_datetime(data2['Created On'])
 data2['Created On']=data2['Created On'].dt.strftime('%m/%Y')
