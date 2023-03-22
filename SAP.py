@@ -85,14 +85,7 @@ st.write(data2['Main WorkCtr'].value_counts())
 data2['Created On']=pd.to_datetime(data2['Created On'])
 data2['Created On']=data2['Created On'].dt.strftime('%m/%Y')
 st.write(data2)
-st.subheader("Select the date and year") 
-d = st.date_input("Enter a date in month/year format:")
-e = st.date_input("Enter a date in month/year format:")
-for i in range(data2.shape[0]):
-  if (data2['Created On'][i]>=d) and (data2['Created On'][i]<=e) :
-    newdata=newdata.append(data2.iloc[i])
-st.write(newdata)
-cs = convert_df(newdata) 
+cs = convert_df(data2) 
 st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
 
 if g=='U1 sootblowing system':
