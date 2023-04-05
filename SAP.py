@@ -60,7 +60,7 @@ def convert_df(df):
 #adding a download button to download csv file
 #st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
 st.subheader("Select range of the Month and year")
-imn = st.number_input('Enter month and year in mm/yyyy format')
+imn = st.number_input('Enter month and year',value=0)
 st.write(imn)
 st.subheader("Select the Equipment/System")
 options = st.multiselect('Select the planner Group',['IDF-1A','IDF-1B','IDF-2A','IDF-2B','FDF-1A','FDF-1B','FDF-2A','FDF-2B','PAF-1A','PAF-1B','PAF-2A','PAF-2B'
