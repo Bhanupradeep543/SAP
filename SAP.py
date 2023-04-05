@@ -59,9 +59,17 @@ def convert_df(df):
 #cs = convert_df(rp) 
 #adding a download button to download csv file
 #st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
-st.subheader("Select range of the Month and year")
-imn = st.number_input('Enter month and year',value=0)
-st.write(imn)
+months = [datetime.date(2000, m, 1).strftime('%B') for m in range(1, 13)]
+
+# Define a range of years
+years = range(2020, 2031)
+
+# Create a selectbox for month and year
+selected_month = st.selectbox('Select a month:', months)
+selected_year = st.selectbox('Select a year:', years)
+
+# Display the selected month and year
+st.write('You selected:', selected_month, selected_year)
 st.subheader("Select the Equipment/System")
 options = st.multiselect('Select the planner Group',['IDF-1A','IDF-1B','IDF-2A','IDF-2B','FDF-1A','FDF-1B','FDF-2A','FDF-2B','PAF-1A','PAF-1B','PAF-2A','PAF-2B'
                                                      ,'APH-1A','APH-1B','APH-2A','APH-2B','MILL-1A','MILL-2A','MILL-1B','MILL-1C'
