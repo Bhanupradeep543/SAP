@@ -60,13 +60,13 @@ def convert_df(df):
 #adding a download button to download csv file
 #st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
 
-st.subheader("Select the Equipment/System")
-options = st.multiselect('Select the planner Group',['IDF-1A','IDF-1B','IDF-2A','IDF-2B','FDF-1A','FDF-1B','FDF-2A','FDF-2B','PAF-1A','PAF-1B','PAF-2A','PAF-2B'
+st.subheader("Select the Area/System/Equipment")
+options = st.multiselect('Select the Area/System/Equipment',['BLR-1','BLR-2','TG-1','TG-2','IDF-1A','IDF-1B','IDF-2A','IDF-2B','FDF-1A','FDF-1B','FDF-2A','FDF-2B','PAF-1A','PAF-1B','PAF-2A','PAF-2B'
                                                      ,'APH-1A','APH-1B','APH-2A','APH-2B','MILL-1A','MILL-2A','MILL-1B','MILL-1C'
                                                     ,'MILL-2B','MILL-2C','MILL-1D','MILL-2D','MILL-2E','MILL-1E','MILL-1F','MILL-2F'
                                                     ,'MILL-2G','MILL-1G','TDBFP-1A','TDBFP-1B','TDBFP-2A','TDBFP-2B','MDBFP','U1 sootblowing system','U2 sootblowing system'])
 g=options[0]
-dict={'IDF-2A':'20-HNC10','IDF-1A':'10-HNC10','IDF-1B':'10-HNC20','IDF-2B':'20-HNC20','FDF-1A':'10-HLB10'
+dict={'BLR-1':'','BLR-2':'','TG-1':'','TG-2':'','IDF-2A':'20-HNC10','IDF-1A':'10-HNC10','IDF-1B':'10-HNC20','IDF-2B':'20-HNC20','FDF-1A':'10-HLB10'
       ,'FDF-1B':'10-HLB20','FDF-2A':'20-HLB10','FDF-2B':'20-HLB20','PAF-1A':'10-HFD10','PAF-1B':'10-HFD20'
       ,'PAF-2A':'20-HFD10','PAF-2B':'20-HFD20','APH-1A':'10-HLD10','APH-1B':'10-HLD20','APH-2A':'20-HLD10'
       ,'APH-2B':'20-HLD20','MILL-1A':'10-HFV10','MILL-2A':'20-HFV10','MILL-1B':'10-HFV20','MILL-1C':'10-HFV30'
