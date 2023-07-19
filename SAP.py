@@ -66,8 +66,8 @@ options = st.multiselect('Select the Area/System/Equipment',['BLR-1','BLR-2','TG
                                                     ,'MILL-2B','MILL-2C','MILL-1D','MILL-2D','MILL-2E','MILL-1E','MILL-1F','MILL-2F'
                                                     ,'MILL-2G','MILL-1G','TDBFP-1A','TDBFP-1B','TDBFP-2A','TDBFP-2B','MDBFP','U1 sootblowing system','U2 sootblowing system'])
 g=options[0]
-dict={'BLR-1':['10-HNC10','10-HNC20',10-HLB10','10-HLB20','10-HFD10',''10-HFD20','10-HLD10','10-HLD20','10-HFV10','10-HFV20','10-HFV30','10-HFV40','10-HFV50','10-HFV60','10-HFV70','10-HFV80']
-      ,'BLR-2':['20-HNC10','20-HNC20',20-HLB10','20-HLB20','20-HFD10',''20-HFD20','20-HLD10','20-HLD20','20-HFV10','20-HFV20','20-HFV30','20-HFV40','20-HFV50','20-HFV60','20-HFV70','20-HFV80']
+dict={'BLR-1':['10-HNC10','10-HNC20','10-HLB10','10-HLB20','10-HFD10','10-HFD20','10-HLD10','10-HLD20','10-HFV10','10-HFV20','10-HFV30','10-HFV40','10-HFV50','10-HFV60','10-HFV70','10-HFV80']
+      ,'BLR-2':['20-HNC10','20-HNC20','20-HLB10','20-HLB20','20-HFD10','20-HFD20','20-HLD10','20-HLD20','20-HFV10','20-HFV20','20-HFV30','20-HFV40','20-HFV50','20-HFV60','20-HFV70','20-HFV80']
       ,'TG-1':'','TG-2':'','IDF-2A':'20-HNC10','IDF-1A':'10-HNC10','IDF-1B':'10-HNC20','IDF-2B':'20-HNC20'
       ,'FDF-1A':'10-HLB10'
       ,'FDF-1B':'10-HLB20','FDF-2A':'20-HLB10','FDF-2B':'20-HLB20','PAF-1A':'10-HFD10','PAF-1B':'10-HFD20'
