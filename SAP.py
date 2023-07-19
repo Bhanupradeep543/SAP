@@ -78,10 +78,10 @@ dict={'BLR-1':['10-HNC10','10-HNC20','10-HLB10','10-HLB20','10-HFD10','10-HFD20'
       ,'MILL-2H':'20-HFV80','MILL-1H':'10-HFV80','TDBFP-1A':'10-LAA20','TDBFP-1B':'10-LAA30'
       ,'TDBFP-2A':'20-LAA20','TDBFP-2B':'20-LAA30','U1 MDBFP':'10-LAA10','U2 MDBFP':'20-LAA10','U1 sootblowing system':'10-HCB51'
       ,'U2 sootblowing system':'20-HCB51'}
-data2=data[data['Functional Loc.'].str.contains(dict[g])]
+data2=data[data['Functional Loc.'].str.contains('|'.join(dict[g]))]
 data2 = data2.drop(columns=['Notification','Order','Priority','User status','Req. start','Required End','Created By','System status','MaintenancePlan','Changed by'
                             ,'Changed On','MaintPlant','Reported by'])
-st.subheader("TOP 5 repeated defects in the above equipment")
+st.subheader("TOP 5 repeated defects in the above System/equipment")
 rp=data2['System'].value_counts().head(5)
 st.write(rp)
 st.subheader("No.of defefcts planner group wise")
