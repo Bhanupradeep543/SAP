@@ -20,7 +20,7 @@ st.markdown(f"""<style>.stApp {{
          </style>""",unsafe_allow_html=True)
 st.write("""SEIL SAP Notifications """) # Tittle addition
 #st.write('Select the analysis Areawise /Equipment wise')zzz
-options = st.multiselect("select the Area/System/Equipment',['Area Wise','Equipment wise'])
+options = st.multiselect('select the Area/System/Equipment',['Area Wise','Equipment wise'])
 h=options[0]
 if h=='Area Wise':
   st.write('area wise')
