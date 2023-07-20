@@ -14,28 +14,21 @@ import streamlit as st
 import io
 from datetime import datetime
 # choosing the image for application background directly from web URL
-st.set_page_config(
-    page_title="Multipage App",
-    page_icon="👋",
-)
-
-st.title("Main Page")
-st.sidebar.success("Select a page above.")
 st.markdown(f"""<style>.stApp {{                        
              background: url("https://www.intouch-quality.com/hubfs/quality-defects-ft-lg.jpg");
              background-size: cover}}
          </style>""",unsafe_allow_html=True)
 st.write("""# SEIL SAP Notifications """) # Tittle addition
+check = st.checkbox("Click here")
+st.write('Select the type of analysis Areawise /Equipment wise', check)
+if check:
+   st.write("Area wise")
 
+check_2 = st.checkbox("Uncheck to remove cake", value=True)
+st.write("State of 2nd checkbox", check_2)
 
-if "my_input" not in st.session_state:
-    st.session_state["my_input"] = ""
-
-my_input = st.text_input("Input a text here", st.session_state["my_input"])
-submit = st.button("Submit")
-if submit:
-    st.session_state["my_input"] = my_input
-    st.write("You have entered: ", my_input)
+if check_2:
+   st.write(":cake:"*102)
 #st.subheader("Select the date range for notifications") 
 #d = st.date_input("From", )
 #e = st.date_input("TO", )
