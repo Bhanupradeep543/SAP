@@ -19,7 +19,14 @@ st.markdown(f"""<style>.stApp {{
              background-size: cover}}
          </style>""",unsafe_allow_html=True)
 st.write("""SEIL SAP Notifications """) # Tittle addition
-#st.write('Select the analysis Areawise /Equipment wise')zzz
+url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/SAPdata.xlsx"
+data = pd.read_excel(url)
+data=data[data['Main WorkCtr']!='OPRN']
+data1=data[data['Description'].str.contains('PM ')]
+data=data.drop(data[data['Description'].isin(data1['Description'])].index)
+st.subheader('Total SAP notifications considered for analysis')
+st.subheader(data.shape[0])
+
 options = st.multiselect('select the Area/System/Equipment',['Area Wise','Equipment wise'])
 h=options[0]
 if h=='Area Wise':
@@ -52,13 +59,7 @@ elif h=='Equipment wise':
 #st.subheader("Select the date range for notifications") 
 #d = st.date_input("From", )
 #e = st.date_input("TO", )
-url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/SAPdata.xlsx"
-data = pd.read_excel(url)
-data=data[data['Main WorkCtr']!='OPRN']
-data1=data[data['Description'].str.contains('PM ')]
-data=data.drop(data[data['Description'].isin(data1['Description'])].index)
-st.subheader('Total notifications')
-st.subheader(data.shape[0])
+
 #column_name = 'System'
 #word_counts = data[column_name].value_counts()
 #repeated_words = word_counts[word_counts > 15]
@@ -95,6 +96,8 @@ def convert_df(df):
 data2=data[data['Functional Loc.'].str.contains(dict[g])]
 data2 = data2.drop(columns=['Notification','Order','Priority','User status','Req. start','Required End','Created By','System status','MaintenancePlan','Changed by'
                             ,'Changed On','MaintPlant','Reported by'])
+st.subheader("Total defects in the above System/equipment")
+rp=data2['System'].value_counts()
 st.subheader("TOP 5 repeated defects in the above System/equipment")
 rp=data2['System'].value_counts().head(5)
 st.write(rp)
