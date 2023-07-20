@@ -19,16 +19,15 @@ st.markdown(f"""<style>.stApp {{
              background-size: cover}}
          </style>""",unsafe_allow_html=True)
 st.write("""# SEIL SAP Notifications """) # Tittle addition
-check = st.checkbox("Click here")
-st.write('Select the type of analysis Areawise /Equipment wise', check)
-if check:
-   st.write("Area wise")
+#st.write('Select the analysis Areawise /Equipment wise')zzz
+options = st.multiselect('Select the Area/System/Equipment',['Area Wise','Equipment wise'])
+h=options[0]
+if h=='Area Wise':
+  sb.write('area wise')
+elif h=='Equipment wise':
+  sb.write ('Equipment wise')
+  
 
-check_2 = st.checkbox("Uncheck to remove cake", value=True)
-st.write("State of 2nd checkbox", check_2)
-
-if check_2:
-   st.write(":cake:"*102)
 #st.subheader("Select the date range for notifications") 
 #d = st.date_input("From", )
 #e = st.date_input("TO", )
