@@ -23,9 +23,9 @@ st.write("""# SEIL SAP Notifications """) # Tittle addition
 options = st.multiselect('Select the Area/System/Equipment',['Area Wise','Equipment wise'])
 h=options[0]
 if h=='Area Wise':
-  sb.write('area wise')
+  st.write('area wise')
 elif h=='Equipment wise':
-  sb.write ('Equipment wise')
+  st.write ('Equipment wise')
   
 
 #st.subheader("Select the date range for notifications") 
