@@ -14,11 +14,6 @@ import streamlit as st
 import io
 from datetime import datetime
 # choosing the image for application background directly from web URL
-st.markdown(f"""<style>.stApp {{                        
-             background: url("https://www.intouch-quality.com/hubfs/quality-defects-ft-lg.jpg");
-             background-size: cover}}
-         </style>""",unsafe_allow_html=True)
-st.write("""# SEIL SAP Notifications """) # Tittle addition
 st.set_page_config(
     page_title="Multipage App",
     page_icon="👋",
@@ -26,6 +21,12 @@ st.set_page_config(
 
 st.title("Main Page")
 st.sidebar.success("Select a page above.")
+st.markdown(f"""<style>.stApp {{                        
+             background: url("https://www.intouch-quality.com/hubfs/quality-defects-ft-lg.jpg");
+             background-size: cover}}
+         </style>""",unsafe_allow_html=True)
+st.write("""# SEIL SAP Notifications """) # Tittle addition
+
 
 if "my_input" not in st.session_state:
     st.session_state["my_input"] = ""
