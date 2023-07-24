@@ -66,7 +66,7 @@ def convert_df(df):
 #cs = convert_df(rp) 
 #adding a download button to download csv file
 #st.download_button(label="Download",data=cs,file_name='Repeated notifications.csv',mime='text/csv')
-data2=data[data['Functional Loc.'].str.contains('|'.join(dict[g])]
+data2=data[data['Functional Loc.'].str.contains('|'.join(dict[g]))]
 data2 = data2.drop(columns=['Notification','Order','Priority','User status','Req. start','Required End','Created By','System status','MaintenancePlan','Changed by'
                             ,'Changed On','MaintPlant','Reported by'])
 st.subheader("Total defects in the above System/equipment")
