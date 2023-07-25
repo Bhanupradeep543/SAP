@@ -14,18 +14,18 @@ import streamlit as st
 import io
 from datetime import datetime
 # choosing the image for application background directly from web URL
-st.markdown(f"""<style>.stApp {{                        
-             background: url("https://www.intouch-quality.com/hubfs/quality-defects-ft-lg.jpg");
-             background-size: cover}}
-         </style>""",unsafe_allow_html=True)
-st.write("""SEIL SAP Notifications """) # Tittle addition
+#st.markdown(f"""<style>.stApp {{                        
+            # background: url("https://www.intouch-quality.com/hubfs/quality-defects-ft-lg.jpg");
+            # background-size: cover}}
+         #</style>""",unsafe_allow_html=True)
+#st.write("""SEIL SAP Notifications """) # Tittle addition
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/SAPdata.xlsx"
 data = pd.read_excel(url)
 data=data[data['Main WorkCtr']!='OPRN']
 data1=data[data['Description'].str.contains('PM ')]
 data=data.drop(data[data['Description'].isin(data1['Description'])].index)
-st.subheader('Total SAP notifications considered for analysis')
-st.subheader(data.shape[0])
+#st.subheader('Total SAP notifications considered for analysis')
+#st.subheader(data.shape[0])
 
 options = st.multiselect('select the Area/System/Equipment',['BLR-1','BLR-2','TG-1','TG-2'])
 g=options[0]
