@@ -19,8 +19,8 @@ data=data[data['Main WorkCtr']!='OPRN']
 data1=data[data['Description'].str.contains('PM ')]
 data=data.drop(data[data['Description'].isin(data1['Description'])].index)
 st.title('Area wise analysis')
-st.subheader("Select the area")
-options = st.multiselect(['BLR-1','BLR-2','TG-1','TG-2'])
+st.subheader("Select the area for Analysis")
+options = st.multiselect('select below`,['BLR-1','BLR-2','TG-1','TG-2'])
 g=options[0]
 dict={'BLR-1':['10-HNC10','10-HNC20','10-HLB10','10-HLB20','10-HFD10','10-HFD20','10-HLD10','10-HLD20','10-HFV10','10-HFV20','10-HFV30','10-HFV40','10-HFV50','10-HFV60','10-HFV70','10-HFV80']
       ,'BLR-2':['20-HNC10','20-HNC20','20-HLB10','20-HLB20','20-HFD10','20-HFD20','20-HLD10','20-HLD20','20-HFV10','20-HFV20','20-HFV30','20-HFV40','20-HFV50','20-HFV60','20-HFV70','20-HFV80']
