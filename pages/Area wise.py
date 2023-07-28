@@ -30,12 +30,12 @@ def convert_df(df):
 data2=data[data['Functional Loc.'].str.contains('|'.join(dict[g]))]
 data2 = data2.drop(columns=['Notification','Order','Priority','User status','Req. start','Required End','Created By','System status','MaintenancePlan','Changed by'
                             ,'Changed On','MaintPlant','Reported by'])
-st.subheader("Total defects in the above System:",data.shape[0])
+st.subheader("Total defects in the above System")
+st.write(data.shape[0])
 rp=data2['System'].value_counts()
 st.subheader("TOP 20 repeated defects in the above System")
 rp=data2['System'].value_counts().head(20)
 st.write(rp)
-st.subheader("No.of defefcts planner group wise")
 fig, ax = plt.subplots()
 ax.pie(data2['Main WorkCtr'].value_counts(),autopct='%1.1f%%')
 ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
