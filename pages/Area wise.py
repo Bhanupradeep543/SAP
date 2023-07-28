@@ -30,7 +30,7 @@ def convert_df(df):
 data2=data[data['Functional Loc.'].str.contains('|'.join(dict[g]))]
 data2 = data2.drop(columns=['Notification','Order','Priority','User status','Req. start','Required End','Created By','System status','MaintenancePlan','Changed by'
                             ,'Changed On','MaintPlant','Reported by'])
-st.subheader("Total defects in the above System:",data2.shape[0])
+st.subheader("Total defects in the above System:",data.shape[0])
 rp=data2['System'].value_counts()
 st.subheader("TOP 20 repeated defects in the above System")
 rp=data2['System'].value_counts().head(20)
