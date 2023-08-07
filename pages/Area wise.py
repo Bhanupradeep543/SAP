@@ -24,7 +24,7 @@ options = st.multiselect('Click on below',['BLR-1','BLR-2','TG-1','TG-2'])
 g=options[0]
 dict={'BLR-1':['10-HNC10','10-HNC20','10-HLB10','10-HLB20','10-HFD10','10-HFD20','10-HLD10','10-HLD20','10-HFV10','10-HFV20','10-HFV30','10-HFV40','10-HFV50','10-HFV60','10-HFV70','10-HFV80']
       ,'BLR-2':['20-HNC10','20-HNC20','20-HLB10','20-HLB20','20-HFD10','20-HFD20','20-HLD10','20-HLD20','20-HFV10','20-HFV20','20-HFV30','20-HFV40','20-HFV50','20-HFV60','20-HFV70','20-HFV80']
-      ,'TG-1':['10-LAA10','10-LAA20','10-LAA30'],'TG-2':['20-LAA10','20-LAA20','20-LAA30']'}
+      ,'TG-1':['10-LAA10','10-LAA20','10-LAA30'],'TG-2':['20-LAA10','20-LAA20','20-LAA30']}
 def convert_df(df):
  return df.to_csv().encode('utf-8')
 data2=data[data['Functional Loc.'].str.contains('|'.join(dict[g]))]
