@@ -17,6 +17,8 @@ data = pd.read_excel(url)
 data=data[data['Main WorkCtr']!='OPRN']
 data1=data[data['Description'].str.contains('PM ')]
 data=data.drop(data[data['Description'].isin(data1['Description'])].index)
+with open('data.pkl', 'wb') as f:
+    pickle.dump(data, f)
 st.title('Area wise analysis')
 st.subheader("Select the area for Analysis")
 options = st.multiselect('Click on below',['BLR-1','BLR-2','TG-1','TG-2'])
