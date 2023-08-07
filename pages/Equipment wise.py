@@ -13,20 +13,8 @@ import matplotlib.pyplot as plt
 import streamlit as st
 import io
 from datetime import datetime
-# choosing the image for application background directly from web URL
-st.markdown(f"""<style>.stApp {{                        
-             background: url("https://www.intouch-quality.com/hubfs/quality-defects-ft-lg.jpg");
-             background-size: cover}}
-         </style>""",unsafe_allow_html=True)
-st.write("""SEIL SAP Notifications """) # Tittle addition
-url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/SAPdata.xlsx"
-data = pd.read_excel(url)
-data=data[data['Main WorkCtr']!='OPRN']
-data1=data[data['Description'].str.contains('PM ')]
-data=data.drop(data[data['Description'].isin(data1['Description'])].index)
-st.subheader('Total SAP notifications considered for analysis')
-st.subheader(data.shape[0])
-
+with open("data.pkl", "rb") as file:
+    data = pickle.load(file)
 options = st.multiselect('select the Area/System/Equipment',['IDF-1A','IDF-1B','IDF-2A','IDF-2B','FDF-1A','FDF-1B','FDF-2A','FDF-2B','PAF-1A','PAF-1B','PAF-2A','PAF-2B'
                                                      ,'APH-1A','APH-1B','APH-2A','APH-2B','MILL-1A','MILL-2A','MILL-1B','MILL-1C'
                                                     ,'MILL-2B','MILL-2C','MILL-1D','MILL-2D','MILL-2E','MILL-1E','MILL-1F','MILL-2F'
