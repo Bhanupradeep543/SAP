@@ -15,7 +15,7 @@ import io
 from datetime import datetime
 # choosing the image for application background directly from web URL
 st.markdown(f"""<style>.stApp {{                        
-             background: url("https://www.intouch-quality.com/hubfs/quality-defects-ft-lg.jpg");
+             background: url("https://images.app.goo.gl/Z9F8zaKF4fiLdYtw8");
              background-size: cover}}
          </style>""",unsafe_allow_html=True)
 st.write("""SEIL SAP Notifications """) # Tittle addition
