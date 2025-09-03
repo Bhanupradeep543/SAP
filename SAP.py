@@ -17,32 +17,9 @@ import streamlit as st
 
 import streamlit as st
 
-st.set_page_config(page_title="Background Image Test", layout="wide")
-
-# Background image CSS (latest Streamlit version compatible)
-page_bg_img = """
-<style>
-.stApp {
-    background-image: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
-</style>
-"""
-
-st.markdown(page_bg_img, unsafe_allow_html=True)
-
-# Content
-st.title("🚀 Streamlit Background Image Example")
-st.write("Now the background should be visible! 🎉")
-
 
 # choosing the image for application background directly from web URL
-# st.markdown(f"""<style>.stApp {{                        
-             background: url("https://share.google/images/GBU42Lwax35kdDv88}}
-         </style>""",unsafe_allow_html=True)
+
 st.subheader("""NTPC SAP Notifications """) # Tittle addition
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/SAPdata.xlsx"
 data = pd.read_excel(url)
