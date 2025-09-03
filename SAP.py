@@ -17,7 +17,7 @@ from datetime import datetime
 st.markdown(f"""<style>.stApp {{                        
              background: url("https://share.google/images/GBU42Lwax35kdDv88}}
          </style>""",unsafe_allow_html=True)
-st.write("""NTPC SAP Notifications """) # Tittle addition
+st.subheader("""NTPC SAP Notifications """) # Tittle addition
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/SAPdata.xlsx"
 data = pd.read_excel(url)
 data=data[data['Main WorkCtr']!='OPRN']
