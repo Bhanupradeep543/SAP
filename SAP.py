@@ -14,41 +14,6 @@ import streamlit as st
 import io
 from datetime import datetime
 
-import streamlit as st
-import base64
-import requests
-
-st.set_page_config(page_title="Background Image Fix", layout="wide")
-
-# Function to convert image (local or URL) to base64
-def get_base64_of_image(url):
-    response = requests.get(url)
-    return base64.b64encode(response.content).decode()
-
-# Example: use an online image
-img_url = "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
-img_base64 = get_base64_of_image(img_url)
-
-# CSS with embedded base64 image
-page_bg_img = f"""
-<style>
-.stApp {{
-    background-image: url("data:image/jpeg;base64,{img_base64}");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}}
-</style>
-"""
-
-st.markdown(page_bg_img, unsafe_allow_html=True)
-
-# App content
-st.title("🚀 Streamlit Background Image (Base64 Method)")
-st.write("This background is embedded directly, so it should always show up.")
-
-
 st.subheader("""NTPC SAP Notifications """) # Tittle addition
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/SAPdata.xlsx"
 data = pd.read_excel(url)
