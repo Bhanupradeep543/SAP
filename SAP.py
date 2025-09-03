@@ -13,8 +13,37 @@ import matplotlib.pyplot as plt
 import streamlit as st
 import io
 from datetime import datetime
+import streamlit as st
+
+# Page configuration
+st.set_page_config(page_title="Background Image with URL", layout="wide")
+
+# Background image CSS
+page_bg_img = """
+<style>
+[data-testid="stAppViewContainer"] {
+    background-image: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+[data-testid="stHeader"] {
+    background: rgba(0,0,0,0); /* Transparent header */
+}
+
+[data-testid="stToolbar"] {
+    right: 2rem;
+}
+</style>
+"""
+
+# Inject CSS
+st.markdown(page_bg_img, unsafe_allow_html=True)
+
 # choosing the image for application background directly from web URL
-st.markdown(f"""<style>.stApp {{                        
+# st.markdown(f"""<style>.stApp {{                        
              background: url("https://share.google/images/GBU42Lwax35kdDv88}}
          </style>""",unsafe_allow_html=True)
 st.subheader("""NTPC SAP Notifications """) # Tittle addition
