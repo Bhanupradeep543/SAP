@@ -13,11 +13,6 @@ import matplotlib.pyplot as plt
 import streamlit as st
 import io
 from datetime import datetime
-import streamlit as st
-
-import streamlit as st
-
-
 # choosing the image for application background directly from web URL
 
 st.subheader("""NTPC SAP Notifications """) # Tittle addition
