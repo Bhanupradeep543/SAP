@@ -15,32 +15,29 @@ import io
 from datetime import datetime
 import streamlit as st
 
-# Page configuration
-st.set_page_config(page_title="Background Image with URL", layout="wide")
+import streamlit as st
 
-# Background image CSS
+st.set_page_config(page_title="Background Image Test", layout="wide")
+
+# Background image CSS (latest Streamlit version compatible)
 page_bg_img = """
 <style>
-[data-testid="stAppViewContainer"] {
+.stApp {
     background-image: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
-
-[data-testid="stHeader"] {
-    background: rgba(0,0,0,0); /* Transparent header */
-}
-
-[data-testid="stToolbar"] {
-    right: 2rem;
-}
 </style>
 """
 
-# Inject CSS
 st.markdown(page_bg_img, unsafe_allow_html=True)
+
+# Content
+st.title("🚀 Streamlit Background Image Example")
+st.write("Now the background should be visible! 🎉")
+
 
 # choosing the image for application background directly from web URL
 # st.markdown(f"""<style>.stApp {{                        
