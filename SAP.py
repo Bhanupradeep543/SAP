@@ -15,8 +15,7 @@ import io
 from datetime import datetime
 # choosing the image for application background directly from web URL
 st.markdown(f"""<style>.stApp {{                        
-             background: url("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.dreamstime.com%2Fdata-analytics-icons-black-background-vector-mockup-data-analytics-icons-black-background-vector-mockup-gradient-image133471324&psig=AOvVaw2gN1aH1XDRUc-DHocmh3ex&ust=1754375803850000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOjz06nF8I4DFQAAAAAdAAAAABAE");
-             background-size: cover}}
+             background: url("https://share.google/images/GBU42Lwax35kdDv88}}
          </style>""",unsafe_allow_html=True)
 st.write("""NTPC SAP Notifications """) # Tittle addition
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/SAPdata.xlsx"
