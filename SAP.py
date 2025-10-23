@@ -47,12 +47,7 @@ if selected:
             st.write(value)
             # Calculate defect frequency
             freq = data2[value].sort_values('Notif.date')
-            deltas =freq['Notif.date'].diff().dt.days.dropna()
-            st.write(deltas)
-        # calculate difference in days
-        
-        avg_gap = deltas.mean()
-        st.write(avg_gap)  
+            st.write(freq)
    
      
 
