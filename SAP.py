@@ -41,11 +41,8 @@ if selected:
         repeated = repeat_defects[repeat_defects['Count'] > 10]
         repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(10)
         st.subheader("TOP 10 repeated defects in the selected stage")
-        st.write(repeated)
         df = pd.DataFrame(repeated)
-    # Number to multiply with
         multiplier = 520
-    # Multiply second column and round to nearest integer
         df['each notification interval in terms of weeks'] = ((multiplier)/df['Count']).round().astype(int)
         st.write(df)
         
