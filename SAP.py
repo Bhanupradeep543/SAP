@@ -20,20 +20,18 @@ data = pd.read_excel(url)
 data1=data[data['Main WorkCtr']=='M400CWCT']
 st.subheader('Total SAP notifications considered for analysis')
 st.subheader(data1.shape[0])
+st.subheader('Top 20 Repeated notifications ')
+repeat_defects=data[data['equipment']!='KORBA PLANT']
+repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
+repeated = repeat_defects[repeat_defects['Count'] > 50]
+
+repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
+
+st.write(repeated)
 #options = st.multiselect('select the stage', ['STAGE-1', 'STAGE-2', 'STAGE-3'])                                                     
 #g=options[0]
 #dict={'STAGE-1':[S1COM],'STAGE-2':[S2COM],'STAGE-3':[S3COM]}
-repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
 
-# Step 5: Filter only repeated defects (Count > 1)
-repeated = repeat_defects[repeat_defects['Count'] > 10]
-
-# Step 6: Sort and view results
-repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True])
-
-# Step 7: Save or display results
-st.write("Repeated defects by Equipment:")
-st.write(repeated)
 #column_name = 'System'
 #word_counts = data[column_name].value_counts()
 #repeated_words = word_counts[word_counts > 15]
