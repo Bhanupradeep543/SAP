@@ -28,6 +28,7 @@ repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, Tru
 st.write(repeated)
 options = st.multiselect('select the stage', ['STAGE-1', 'STAGE-2', 'STAGE-3'])                                                     
 dict={'STAGE-1':['S1COM'],'STAGE-2':['S2COM'],'STAGE-3':['S3COM']}
+st.write(dict[options[0]])
 if options:  # means user selected something
        data2=data[data['Functional Loc.'].str.contains(dict[options[0]])]
        repeat_defects = (data2.groupby(['equipment']).size().reset_index(name='Count'))
