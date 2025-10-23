@@ -42,10 +42,19 @@ if selected:
         repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(10)
         st.subheader("TOP 10 repeated defects in the selected stage")
         # Calculate defect frequency
-        defect_freq = repeated['equipment'].value_counts().reset_index()
-        defect_freq.columns = ['equipment', 'Frequency']
-        st.subheader("Defect Frequency Table")
-        st.dataframe(defect_freq)
+        repeated = repeated.sort_values('Notif.date')
+        # calculate difference in days
+        deltas = repeated['Notif.date'].diff().dt.days.dropna()
+        if len(deltas) > 0:
+            avg_gap = deltas.mean()
+        else:
+            avg_gap = None  # only one notification
+        
+        avg_df = pd.DataFrame(avg_gap).sort_values('Avg_Days_Between_Notifications')
+    
+    st.subheader("📊 Average Duration Between Notifications")
+    st.dataframe(avg_df)
 
-
+        
+     
 
