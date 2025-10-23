@@ -23,7 +23,6 @@ st.subheader(data1.shape[0])
 options = st.multiselect('select the stage', ['STAGE-1', 'STAGE-2', 'STAGE-3'])                                                     
 g=options[0]
 dict={'STAGE-1':[S1COM],'STAGE-2':[S2COM],'STAGE-3':[S3COM]}
-repeat=
 #column_name = 'System'
 #word_counts = data[column_name].value_counts()
 #repeated_words = word_counts[word_counts > 15]
