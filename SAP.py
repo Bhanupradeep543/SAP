@@ -41,6 +41,7 @@ if selected:
         repeated = repeat_defects[repeat_defects['Count'] > 20]
         repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(10)
         st.subheader("TOP 10 repeated defects in the selected stage")
+        st.write(repeated)
         # Calculate defect frequency
         repeated = repeated.sort_values('Notif.date')
         # calculate difference in days
