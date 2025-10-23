@@ -50,9 +50,8 @@ if selected:
             freq = freq.sort_values('Notif.date')
              # calculate difference in days
             deltas = freq['Notif.date'].diff().dt.days.dropna()
-            if len(deltas) > 0:
-                avg_gap = deltas.mean()
-                st.write(avg_gap)
+            avg_gap = deltas.mean()
+            st.write(avg_gap)
    
      
 
