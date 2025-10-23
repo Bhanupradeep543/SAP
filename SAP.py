@@ -20,9 +20,9 @@ data = pd.read_excel(url)
 data1=data[data['Main WorkCtr']=='M400CWCT']
 st.subheader('Total SAP notifications considered for analysis')
 st.subheader(data1.shape[0])
-options = st.multiselect('select the stage', ['STAGE-1', 'STAGE-2', 'STAGE-3'])                                                     
-g=options[0]
-dict={'STAGE-1':[S1COM],'STAGE-2':[S2COM],'STAGE-3':[S3COM]}
+#options = st.multiselect('select the stage', ['STAGE-1', 'STAGE-2', 'STAGE-3'])                                                     
+#g=options[0]
+#dict={'STAGE-1':[S1COM],'STAGE-2':[S2COM],'STAGE-3':[S3COM]}
 repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
 
 # Step 5: Filter only repeated defects (Count > 1)
