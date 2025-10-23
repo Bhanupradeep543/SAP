@@ -17,7 +17,7 @@ from datetime import datetime
 st.subheader("""NTPC SAP Notifications """) # Tittle addition
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
 data = pd.read_excel(url)
-data=data[data['Main WorkCtr']='M400CWCT']
+data=data[data['Main WorkCtr']=='M400CWCT']
 st.subheader('Total SAP notifications considered for analysis')
 st.subheader(data.shape[0])
 options = st.multiselect('select the stage', ['STAGE-1', 'STAGE-2', 'STAGE-3'])                                                     
