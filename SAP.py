@@ -29,6 +29,7 @@ st.write(repeated)
 options = st.multiselect('select the stage', ['STAGE-1', 'STAGE-2', 'STAGE-3'])                                                     
 dict={'STAGE-1':[S1COM],'STAGE-2':[S2COM],'STAGE-3':[S3COM]}
 g=options[0]
+st.write(g)
 data2=data[data['Functional Loc.'].str.contains(dict[g])]
 repeat_defects = (data2.groupby(['equipment']).size().reset_index(name='Count'))
 st.subheader("Total defects in the above stage")
