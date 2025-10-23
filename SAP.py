@@ -42,16 +42,10 @@ if selected:
         repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(10)
         st.subheader("TOP 10 repeated defects in the selected stage")
         st.write(repeated)
-        for i in range(0,9):
-            value = repeated.iloc[i, 0]
-            st.write(value)
-            # Calculate defect frequency
-            freq = data2[data2['equipment'].str.contains(value)]
-            freq = freq.sort_values('Notif.date')
-             # calculate difference in days
-            deltas = freq['Notif.date'].diff().dt.days.dropna()
-            avg_gap = deltas.mean()
-            st.write(avg_gap)
-   
-     
-
+        df = pd.DataFrame(repeated)
+    # Number to multiply with
+        multiplier = 1/520
+    # Multiply second column and round to nearest integer
+        df['Result'] = (df['Column2'] * multiplier).round().astype(int)
+        st.write(df)
+        
