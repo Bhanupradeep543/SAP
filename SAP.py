@@ -28,8 +28,9 @@ repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, Tru
 st.write(repeated)
 options = st.multiselect('select the stage', ['STAGE-1', 'STAGE-2', 'STAGE-3'])                                                     
 dict={'STAGE-1':['S1COM'],'STAGE-2':['S2COM'],'STAGE-3':['S3COM']}
-g=options[0]
-data2=data[data['Functional Loc.'].str.contains(dict[g])]
+if options:  # means user selected something
+    selected_stage = options[0]
+   data2=data[data['Functional Loc.'].str.contains(dict[selected_stage])]
 repeat_defects = (data2.groupby(['equipment']).size().reset_index(name='Count'))
 st.subheader("Total defects in the above stage")
 st.write(data2.shape[0])
@@ -37,3 +38,7 @@ repeated = repeat_defects[repeat_defects['Count'] > 20]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(10)
 st.subheader("TOP 10 repeated defects in the selected stage")
 st.write(repeated)
+else:
+    st.write("No stage selected yet.")
+
+
