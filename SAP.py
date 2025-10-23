@@ -26,21 +26,10 @@ repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
 repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
-#options = st.multiselect('select the stage', ['STAGE-1', 'STAGE-2', 'STAGE-3'])                                                     
-#dict={'STAGE-1':['S1COM'],'STAGE-2':['S2COM'],'STAGE-3':['S3COM']}
-#st.write(dict[options[0]])
 keywords = {
-    "Stage-1": "S1COM",
-    "Stage-2": "S2COM",
-    "Stage-3": "S3COM",
-    "Boiler": "BLR_SYS",
-    "Turbine": "TRB_SYS",
-    "Cooling Water": "CW_SYS"
+    "Stage-1": "S1COM","Stage-2": "S2COM","Stage-3": "S3COM","Boiler": "BLR_SYS","Turbine": "TRB_SYS","Cooling Water": "CW_SYS"
 }
-
 selected = st.multiselect("Select the systems:", list(keywords.keys()))
-
-# Display keywords
 if selected:
      selected_keywords = [keywords[s] for s in selected]
      for k in selected_keywords:
@@ -54,16 +43,6 @@ if selected:
         st.write(repeated)
 else:
     st.write("Select at least one system to view keywords.")
-#if options:  # means user selected something
-       #data2=data[data['Functional Loc.'].str.contains(dict[options[0]])]
-       #repeat_defects = (data2.groupby(['equipment']).size().reset_index(name='Count'))
-       #st.subheader("Total defects in the above stage")
-       #st.write(data2.shape[0])
-       #repeated = repeat_defects[repeat_defects['Count'] > 20]
-       #repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(10)
-       #st.subheader("TOP 10 repeated defects in the selected stage")
-       #st.write(repeated)
-#else:
-    #st.write("No stage selected yet.")
+
 
 
