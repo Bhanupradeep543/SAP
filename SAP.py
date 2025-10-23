@@ -47,11 +47,11 @@ if selected:
         data2=data[data['Functional Loc.'].str.contains(k)]
         repeat_defects = (data2.groupby(['equipment']).size().reset_index(name='Count'))
         st.subheader("Total defects in the above stage")
-       st.write(data2.shape[0])
-       repeated = repeat_defects[repeat_defects['Count'] > 20]
-       repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(10)
-       st.subheader("TOP 10 repeated defects in the selected stage")
-       st.write(repeated)
+        st.write(data2.shape[0])
+        repeated = repeat_defects[repeat_defects['Count'] > 20]
+        repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(10)
+        st.subheader("TOP 10 repeated defects in the selected stage")
+        st.write(repeated)
 else:
     st.write("Select at least one system to view keywords.")
 #if options:  # means user selected something
