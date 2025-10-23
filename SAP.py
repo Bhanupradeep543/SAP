@@ -45,10 +45,12 @@ if selected:
         for i in range(0,9):
             value = repeated.iloc[i, 0]
             st.write(value)
-        # Calculate defect frequency
-        freq = repeated.sort_values('Notif.date')
+            # Calculate defect frequency
+            freq = data2[value].sort_values('Notif.date')
+            deltas =freq'Notif.date'].diff().dt.days.dropna()
+            st.write(deltas)
         # calculate difference in days
-        deltas = repeated['Notif.date'].diff().dt.days.dropna()
+        
         avg_gap = deltas.mean()
         st.write(avg_gap)  
    
