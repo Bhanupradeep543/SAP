@@ -48,21 +48,5 @@ if selected:
         st.subheader("📊 Defect Frequency Table")
         st.dataframe(defect_freq)
 
-    # Optional: show a chart
-    chart = (
-        alt.Chart(defect_freq.head(15))
-        .mark_bar()
-        .encode(
-            x=alt.X('Frequency:Q', title='No. of Occurrences'),
-            y=alt.Y('Defect_Description:N', sort='-x', title='Defect'),
-            tooltip=['Defect_Description', 'Frequency']
-        )
-        .properties(title='Top 15 Repeated Defects')
-    )
-
-    st.altair_chart(chart, use_container_width=True)
-else:
-    st.write("Select at least one system to view keywords.")
-
 
 
