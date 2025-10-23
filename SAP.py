@@ -21,7 +21,7 @@ data1=data[data['Main WorkCtr']=='M400CWCT']
 st.subheader('Total SAP notifications considered for analysis')
 st.subheader(data1.shape[0])
 st.subheader('Top 20 Repeated notifications ')
-repeat_defects=data[data['equipment']!='KORBA STATION COMMON']
+data=data[data['equipment']!='KORBA STATION COMMON']
 repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
 repeated = repeat_defects[repeat_defects['Count'] > 50]
 
