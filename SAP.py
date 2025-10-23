@@ -17,13 +17,13 @@ from datetime import datetime
 st.subheader("""NTPC SAP Notifications """) # Tittle addition
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
 data = pd.read_excel(url)
-data=data[data['Main WorkCtr']=='M400CWCT']
+data1=data[data['Main WorkCtr']=='M400CWCT']
 st.subheader('Total SAP notifications considered for analysis')
-st.subheader(data.shape[0])
+st.subheader(data1.shape[0])
 options = st.multiselect('select the stage', ['STAGE-1', 'STAGE-2', 'STAGE-3'])                                                     
 g=options[0]
 dict={'STAGE-1':[S1COM],'STAGE-2':[S2COM],'STAGE-3':[S3COM]}
-
+repeat=
 #column_name = 'System'
 #word_counts = data[column_name].value_counts()
 #repeated_words = word_counts[word_counts > 15]
