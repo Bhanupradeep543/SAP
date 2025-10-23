@@ -50,7 +50,7 @@ if selected:
         else:
             avg_gap = None  # only one notification
         
-        avg_df = pd.DataFrame(avg_gap).sort_values('Avg_Days_Between_Notifications')
+    avg_df = pd.DataFrame(avg_gap).sort_values('Avg_Days_Between_Notifications')
     
     st.subheader("📊 Average Duration Between Notifications")
     st.dataframe(avg_df)
