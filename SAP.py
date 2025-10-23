@@ -42,9 +42,7 @@ selected = st.multiselect("Select the systems:", list(keywords.keys()))
 
 # Display keywords
 if selected:
-    st.write("### Keywords:")
-    for s in selected:
-        st.write(f"{s} → **{keywords[s]}**")
+     st.write({keywords[s]})
 else:
     st.write("Select at least one system to view keywords.")
 #if options:  # means user selected something
