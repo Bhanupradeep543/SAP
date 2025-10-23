@@ -35,15 +35,15 @@ if selected:
      selected_keywords = [keywords[s] for s in selected]
      for k in selected_keywords:
         data2=data[data['Functional Loc.'].str.contains(k)]
-        repeat_defects = (data2.groupby(['equipment']).size().reset_index(name='Count'))
         st.subheader("Total defects in the above stage")
         st.write(data2.shape[0])
-        repeated = repeat_defects[repeat_defects['Count'] > 20]
+        repeat_defects = (data2.groupby(['equipment']).size().reset_index(name='Count'))     
+        repeated = repeat_defects[repeat_defects['Count'] > 10]
         repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(10)
         st.subheader("TOP 10 repeated defects in the selected stage")
-        st.write(repeated)
+        st.write(repeated[0])
         # Calculate defect frequency
-        repeated = repeated.sort_values('Notif.date')
+        freq = repeated.sort_values('Notif.date')
         # calculate difference in days
         deltas = repeated['Notif.date'].diff().dt.days.dropna()
         avg_gap = deltas.mean()
