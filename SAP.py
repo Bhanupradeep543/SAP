@@ -47,9 +47,7 @@ if selected:
         deltas = repeated['Notif.date'].diff().dt.days.dropna()
         if len(deltas) > 0:
             avg_gap = deltas.mean()
-        else:
-            avg_gap = None  # only one notification
-        
+           
     avg_df = pd.DataFrame(avg_gap).sort_values('Avg_Days_Between_Notifications')
     
     st.subheader("📊 Average Duration Between Notifications")
