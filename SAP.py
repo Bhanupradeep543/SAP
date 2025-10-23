@@ -23,7 +23,7 @@ data=data.drop(data[data['Description'].isin(data1['Description'])].index)
 st.subheader('Total SAP notifications considered for analysis')
 st.subheader(data.shape[0])
 
-options = st.multiselect('select the Area/System/Equipment',['STAGE-1','STAGE-2','STAGE-3'])                                                     ])
+options = st.multiselect('select the stage',['STAGE-1','STAGE-2','STAGE-3'])                                                     ])
 g=options[0]
 dict={'STAGE-1':[S1COM],'STAGE-2':[S2COM],'STAGE-3':[S3COM]}
 #st.subheader("Select the date range for notifications") 
