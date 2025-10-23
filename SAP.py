@@ -43,7 +43,7 @@ if selected:
         st.subheader("TOP 10 repeated defects in the selected stage")
         st.write(repeated)
         for i in range(0,9):
-            value = repeated.iloc[0, i]
+            value = repeated.iloc[i, 0]
             st.write(value)
         # Calculate defect frequency
         freq = repeated.sort_values('Notif.date')
