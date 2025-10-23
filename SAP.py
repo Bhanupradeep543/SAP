@@ -44,8 +44,8 @@ if selected:
         st.write(repeated)
         df = pd.DataFrame(repeated)
     # Number to multiply with
-        multiplier = 1/520
+        multiplier = 520
     # Multiply second column and round to nearest integer
-        df['interval between each notification'] = (df['Count'] * multiplier).round().astype(int)
+        df['interval between each notification'] = (multiplier)/df['Count'].round().astype(int)
         st.write(df)
         
