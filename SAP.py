@@ -41,11 +41,10 @@ if selected:
         repeated = repeat_defects[repeat_defects['Count'] > 20]
         repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(10)
         st.subheader("TOP 10 repeated defects in the selected stage")
-        st.write(repeated)
         # Calculate defect frequency
         defect_freq = repeated['equipment'].value_counts().reset_index()
         defect_freq.columns = ['equipment', 'Frequency']
-        st.subheader("📊 Defect Frequency Table")
+        st.subheader("Defect Frequency Table")
         st.dataframe(defect_freq)
 
 
