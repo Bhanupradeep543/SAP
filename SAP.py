@@ -46,6 +46,6 @@ if selected:
     # Number to multiply with
         multiplier = 1/520
     # Multiply second column and round to nearest integer
-        df['Result'] = (df['Column2'] * multiplier).round().astype(int)
+        df['interval between each notification'] = (df['count'] * multiplier).round().astype(int)
         st.write(df)
         
