@@ -18,8 +18,6 @@ st.subheader("""NTPC SAP Notifications """) # Tittle addition
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
 data = pd.read_excel(url)
 data=data[data['Main WorkCtr']!='M400CWCT']
-data1=data[data['Description'].str.contains('PM ')]
-data=data.drop(data[data['Description'].isin(data1['Description'])].index)
 st.subheader('Total SAP notifications considered for analysis')
 st.subheader(data.shape[0])
 options = st.multiselect('select the stage', ['STAGE-1', 'STAGE-2', 'STAGE-3'])                                                     
