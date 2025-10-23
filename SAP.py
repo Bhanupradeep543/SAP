@@ -46,7 +46,7 @@ if selected:
             value = repeated.iloc[i, 0]
             st.write(value)
             # Calculate defect frequency
-            freq = data2[value].sort_values('Notif.date')
+            freq = data2[data2['equipment'].str.contains(value).sort_values('Notif.date')
             st.write(freq)
    
      
