@@ -15,7 +15,7 @@ import io
 from datetime import datetime
 
 st.subheader("""NTPC SAP Notifications """) # Tittle addition
-url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/totaldefects.xlsx"
+url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
 data = pd.read_excel(url)
 data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
 data1=data[data['Main WorkCtr']=='M400CWCT']
