@@ -60,6 +60,5 @@ if selected:
         yearly_count.rename(columns={data_col: "No_of_Occurrences"}, inplace=True)
         st.subheader("📅 Year-wise gland leaks")
         st.dataframe(yearly_count)
-       # Plot bar chart
-       st.bar_chart(data=yearly_count, x="Year", y="No_of_Occurrences")
-        
+        # Plot bar chart
+        st.bar_chart(data=yearly_count, x="Year", y="No_of_Occurrences")      
