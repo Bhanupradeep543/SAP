@@ -51,8 +51,9 @@ if selected:
         repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True])
         df1 = pd.DataFrame(repeated)
         st.write(df1)
-        data2["Year"] = data2['Notif.date'].dt.year
+        
         data3=data2[data2['Description'].str.contains('gland|GLAND|Gland|galand')]
+        data3["Year"] = data3['Notif.date'].dt.year
         st.write("no.of gland leaks in the selected stage",data3.shape[0])
         yearly_count = data3.groupby("Year")['Notif.date'].count().reset_index()
         yearly_count.rename(columns={'Notif.date': "gland leak"}, inplace=True)
@@ -60,6 +61,7 @@ if selected:
         st.bar_chart(data=yearly_count, x="Year", y="gland leak")      
         
         data4=data2[data2['Description'].str.contains('Vibration|vibration|VIBRATION')]
+        data4["Year"] = data4['Notif.date'].dt.year
         st.write("no.of vibrational issues in the selected stage",data4.shape[0])
         yearly_count = data4.groupby("Year")['Notif.date'].count().reset_index()
         yearly_count.rename(columns={'Notif.date': "vibrational issues"}, inplace=True)
@@ -67,6 +69,7 @@ if selected:
         st.bar_chart(data=yearly_count, x="Year", y="vibrational issues")    
         
         data5=data2[data2['Description'].str.contains('sound|SOUND|Sound|bearing|BEARING|Bearing|brng|BRNG|thrust|THRUST|Thrust')]
+        data5["Year"] = data5['Notif.date'].dt.year
         st.write("no.of bearing/coupling issues in the selected stage",data5.shape[0])
         yearly_count = data5.groupby("Year")['Notif.date'].count().reset_index()
         yearly_count.rename(columns={'Notif.date': "bearing/coupling issues"}, inplace=True)
@@ -74,6 +77,7 @@ if selected:
         st.bar_chart(data=yearly_count, x="Year", y="bearing/coupling issues") 
         
         data6=data2[data2['Description'].str.contains('nrv|NRV|Nrv')]
+        data6["Year"] = data6['Notif.date'].dt.year
         st.write("no.of NRV passing issues in the selected stage",data6.shape[0])
         yearly_count = data6.groupby("Year")['Notif.date'].count().reset_index()
         yearly_count.rename(columns={'Notif.date': "NRV passing"}, inplace=True)
@@ -81,6 +85,7 @@ if selected:
         st.bar_chart(data=yearly_count, x="Year", y="NRV passing")
 
         data7=data2[data2['Description'].str.contains('valve|VALVE|vlv|VLV|Valve')]
+        data7["Year"] = data7['Notif.date'].dt.year
         st.write("no.of valve issues in the selected stage",data7.shape[0])
         yearly_count = data7.groupby("Year")['Notif.date'].count().reset_index()
         yearly_count.rename(columns={'Notif.date': "Valve issues"}, inplace=True)
