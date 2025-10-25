@@ -58,15 +58,24 @@ if selected:
         yearly_count.rename(columns={'Notif.date': "gland leak"}, inplace=True)
         st.subheader("📅 Year-wise gland leaks")
         st.bar_chart(data=yearly_count, x="Year", y="gland leak")      
-        data4=data2[data2['Description'].str.contains('Vibration|vibration|VIBRATION')]
+        
+         data4=data2[data2['Description'].str.contains('Vibration|vibration|VIBRATION')]
         st.write("no.of vibrational issues in the selected stage",data4.shape[0])
         yearly_count = data4.groupby("Year")['Notif.date'].count().reset_index()
         yearly_count.rename(columns={'Notif.date': "vibrational issues"}, inplace=True)
         st.subheader("📅 Year-wise vibrational issues")
         st.bar_chart(data=yearly_count, x="Year", y="vibrational issues")    
-        data5=data2[data2['Description'].str.contains('sound|SOUND|Sound')]
-        st.write("no.of bearing/coupling issues in the selected stage",data4.shape[0])
+        
+         data5=data2[data2['Description'].str.contains('sound|SOUND|Sound')]
+        st.write("no.of bearing/coupling issues in the selected stage",data5.shape[0])
         yearly_count = data5.groupby("Year")['Notif.date'].count().reset_index()
         yearly_count.rename(columns={'Notif.date': "bearing/coupling issues"}, inplace=True)
         st.subheader("📅 Year-wise bearing/coupling issues")
-        st.bar_chart(data=yearly_count, x="Year", y="bearing/coupling issues")    
+        st.bar_chart(data=yearly_count, x="Year", y="bearing/coupling issues") 
+        
+        data6=data2[data2['Description'].str.contains('nrv|NRV|Nrv')]
+        st.write("no.of bearing/coupling issues in the selected stage",data6.shape[0])
+        yearly_count = data6.groupby("Year")['Notif.date'].count().reset_index()
+        yearly_count.rename(columns={'Notif.date': "NRV passing"}, inplace=True)
+        st.subheader("📅 Year-wise NRV passings")
+        st.bar_chart(data=yearly_count, x="Year", y="NRV passing") 
