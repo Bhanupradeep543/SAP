@@ -51,5 +51,7 @@ if selected:
         repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True])
         df1 = pd.DataFrame(repeated)
         st.write(df1)
+        data3=data2[data2['Description'].str.contains('gland|GLAND|Gland|galand')]
+        st.write("/no.of gland leaks in the selected stage",data3.shape[0])
          
         
