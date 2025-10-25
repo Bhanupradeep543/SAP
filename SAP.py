@@ -47,8 +47,8 @@ if selected:
         st.write(df)
         st.subheader("equipment wise defects in the selected stage")
         repeat_defects = (data2.groupby(['equipment']).size().reset_index(name='Count'))
-        repeated = repeat_defects[repeat_defects['Count'] > 10]
-        repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head()
+        repeated = repeat_defects[repeat_defects['Count'] > 1]
+        repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True])
         df1 = pd.DataFrame(repeated)
         st.write(df1)
          
