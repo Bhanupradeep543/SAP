@@ -78,4 +78,14 @@ if selected:
         yearly_count = data6.groupby("Year")['Notif.date'].count().reset_index()
         yearly_count.rename(columns={'Notif.date': "NRV passing"}, inplace=True)
         st.subheader("📅 Year-wise NRV passings")
-        st.bar_chart(data=yearly_count, x="Year", y="NRV passing") 
+        st.bar_chart(data=yearly_count, x="Year", y="NRV passing")
+
+        data7=data2[data2['Description'].str.contains('valve|VALVE|vlv|VLV|Valve')]
+        st.write("no.of valve issues in the selected stage",data7.shape[0])
+        yearly_count = data7.groupby("Year")['Notif.date'].count().reset_index()
+        yearly_count.rename(columns={'Notif.date': "Valve issues"}, inplace=True)
+        st.subheader("📅 Year-wise Valve issues")
+        st.bar_chart(data=yearly_count, x="Year", y="Valve issues")
+        
+
+        
