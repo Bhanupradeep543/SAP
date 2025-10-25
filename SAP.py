@@ -55,11 +55,13 @@ if selected:
         st.write("no.of gland leaks in the selected stage",data3.shape[0])
         data3["Year"] = data3['Notif.date'].dt.year
         yearly_count = data3.groupby("Year")['Notif.date'].count().reset_index()
+        yearly_count.rename(columns={'Notif.date': "gland leak"}, inplace=True)
         st.subheader("📅 Year-wise gland leaks")
         st.bar_chart(data=yearly_count, x="Year", y="gland leak")      
         data4=data2[data2['Description'].str.contains('Vibration|vibration|VIBRATION')]
         st.write("no.of vibrational issues in the selected stage",data4.shape[0])
         data4["Year"] = data4['Notif.date'].dt.year
         yearly_count = data4.groupby("Year")['Notif.date'].count().reset_index()
+        yearly_count.rename(columns={'Notif.date': "vibrational issues"}, inplace=True)
         st.subheader("📅 Year-wise vibrational issues")
         st.bar_chart(data=yearly_count, x="Year", y="vibrational issues")    
