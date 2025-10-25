@@ -66,7 +66,7 @@ if selected:
         st.subheader("📅 Year-wise vibrational issues")
         st.bar_chart(data=yearly_count, x="Year", y="vibrational issues")    
         
-        data5=data2[data2['Description'].str.contains('sound|SOUND|Sound|bearing|BEARING|Bearing|brng|BRNG')]
+        data5=data2[data2['Description'].str.contains('sound|SOUND|Sound|bearing|BEARING|Bearing|brng|BRNG|thrust|THRUST|Thrust')]
         st.write("no.of bearing/coupling issues in the selected stage",data5.shape[0])
         yearly_count = data5.groupby("Year")['Notif.date'].count().reset_index()
         yearly_count.rename(columns={'Notif.date': "bearing/coupling issues"}, inplace=True)
