@@ -13,10 +13,9 @@ import matplotlib.pyplot as plt
 import streamlit as st
 import io
 from datetime import datetime
-from pyxlsb import open_workbook
 
 st.subheader("""NTPC SAP Notifications """) # Tittle addition
-url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/totaldefects.xlsb"
+url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/totaldefects.xlsx"
 data = pd.read_excel(url,engine="pyxlsb")
 data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
 data1=data[data['Main WorkCtr']=='M400CWCT']
