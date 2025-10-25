@@ -55,6 +55,6 @@ if selected:
         st.write("no.of gland leaks in the selected stage",data3.shape[0])
         data3["Year"] = data3['Notif.date'].dt.year
         yearly_count = data3.groupby("Year")['Notif.date'].count().reset_index()
-        yearly_count.rename(columns={'Notif.date': "No_of_Occurrences"}, inplace=True)
+        yearly_count.rename(columns={'Notif.date': "gland leak"}, inplace=True)
         st.subheader("📅 Year-wise gland leaks")
         st.bar_chart(data=yearly_count, x="Year", y="gland leak")      
