@@ -68,5 +68,5 @@ if selected:
         st.write("no.of bearing/coupling issues in the selected stage",data4.shape[0])
         yearly_count = data4.groupby("Year")['Notif.date'].count().reset_index()
         yearly_count.rename(columns={'Notif.date': "bearing/coupling issues"}, inplace=True)
-        st.subheader("📅 Year-wise vibrational issues")
+        st.subheader("📅 Year-wise bearing/coupling issues")
         st.bar_chart(data=yearly_count, x="Year", y="bearing/coupling issues")    
