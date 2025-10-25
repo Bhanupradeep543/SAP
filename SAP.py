@@ -56,7 +56,7 @@ if selected:
         data3['Notif.date'] = pd.to_datetime(data3['Notif.date'], errors='coerce')
         data3["Year"] = data3['Notif.date'].dt.year
         # Group by year and count number of entries
-        yearly_count = data3.groupby("Year")[data_col].count().reset_index()
+        yearly_count = data3.groupby("Year")['Notif.date'].count().reset_index()
         yearly_count.rename(columns={data_col: "No_of_Occurrences"}, inplace=True)
         st.subheader("📅 Year-wise gland leaks")
         st.dataframe(yearly_count)
