@@ -35,7 +35,7 @@ if selected:
      selected_keywords = [keywords[s] for s in selected]
      for k in selected_keywords:
         data2=data[data['Functional Loc.'].str.contains(k)]
-        st.subheader("Total defects in",k)
+        st.subheader("Total defects in",selected)
         st.write(data2.shape[0])
         repeat_defects = (data2.groupby(['equipment']).size().reset_index(name='Count'))     
         repeated = repeat_defects[repeat_defects['Count'] > 10]
