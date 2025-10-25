@@ -74,7 +74,7 @@ if selected:
         st.bar_chart(data=yearly_count, x="Year", y="bearing/coupling issues") 
         
         data6=data2[data2['Description'].str.contains('nrv|NRV|Nrv')]
-        st.write("no.of bearing/coupling issues in the selected stage",data6.shape[0])
+        st.write("no.of NRV passing issues in the selected stage",data6.shape[0])
         yearly_count = data6.groupby("Year")['Notif.date'].count().reset_index()
         yearly_count.rename(columns={'Notif.date': "NRV passing"}, inplace=True)
         st.subheader("📅 Year-wise NRV passings")
