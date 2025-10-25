@@ -16,7 +16,7 @@ from datetime import datetime
 from pyxlsb import open_workbook
 
 st.subheader("""NTPC SAP Notifications """) # Tittle addition
-url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba total defects.xlsb"
+url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/totaldefects.xlsb"
 data = pd.read_excel(url,engine="pyxlsb")
 data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
 data1=data[data['Main WorkCtr']=='M400CWCT']
