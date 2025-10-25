@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import streamlit as st
 import io
 from datetime import datetime
+from pyxlsb import open_workbook
 
 st.subheader("""NTPC SAP Notifications """) # Tittle addition
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba total defects.xlsb"
