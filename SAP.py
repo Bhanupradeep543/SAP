@@ -59,6 +59,6 @@ if selected:
         yearly_count = data3.groupby("Year")['Notif.date'].count().reset_index()
         yearly_count.rename(columns={'Notif.date': "No_of_Occurrences"}, inplace=True)
         st.subheader("📅 Year-wise gland leaks")
-        st.dataframe(yearly_count)
+        #st.dataframe(yearly_count)
         # Plot bar chart
         st.bar_chart(data=yearly_count, x="Year", y="No_of_Occurrences")      
