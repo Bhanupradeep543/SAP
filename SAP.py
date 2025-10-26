@@ -14,7 +14,6 @@ import streamlit as st
 import io
 from datetime import datetime
 import streamlit as st
-from twilio.rest import Client
 import random
 import streamlit as st
 
@@ -54,7 +53,7 @@ if st.button("Login"):
             }
         selected = st.multiselect("Select the systems:", list(keywords.keys()))
         if selected:
-             selected_keywords = [keywords[s] for s in selected]
+           selected_keywords = [keywords[s] for s in selected]
              for k in selected_keywords:
                 data2=data[data['Functional Loc.'].str.contains(k)]
                 st.subheader("Total defects in the selected stage")
