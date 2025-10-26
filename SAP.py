@@ -51,8 +51,8 @@ if st.button("Login"):
         keywords = {
             "Stage-1": "S1COM","Stage-2": "S2COM","Stage-3": "S3COM" }
         selected = st.multiselect("Select the systems:", list(keywords.keys()))
-            if selected:
-               selected_keywords = [keywords[s] for s in selected]
+        if selected:
+           selected_keywords = [keywords[s] for s in selected]
                for k in selected_keywords:
                 data2=data[data['Functional Loc.'].str.contains(k)]
                 st.subheader("Total defects in the selected stage")
