@@ -26,15 +26,22 @@ PASSWORD = "m400cwct"
 # ------------------------
 # Streamlit login
 # ------------------------
-st.title("Simple Login Page")
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
 
-username = st.text_input("Username")
-password = st.text_input("Password", type="password")
+# ------------------------
+# Login form
+# ------------------------
+if not st.session_state.logged_in:
+    st.title("Login Page")
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
 
-if st.button("Login"):
-    if username == USERNAME and password == PASSWORD:
-        st.success(f"Welcome {username}!")
-        st.write("You are now logged in. This is your protected page.")
+    if st.button("Login"):
+        if username == USERNAME and password == PASSWORD:
+            st.session_state.logged_in = True  # persist login
+            st.success(f"Welcome {username}!")
+   st.write("You are now logged in. This is your protected page.")        
         st.subheader("""NTPC SAP Notifications """) # Tittle addition
         url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
         data = pd.read_excel(url)
