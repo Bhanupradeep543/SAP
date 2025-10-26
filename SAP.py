@@ -13,6 +13,22 @@ import matplotlib.pyplot as plt
 import streamlit as st
 import io
 from datetime import datetime
+# Set page config (optional)
+st.set_page_config(page_title="Custom Background", layout="wide")
+
+# CSS to set background image
+page_bg_img = """
+<style>
+body {
+background-image: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb");
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+background-attachment: fixed;
+}
+</style>
+"""
+st.markdown(page_bg_img, unsafe_allow_html=True)
 
 st.subheader("""NTPC SAP Notifications """) # Tittle addition
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
