@@ -13,6 +13,60 @@ import matplotlib.pyplot as plt
 import streamlit as st
 import io
 from datetime import datetime
+import streamlit as st
+from twilio.rest import Client
+import random
+
+# ------------------------
+# Twilio config
+# ------------------------
+TWILIO_SID = "YOUR_TWILIO_ACCOUNT_SID"
+TWILIO_AUTH_TOKEN = "YOUR_TWILIO_AUTH_TOKEN"
+TWILIO_PHONE = "+918978380243"  # your Twilio number
+
+client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
+
+# ------------------------
+# Helper functions
+# ------------------------
+def send_otp(phone, otp):
+    message = client.messages.create(
+        body=f"Your OTP for Streamlit login is: {otp}",
+        from_=TWILIO_PHONE,
+        to=phone
+    )
+    return message.sid
+
+# ------------------------
+# Streamlit UI
+# ------------------------
+st.title("Mobile OTP Login")
+
+# Step 1: Enter mobile number
+phone_number = st.text_input("Enter your mobile number (with country code, e.g., +91XXXXXXXXXX)")
+
+if st.button("Send OTP"):
+    if phone_number:
+        otp = str(random.randint(100000, 999999))
+        st.session_state["otp"] = otp
+        st.session_state["phone"] = phone_number
+        send_otp(phone_number, otp)
+        st.success(f"OTP sent to {phone_number}")
+    else:
+        st.error("Please enter a valid mobile number.")
+
+# Step 2: Verify OTP
+if "otp" in st.session_state:
+    user_otp = st.text_input("Enter the OTP you received")
+    if st.button("Verify OTP"):
+        if user_otp == st.session_state["otp"]:
+            st.success(f"Login successful! Welcome {st.session_state['phone']}")
+            # You can now show the protected app content
+            st.write("This is a protected page.")
+            # Optionally, reset OTP after successful login
+            del st.session_state["otp"]
+        else:
+            st.error("Incorrect OTP. Try again.")
 
 st.subheader("""NTPC SAP Notifications """) # Tittle addition
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
