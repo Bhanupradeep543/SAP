@@ -93,14 +93,20 @@ if selected:
         st.bar_chart(data=yearly_count, x="Year", y="Valve issues")
 
         date_col = data2['Notif.date']
-        equip_col=data2['equipment']
+        equip_col = data2['equipment']
         data2 = data2.dropna(subset=[date_col, equip_col])
         # Count occurrences per equipment
         equip_count = data2['equipment'].value_counts().reset_index()
         equip_count.columns = [equip_col, 'Count']
         
         # Filter equipments with >30 defects
-        frequent_equip = equip_count[equip_count['Count'] > 30][equip_col].tolist()
+        frequent_equip_df = equip_count[equip_count["Count"] > 30]
+        # If not empty, extract list safely
+        if not frequent_equip_df.empty:
+            frequent_equip = frequent_equip_df.iloc[:, 0].tolist()  # first column = equipment name
+        else:
+            frequent_equip = []
+        
         st.write(f"Equipments with more than 30 defects: {len(frequent_equip)}")
         forecast_results = []
         for eq in frequent_equip:
