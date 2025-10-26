@@ -92,28 +92,30 @@ if selected:
         st.subheader("📅 Year-wise Valve issues")
         st.bar_chart(data=yearly_count, x="Year", y="Valve issues")
 
-        date_col = data2['Notif.date']
-        equip_col = data2['equipment']
-        
+        date_col = st.selectbox("Select Date column", data2.columns)
+        equip_col = st.selectbox("Select Equipment/Asset column", data2.columns)
+
+         # Convert to datetime
+        data2[date_col] = pd.to_datetime(data2[date_col], errors='coerce')
+        data2 = data2.dropna(subset=[date_col, equip_col])
+
         # Count occurrences per equipment
-        equip_count = data2['equipment'].value_counts().reset_index()
+        equip_count = data2[equip_col].value_counts().reset_index()
         equip_count.columns = [equip_col, 'Count']
-        
+
         # Filter equipments with >30 defects
-        frequent_equip_df = equip_count[equip_count["Count"] > 30]
-        # If not empty, extract list safely
-        if not frequent_equip_df.empty:
-            frequent_equip = frequent_equip_df.iloc[:, 0].tolist()  # first column = equipment name
-        else:
-            frequent_equip = []
-        
+        frequent_equip = equip_count[equip_count['Count'] > 30][equip_col].tolist()
         st.write(f"Equipments with more than 30 defects: {len(frequent_equip)}")
+
         forecast_results = []
+
         for eq in frequent_equip:
-           eq_data = data2[data2['equipment'] == eq].sort_values(by=date_col)
-           eq_dates = eq_data[date_col].dropna().sort_values()
-         # Compute intervals between defects
+            eq_data = data2[data2[equip_col] == eq].sort_values(by=date_col)
+            eq_dates = eq_data[date_col].dropna().sort_values()
+
+        # Compute intervals between defects
         gaps = eq_dates.diff().dt.days.dropna()
+
         if len(gaps) > 0:
             avg_gap = gaps.mean()
             last_date = eq_dates.max()
@@ -130,5 +132,8 @@ if selected:
         result_df = pd.DataFrame(forecast_results)
         st.subheader("📅 Forecasted Next Defect Dates")
         st.dataframe(result_df)
+
+        # Optional visualization
+        st.bar_chart(data=result_df, x="Equipment", y="Average_Gap_(days)")
 
         
