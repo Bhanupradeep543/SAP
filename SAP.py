@@ -92,8 +92,8 @@ if selected:
         st.subheader("📅 Year-wise Valve issues")
         st.bar_chart(data=yearly_count, x="Year", y="Valve issues")
 
-       date_col = st.selectbox("Select Date column", data2.columns)
-       equip_col = st.selectbox("Select Equipment column", data2.columns)
+        date_col = st.selectbox("Select Date column", data2.columns)
+        equip_col = st.selectbox("Select Equipment column", data2.columns)
 
         # Convert to datetime
         data2[date_col] = pd.to_datetime(data2[date_col], errors='coerce')
