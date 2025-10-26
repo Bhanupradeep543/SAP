@@ -92,48 +92,59 @@ if selected:
         st.subheader("📅 Year-wise Valve issues")
         st.bar_chart(data=yearly_count, x="Year", y="Valve issues")
 
-        date_col = st.selectbox("Select Date column", data2.columns)
-        equip_col = st.selectbox("Select Equipment/Asset column", data2.columns)
+       date_col = st.selectbox("Select Date column", data2.columns)
+       equip_col = st.selectbox("Select Equipment column", data2.columns)
 
-         # Convert to datetime
+        # Convert to datetime
         data2[date_col] = pd.to_datetime(data2[date_col], errors='coerce')
         data2 = data2.dropna(subset=[date_col, equip_col])
 
-        # Count occurrences per equipment
-        equip_count = data2[equip_col].value_counts().reset_index()
-        equip_count.columns = [equip_col, 'Count']
+        # Convert equipment name to string to avoid dtype mismatch
+        data2[equip_col] = data2[equip_col].astype(str)
 
-        # Filter equipments with >30 defects
-        frequent_equip = equip_count[equip_count['Count'] > 30][equip_col].tolist()
-        st.write(f"Equipments with more than 30 defects: {len(frequent_equip)}")
+        # Equipment frequency table
+        equip_count = data2[equip_col].value_counts().reset_index()
+        equip_count.columns = [equip_col, 'Defect_Count']
+
+        # Show equipment list with counts
+        st.subheader("⚙️ Equipment-wise defect frequency")
+        st.dataframe(equip_count)
+
+        # Let user pick one or more equipments
+        selected_equips = st.multiselect(
+            "Select equipment(s) to forecast:",
+            options=equip_count[equip_count['Defect_Count'] > 0][equip_col].tolist(),
+            help="You can select multiple equipments for prediction."
+        )
 
         forecast_results = []
 
-        for eq in frequent_equip:
-            eq_data = data2[data2[equip_col] == eq].sort_values(by=date_col)
-            eq_dates = eq_data[date_col].dropna().sort_values()
+        if selected_equips:
+            for eq in selected_equips:
+                eq_data = data2[data2[equip_col] == eq].sort_values(by=date_col)
+                eq_dates = eq_data[date_col].dropna().sort_values()
 
-        # Compute intervals between defects
-        gaps = eq_dates.diff().dt.days.dropna()
+                if len(eq_dates) > 1:
+                    # Calculate gaps between defects
+                    gaps = eq_dates.diff().dt.days.dropna()
 
-        if len(gaps) > 0:
-            avg_gap = gaps.mean()
-            last_date = eq_dates.max()
-            next_pred_date = last_date + pd.Timedelta(days=avg_gap)
+                    avg_gap = gaps.mean()
+                    last_date = eq_dates.max()
+                    next_pred_date = last_date + pd.Timedelta(days=avg_gap)
 
-            forecast_results.append({
-                "Equipment": eq,
-                "Total_Defects": len(eq_dates),
-                "Average_Gap_(days)": round(avg_gap, 1),
-                "Last_Defect_Date": last_date.date(),
-                "Predicted_Next_Defect": next_pred_date.date()
-            })
+                    forecast_results.append({
+                    "Equipment": eq,
+                    "Total_Defects": len(eq_dates),
+                    "Average_Gap_(days)": round(avg_gap, 1),
+                    "Last_Defect_Date": last_date.date(),
+                    "Predicted_Next_Defect": next_pred_date.date()
+                })
 
-        result_df = pd.DataFrame(forecast_results)
-        st.subheader("📅 Forecasted Next Defect Dates")
-        st.dataframe(result_df)
+        if forecast_results:
+            result_df = pd.DataFrame(forecast_results)
+            st.subheader("📅 Forecasted Next Defect Dates")
+            st.dataframe(result_df)
 
-        # Optional visualization
-        st.bar_chart(data=result_df, x="Equipment", y="Average_Gap_(days)")
-
-        
+            st.bar_chart(data=result_df, x="Equipment", y="Average_Gap_(days)")
+        else:
+            st.warning("No sufficient data to forecast for selected equipment(s).")
