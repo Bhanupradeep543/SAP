@@ -16,7 +16,28 @@ from datetime import datetime
 import streamlit as st
 from twilio.rest import Client
 import random
+import streamlit as st
 
+# ------------------------
+# Default credentials
+# ------------------------
+USERNAME = "bhanu"
+PASSWORD = "m400cwct"
+
+# ------------------------
+# Streamlit login
+# ------------------------
+st.title("Simple Login Page")
+
+username = st.text_input("Username")
+password = st.text_input("Password", type="password")
+
+if st.button("Login"):
+    if username == USERNAME and password == PASSWORD:
+        st.success(f"Welcome {username}!")
+        st.write("You are now logged in. This is your protected page.")
+    else:
+        st.error("Invalid username or password")
 st.subheader("""NTPC SAP Notifications """) # Tittle addition
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
 data = pd.read_excel(url)
