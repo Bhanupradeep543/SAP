@@ -41,7 +41,7 @@ if not st.session_state.logged_in:
        if username == USERNAME and password == PASSWORD:
         st.session_state.logged_in = True  # persist login
         st.success(f"Welcome {username}!")
-]       st.write("You are now logged in. This is your protected page.")        
+        st.write("You are now logged in. This is your protected page.")        
         st.subheader("""NTPC SAP Notifications """) # Tittle addition
         url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
         data = pd.read_excel(url)
