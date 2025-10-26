@@ -58,28 +58,28 @@ repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, Tru
 st.write(repeated)
 keywords = {"Stage-1": "S1COM","Stage-2": "S2COM","Stage-3": "S3COM" }
 selected = st.multiselect("Select the systems:", list(keywords.keys()))
- if selected:
-    selected_keywords = [keywords[s] for s in selected]
-    for k in selected_keywords:
-     data2=data[data['Functional Loc.'].str.contains(k)]
-     st.subheader("Total defects in the selected stage")
-     st.write(data2.shape[0])
-     repeat_defects = (data2.groupby(['equipment']).size().reset_index(name='Count'))     
-     repeated = repeat_defects[repeat_defects['Count'] > 10]
-     repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(10)
-     st.subheader("TOP 10 repeated defects in the selected stage")
-     df = pd.DataFrame(repeated)
-     multiplier = 520
-     df['each notification interval in terms of weeks'] = ((multiplier)/df['Count']).round().astype(int)
-     st.write(df)
-     
-     data3=data2[data2['Description'].str.contains('gland|GLAND|Gland|galand')]
-     data3["Year"] = data3['Notif.date'].dt.year
-     st.write("no.of gland leaks in the selected stage",data3.shape[0])
-     yearly_count = data3.groupby("Year")['Notif.date'].count().reset_index()
-     yearly_count.rename(columns={'Notif.date': "gland leak"}, inplace=True)
-     st.subheader("📅 Year-wise gland leaks")
-     st.bar_chart(data=yearly_count, x="Year", y="gland leak")      
+if selected:
+ selected_keywords = [keywords[s] for s in selected]
+ for k in selected_keywords:
+  data2=data[data['Functional Loc.'].str.contains(k)]
+  st.subheader("Total defects in the selected stage")
+  st.write(data2.shape[0])
+  repeat_defects = (data2.groupby(['equipment']).size().reset_index(name='Count'))     
+  repeated = repeat_defects[repeat_defects['Count'] > 10]
+  repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(10)
+  st.subheader("TOP 10 repeated defects in the selected stage")
+  df = pd.DataFrame(repeated)
+  multiplier = 520
+  df['each notification interval in terms of weeks'] = ((multiplier)/df['Count']).round().astype(int)
+  st.write(df)
+   
+  data3=data2[data2['Description'].str.contains('gland|GLAND|Gland|galand')]
+  data3["Year"] = data3['Notif.date'].dt.year
+  st.write("no.of gland leaks in the selected stage",data3.shape[0])
+  yearly_count = data3.groupby("Year")['Notif.date'].count().reset_index()
+  yearly_count.rename(columns={'Notif.date': "gland leak"}, inplace=True)
+  st.subheader("📅 Year-wise gland leaks")
+  st.bar_chart(data=yearly_count, x="Year", y="gland leak")      
      
      data4=data2[data2['Description'].str.contains('Vibration|vibration|VIBRATION')]
      data4["Year"] = data4['Notif.date'].dt.year
