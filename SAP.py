@@ -15,33 +15,7 @@ import io
 from datetime import datetime
 import streamlit as st
 import random
-import streamlit as st
-'''
-# ------------------------
-# Default credentials
-# ------------------------
-USERNAME = "bhanu"
-PASSWORD = "m400cwct"
-
-# ------------------------
-# Streamlit login
-# ------------------------
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
-
-# ------------------------
-# Login form
-# ------------------------
-if not st.session_state.logged_in:
-    st.title("Login Page")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
-
-    if st.button("Login"):
-       if username == USERNAME and password == PASSWORD:
-        st.session_state.logged_in = True  # persist login
-        st.success(f"Welcome {username}!")
-        st.write("You are now logged in. This is your protected page.")'''    
+import streamlit as st   
 
 st.subheader("""NTPC SAP Notifications """) # Tittle addition
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
