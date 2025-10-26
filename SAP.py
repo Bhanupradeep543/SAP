@@ -138,7 +138,4 @@ if selected:
             result_df = pd.DataFrame(forecast_results)
             st.subheader("📅 Forecasted Next Defect Dates")
             st.dataframe(result_df)
-
-            st.bar_chart(data=result_df, x="Equipment", y="Average_Gap_(days)")
-        else:
-            st.warning("No sufficient data to forecast for selected equipment(s).")
+        
