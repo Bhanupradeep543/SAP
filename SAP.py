@@ -45,12 +45,6 @@ if selected:
         multiplier = 520
         df['each notification interval in terms of weeks'] = ((multiplier)/df['Count']).round().astype(int)
         st.write(df)
-        st.subheader("equipment wise defects in the selected stage")
-        repeat_defects = (data2.groupby(['equipment']).size().reset_index(name='Count'))
-        repeated = repeat_defects[repeat_defects['Count'] > 1]
-        repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True])
-        df1 = pd.DataFrame(repeated)
-        st.write(df1)
         
         data3=data2[data2['Description'].str.contains('gland|GLAND|Gland|galand')]
         data3["Year"] = data3['Notif.date'].dt.year
