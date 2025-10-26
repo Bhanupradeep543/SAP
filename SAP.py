@@ -94,7 +94,7 @@ if selected:
 
         date_col = data2['Notif.date']
         equip_col = data2['equipment']
-        data2 = data2.dropna(subset=[date_col, equip_col])
+        
         # Count occurrences per equipment
         equip_count = data2['equipment'].value_counts().reset_index()
         equip_count.columns = [equip_col, 'Count']
