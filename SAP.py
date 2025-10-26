@@ -93,16 +93,15 @@ if selected:
         st.bar_chart(data=yearly_count, x="Year", y="Valve issues")
 
         date_col = data2['Notif.date']
-        equip_col = data2['equipment']
         # Count occurrences per equipment
-        equip_count = data2[equip_col].value_counts().reset_index()
+        equip_count = data2['equipment'].value_counts().reset_index()
         equip_count.columns = [equip_col, 'Count']
         # Filter equipments with >30 defects
         frequent_equip = equip_count[equip_count['Count'] > 30][equip_col].tolist()
         st.write(f"Equipments with more than 30 defects: {len(frequent_equip)}")
         forecast_results = []
         for eq in frequent_equip:
-           eq_data = data2[data2[equip_col] == eq].sort_values(by=date_col)
+           eq_data = data2[data2['equipment'] == eq].sort_values(by=date_col)
            eq_dates = eq_data[date_col].dropna().sort_values()
          # Compute intervals between defects
         gaps = eq_dates.diff().dt.days.dropna()
