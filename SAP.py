@@ -36,9 +36,7 @@ if st.button("Login"):
     if username == USERNAME and password == PASSWORD:
         st.success(f"Welcome {username}!")
         st.write("You are now logged in. This is your protected page.")
-    else:
-        st.error("Invalid username or password")
-st.subheader("""NTPC SAP Notifications """) # Tittle addition
+        st.subheader("""NTPC SAP Notifications """) # Tittle addition
 url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
 data = pd.read_excel(url)
 data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
@@ -163,3 +161,6 @@ if selected:
             st.subheader("📅 Forecasted Next Defect Dates")
             st.dataframe(result_df)
         
+
+    else:
+        st.error("Invalid username or password")
