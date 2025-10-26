@@ -53,7 +53,7 @@ if st.button("Login"):
         selected = st.multiselect("Select the systems:", list(keywords.keys()))
         if selected:
            selected_keywords = [keywords[s] for s in selected]
-               for k in selected_keywords:
+           for k in selected_keywords:
                 data2=data[data['Functional Loc.'].str.contains(k)]
                 st.subheader("Total defects in the selected stage")
                 st.write(data2.shape[0])
