@@ -130,8 +130,7 @@ if st.button("Login"):
                 selected_equips = st.multiselect(
                     "Select equipment(s) to forecast:",
                     options=equip_count[equip_count['Defect_Count'] > 0][equip_col].tolist(),
-                    help="You can select multiple equipments for prediction."
-              1      )
+                    help="You can select multiple equipments for prediction.")
 
                 forecast_results = []
 
