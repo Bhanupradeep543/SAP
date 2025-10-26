@@ -159,6 +159,3 @@ if not st.session_state.logged_in:
                         st.subheader("📅 Forecasted Next Defect Dates")
                         st.dataframe(result_df)
         
-
-   ''' else:
-            st.error("Invalid username or password")'''
