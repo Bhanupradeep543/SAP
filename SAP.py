@@ -96,7 +96,7 @@ if selected:
         equip_col=data2['equipment']
          
         # Count occurrences per equipment
-        equip_count = data2[equip_col].value_counts().reset_index()
+        equip_count = data2['equipment'].value_counts().reset_index()
         equip_count.columns = [equip_col, 'Count']
         # Filter equipments with >30 defects
         frequent_equip = equip_count[equip_count['Count'] > 30][equip_col].tolist()
