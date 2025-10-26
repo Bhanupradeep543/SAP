@@ -49,12 +49,11 @@ if st.button("Login"):
         repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
         st.write(repeated)
         keywords = {
-            "Stage-1": "S1COM","Stage-2": "S2COM","Stage-3": "S3COM","Boiler": "BLR_SYS","Turbine": "TRB_SYS","Cooling Water": "CW_SYS"
-            }
+            "Stage-1": "S1COM","Stage-2": "S2COM","Stage-3": "S3COM" }
         selected = st.multiselect("Select the systems:", list(keywords.keys()))
-        if selected:
-           selected_keywords = [keywords[s] for s in selected]
-           for k in selected_keywords:
+            if selected:
+               selected_keywords = [keywords[s] for s in selected]
+               for k in selected_keywords:
                 data2=data[data['Functional Loc.'].str.contains(k)]
                 st.subheader("Total defects in the selected stage")
                 st.write(data2.shape[0])
