@@ -91,6 +91,36 @@ if selected:
         yearly_count.rename(columns={'Notif.date': "Valve issues"}, inplace=True)
         st.subheader("📅 Year-wise Valve issues")
         st.bar_chart(data=yearly_count, x="Year", y="Valve issues")
-        
+
+        date_col = data2['Notif.date']
+        equip_col = data2['equipment']
+        # Count occurrences per equipment
+        equip_count = data2[equip_col].value_counts().reset_index()
+        equip_count.columns = [equip_col, 'Count']
+        # Filter equipments with >30 defects
+        frequent_equip = equip_count[equip_count['Count'] > 30][equip_col].tolist()
+        st.write(f"Equipments with more than 30 defects: {len(frequent_equip)}")
+        forecast_results = []
+        for eq in frequent_equip:
+           eq_data = data2[data2[equip_col] == eq].sort_values(by=date_col)
+           eq_dates = eq_data[date_col].dropna().sort_values()
+         # Compute intervals between defects
+        gaps = eq_dates.diff().dt.days.dropna()
+        if len(gaps) > 0:
+            avg_gap = gaps.mean()
+            last_date = eq_dates.max()
+            next_pred_date = last_date + pd.Timedelta(days=avg_gap)
+
+            forecast_results.append({
+                "Equipment": eq,
+                "Total_Defects": len(eq_dates),
+                "Average_Gap_(days)": round(avg_gap, 1),
+                "Last_Defect_Date": last_date.date(),
+                "Predicted_Next_Defect": next_pred_date.date()
+            })
+
+        result_df = pd.DataFrame(forecast_results)
+        st.subheader("📅 Forecasted Next Defect Dates")
+        st.dataframe(result_df)
 
         
