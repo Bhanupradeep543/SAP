@@ -18,21 +18,26 @@ import random
 import streamlit as st   
 drive_url = "https://drive.google.com/uc?export=view&id=1kD2lavHOEbsDogd05fwVNHzuEmLlX7Dy"
 
-page_bg = f"""
+# CSS style block using single quotes
+page_bg = f'''
 <style>
 [data-testid="stAppViewContainer"] {{
-background-image: url("{drive_url}");
-background-size: cover;
-background-repeat: no-repeat;
-background-attachment: fixed;
+    background-image: url("{drive_url}");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }}
-
 [data-testid="stHeader"] {{
-background: rgba(0,0,0,0);
+    background: rgba(0,0,0,0);
 }}
-</style>""
+[data-testid="stSidebar"] {{
+    background: rgba(255,255,255,0.7);
+}}
+</style>
+'''
 
-st.markdown(page_bg_img, unsafe_allow_html=True)
+# Inject CSS into Streamlit
+st.markdown(page_bg, unsafe_allow_html=True)
 st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "xls", "csv"])
 
