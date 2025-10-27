@@ -16,28 +16,23 @@ from datetime import datetime
 import streamlit as st
 import random
 import streamlit as st   
-drive_url = "https://drive.google.com/uc?export=view&id=1kD2lavHOEbsDogd05fwVNHzuEmLlX7Dy"
+import base64
 
-# CSS style block using single quotes
-page_bg = f'''
-<style>
-[data-testid="stAppViewContainer"] {{
-    background-image: url("{drive_url}");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}}
-[data-testid="stHeader"] {{
-    background: rgba(0,0,0,0);
-}}
-[data-testid="stSidebar"] {{
-    background: rgba(255,255,255,0.7);
-}}
-</style>
-'''
-
-# Inject CSS into Streamlit
-st.markdown(page_bg, unsafe_allow_html=True)
+def add_bg_from_local(image_file):
+    with open(image_file, "rb") as f:
+        data = f.read()
+    encoded = base64.b64encode(data).decode()
+    css = f"""
+    <style>
+    [data-testid="stAppViewContainer"] {{
+        background-image: url("data:image/png;base64,{encoded}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }}
+    </style>
+    """
+    st.markdown(css, unsafe_allow_html=True)
 st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "xls", "csv"])
 
