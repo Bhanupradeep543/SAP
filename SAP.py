@@ -16,25 +16,22 @@ from datetime import datetime
 import streamlit as st
 import random
 import streamlit as st   
-# Set background image or color using inline CSS
-page_bg_img = """
+drive_url = "https://drive.google.com/uc?export=view&id=1kD2lavHOEbsDogd05fwVNHzuEmLlX7Dy"
+page_bg = f"""
 <style>
-[data-testid="stAppViewContainer"] {
-background-image: url("https://www.freepik.com/free-photo/abstract-dark-blue-futuristic-digital-grid-background_15601272.htm#fromView=keyword&page=1&position=4&uuid=e2143d6b-2299-48db-903b-34198adeec53&query=Analytics+background");
+[data-testid="stAppViewContainer"] {{
+background-image: url("{drive_url}");
 background-size: cover;
 background-repeat: no-repeat;
 background-attachment: fixed;
-}
+}}
 
-[data-testid="stHeader"]{
+[data-testid="stHeader"] {{
 background: rgba(0,0,0,0);
-}
-
-[data-testid="stToolbar"]{
-right: 2rem;
-}
+}}
 </style>
 """
+
 st.markdown(page_bg_img, unsafe_allow_html=True)
 st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "xls", "csv"])
