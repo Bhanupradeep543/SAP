@@ -30,7 +30,7 @@ background-attachment: fixed;
 [data-testid="stHeader"] {{
 background: rgba(0,0,0,0);
 }}
-</style>
+</style>""
 
 st.markdown(page_bg_img, unsafe_allow_html=True)
 st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
