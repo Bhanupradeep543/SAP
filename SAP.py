@@ -18,21 +18,25 @@ import random
 import streamlit as st   
 import base64
 
-def add_bg_from_local(image_file):
-    with open(image_file, "rb") as f:
-        data = f.read()
-    encoded = base64.b64encode(data).decode()
-    css = f"""
-    <style>
-    [data-testid="stAppViewContainer"] {{
-        background-image: url("data:image/png;base64,{encoded}");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-    }}
-    </style>
-    """
-    st.markdown(css, unsafe_allow_html=True)
+page_bg_img = """
+<style>
+[data-testid="stAppViewContainer"] {
+background-image: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb");
+background-size: cover;
+background-repeat: no-repeat;
+background-attachment: fixed;
+}
+
+[data-testid="stHeader"]{
+background: rgba(0,0,0,0);
+}
+
+[data-testid="stToolbar"]{
+right: 2rem;
+}
+</style>
+"""
+st.markdown(page_bg_img, unsafe_allow_html=True)
 st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "xls", "csv"])
 
