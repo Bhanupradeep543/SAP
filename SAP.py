@@ -17,6 +17,7 @@ import streamlit as st
 import random
 import streamlit as st   
 drive_url = "https://drive.google.com/uc?export=view&id=1kD2lavHOEbsDogd05fwVNHzuEmLlX7Dy"
+
 page_bg = f"""
 <style>
 [data-testid="stAppViewContainer"] {{
@@ -30,7 +31,6 @@ background-attachment: fixed;
 background: rgba(0,0,0,0);
 }}
 </style>
-"""
 
 st.markdown(page_bg_img, unsafe_allow_html=True)
 st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
