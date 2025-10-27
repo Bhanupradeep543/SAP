@@ -17,7 +17,7 @@ import streamlit as st
 import random
 import streamlit as st   
 
-st.tittle("""NTPC SAP Notifications Analysis """) # Tittle addition
+st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "xls", "csv"])
 
 if uploaded_file is not None:
