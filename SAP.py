@@ -17,9 +17,19 @@ import streamlit as st
 import random
 import streamlit as st   
 
-st.subheader("""NTPC SAP Notifications """) # Tittle addition
-url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
-data = pd.read_excel(url)
+st.tittle("""NTPC SAP Notifications Analysis """) # Tittle addition
+uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "xls", "csv"])
+
+if uploaded_file is not None:
+    # Read the uploaded file
+    if uploaded_file.name.endswith(".csv"):
+        data = pd.read_csv(uploaded_file)
+    else:
+        data = pd.read_excel(uploaded_file)
+
+    st.success("✅ Data loaded successfully!")
+#url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
+#data = pd.read_excel(url)
 data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
 data1=data[data['Main WorkCtr']=='M400CWCT']
 st.subheader('Total SAP notifications considered for analysis')
