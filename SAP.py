@@ -20,7 +20,7 @@ import streamlit as st
 page_bg_img = """
 <style>
 [data-testid="stAppViewContainer"] {
-background-image: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb");
+background-image: url("https://www.freepik.com/free-photo/abstract-dark-blue-futuristic-digital-grid-background_15601272.htm#fromView=keyword&page=1&position=4&uuid=e2143d6b-2299-48db-903b-34198adeec53&query=Analytics+background");
 background-size: cover;
 background-repeat: no-repeat;
 background-attachment: fixed;
