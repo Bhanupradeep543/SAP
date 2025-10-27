@@ -18,7 +18,7 @@ import random
 import streamlit as st   
 import base64
 
-page_bg_img = """
+'''page_bg_img = """
 <style>
 [data-testid="stAppViewContainer"] {
 background-image: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb");
@@ -36,7 +36,7 @@ right: 2rem;
 }
 </style>
 """
-st.markdown(page_bg_img, unsafe_allow_html=True)
+st.markdown(page_bg_img, unsafe_allow_html=True)'''
 st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "xls", "csv"])
 
