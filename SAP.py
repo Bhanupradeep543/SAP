@@ -35,11 +35,7 @@ right: 2rem;
 }
 </style>
 """
-
 st.markdown(page_bg_img, unsafe_allow_html=True)
-
-st.title("Custom Background Demo")
-st.write("This Streamlit app has a custom background using CSS.")
 st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "xls", "csv"])
 
