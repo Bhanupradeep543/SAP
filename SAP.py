@@ -72,8 +72,8 @@ for kw in KEYWORDS:
     result_df = result_df.sort_values(by="Count", ascending=False).reset_index(drop=True)
 
     # Display final result
-    st.write("### Final Keyword Summary (Sorted)")
-    st.dataframe(result_df)
+st.write("### Final Keyword Summary (Sorted)")
+st.dataframe(result_df)
 # PC code without errors
 keywords = {"Stage-1": "S1COM","Stage-2": "S2COM","Stage-3": "S3COM" }
 selected = st.multiselect("Select the stage:", list(keywords.keys()))
