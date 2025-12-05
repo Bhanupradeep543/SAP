@@ -21,9 +21,10 @@ import base64
 st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
 if "uploaded_file" not in st.session_state:
     st.session_state.uploaded_file = None
+if "processed_data" not in st.session_state:
+    st.session_state.processed_data = None
 # File uploader
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "xls", "csv"])
-
 if uploaded_file is not None and uploaded_file != st.session_state.uploaded_file:
     st.session_state.uploaded_file = uploaded_file
     # Read the uploaded file
@@ -31,10 +32,15 @@ if uploaded_file is not None and uploaded_file != st.session_state.uploaded_file
         data = pd.read_csv(uploaded_file)
     else:
         data = pd.read_excel(uploaded_file)
+    st.session_state.processed_data = data
     
+    if st.session_state.processed_data is not None:
+        st.write("### Processed Output")
+        st.dataframe(st.session_state.processed_data)
+    else:
+        st.info("Upload a file to begin analysis.")
     st.success("✅ Data loaded successfully!")
-#url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
-#data = pd.read_excel(url)
+
 data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
 data1=data[data['Main WorkCtr']=='M400CWCT']
 st.subheader('Total SAP notifications considered for analysis')
