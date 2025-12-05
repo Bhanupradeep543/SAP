@@ -125,7 +125,7 @@ if selected:
   st.subheader("📅 Year-wise NRV passings")
   st.bar_chart(data=yearly_count, x="Year", y="NRV passing")
  
-  data7=data2[data2['Description'].str.contains('valve|VALVE|vlv|VLV|Valve')]
+  data7=data2[data2['Description'].str.contains('valve|VALVE|vlv|VLV|Valve|v/v')]
   data7["Year"] = data7['Notif.date'].dt.year
   st.write("no.of valve issues in the selected stage",data7.shape[0])
   yearly_count = data7.groupby("Year")['Notif.date'].count().reset_index()
@@ -137,10 +137,26 @@ if selected:
   data8["Year"] = data8['Notif.date'].dt.year
   st.write("no.of valve issues in the selected stage",data8.shape[0])
   yearly_count = data8.groupby("Year")['Notif.date'].count().reset_index()
-  yearly_count.rename(columns={'Notif.date': "Valve issues"}, inplace=True)
+  yearly_count.rename(columns={'Notif.date': "Oil leaks/ oil top up issues"}, inplace=True)
   st.subheader("📅 Year-wise Oil leaks/ oil top up issues")
-  st.bar_chart(data=yearly_count, x="Year", y="Valve issues")
+  st.bar_chart(data=yearly_count, x="Year", y="Oil leaks/ oil top up issues")
 
+  data9=data2[data2['Description'].str.contains('reverse|REVERSE|Reverse|Decouple|decouple|DECOUPLE')]
+  data8["Year"] = data9['Notif.date'].dt.year
+  st.write("no.of valve issues in the selected stage",data9.shape[0])
+  yearly_count = data9.groupby("Year")['Notif.date'].count().reset_index()
+  yearly_count.rename(columns={'Notif.date': "pump/Fan shaft jam/reverse rotational issues"}, inplace=True)
+  st.subheader("📅 Year-wise pump/Fan shaft Decoupled/reverse rotational issues")
+  st.bar_chart(data=yearly_count, x="Year", y="pump/Fan shaft Decoupled/reverse rotational issues")
+     
+  data10=data2[data2['Description'].str.contains('pipe|PIPE|LINE|Line|line|Pipe')]
+  data8["Year"] = data10['Notif.date'].dt.year
+  st.write("no.of valve issues in the selected stage",data10.shape[0])
+  yearly_count = data9.groupby("Year")['Notif.date'].count().reset_index()
+  yearly_count.rename(columns={'Notif.date': "Pipe leakage issues"}, inplace=True)
+  st.subheader("📅 Year-wise Pipe leakage issues")
+  st.bar_chart(data=yearly_count, x="Year", y="Pipe leakage issues")
+ 
   date_col = st.selectbox("Select Date column", data2.columns)
   equip_col = st.selectbox("Select Equipment column", data2.columns)
   # Convert to datetime
