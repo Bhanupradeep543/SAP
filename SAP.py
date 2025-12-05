@@ -96,7 +96,7 @@ if selected:
   st.subheader("📅 Year-wise gland leaks")
   st.bar_chart(data=yearly_count, x="Year", y="gland leak")      
      
-  data4=data2[data2['Description'].str.contains('Vibration|vibration|VIBRATION')]
+  data4=data2[data2['Description'].str.contains('Vibration|vibration|VIBRATION|vib|VIB')]
   data4["Year"] = data4['Notif.date'].dt.year
   st.write("no.of vibrational issues in the selected stage",data4.shape[0])
   yearly_count = data4.groupby("Year")['Notif.date'].count().reset_index()
@@ -126,6 +126,14 @@ if selected:
   yearly_count = data7.groupby("Year")['Notif.date'].count().reset_index()
   yearly_count.rename(columns={'Notif.date': "Valve issues"}, inplace=True)
   st.subheader("📅 Year-wise Valve issues")
+  st.bar_chart(data=yearly_count, x="Year", y="Valve issues")
+
+  data8=data2[data2['Description'].str.contains('oil|OIL|Oil')]
+  data8["Year"] = data8['Notif.date'].dt.year
+  st.write("no.of valve issues in the selected stage",data8.shape[0])
+  yearly_count = data8.groupby("Year")['Notif.date'].count().reset_index()
+  yearly_count.rename(columns={'Notif.date': "Valve issues"}, inplace=True)
+  st.subheader("📅 Year-wise Oil leaks/ oil top up issues")
   st.bar_chart(data=yearly_count, x="Year", y="Valve issues")
 
   date_col = st.selectbox("Select Date column", data2.columns)
