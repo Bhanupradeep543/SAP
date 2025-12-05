@@ -42,7 +42,7 @@ repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
 keywords = {"Stage-1": "S1COM","Stage-2": "S2COM","Stage-3": "S3COM" }
-selected = st.multiselect("Select the systems:", list(keywords.keys()))
+selected = st.multiselect("Select the stage:", list(keywords.keys()))
 if selected:
  selected_keywords = [keywords[s] for s in selected]
  for k in selected_keywords:
