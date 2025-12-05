@@ -35,11 +35,8 @@ if uploaded_file is not None and uploaded_file != st.session_state.uploaded_file
     st.session_state.processed_data = data
     
     if st.session_state.processed_data is not None:
-        st.write("### Processed Output")
-        st.dataframe(st.session_state.processed_data)
-    else:
-        st.info("Upload a file to begin analysis.")
-    st.success("✅ Data loaded successfully!")
+       
+st.success("✅ Data loaded successfully!")
 
 data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
 data1=data[data['Main WorkCtr']=='M400CWCT']
