@@ -142,7 +142,7 @@ if selected:
   st.bar_chart(data=yearly_count, x="Year", y="Oil leaks/ oil top up issues")
 
   data9=data2[data2['Description'].str.contains('reverse|REVERSE|Reverse|Decouple|decouple|DECOUPLE')]
-  data8["Year"] = data9['Notif.date'].dt.year
+  data9["Year"] = data9['Notif.date'].dt.year
   st.write("no.of pump/Fan shaft Decoupled/reverse rotational issues in the selected stage",data9.shape[0])
   yearly_count = data9.groupby("Year")['Notif.date'].count().reset_index()
   yearly_count.rename(columns={'Notif.date': "pump/Fan shaft jam/reverse rotational issues"}, inplace=True)
@@ -150,7 +150,7 @@ if selected:
   st.bar_chart(data=yearly_count, x="Year", y="pump/Fan shaft Decoupled/reverse rotational issues")
      
   data10=data2[data2['Description'].str.contains('pipe|PIPE|LINE|Line|line|Pipe')]
-  data8["Year"] = data10['Notif.date'].dt.year
+  data10["Year"] = data10['Notif.date'].dt.year
   st.write("no.of Pipe leakage issues in the selected stage",data10.shape[0])
   yearly_count = data9.groupby("Year")['Notif.date'].count().reset_index()
   yearly_count.rename(columns={'Notif.date': "Pipe leakage issues"}, inplace=True)
