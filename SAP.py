@@ -53,7 +53,7 @@ KEYWORD_MAP = {"1017-S1COM-ACW-ACL":"ADD.CLARIFIED PUMP SYSTEM","1017-S1COM-ACW-
 "1017-S2COM-CWS-TS":"ST-2 TWS SYSTEM","1017-S3COM-CLT-T7A":"ST-3 COOLING TOWER 7A","1017-S3COM-CLT-T7B":"ST-3 COOLING TOWER 7A","1017-S3COM-CWS":"ST-3 CW SYSTEM"}
 COLUMN_NAME = "Functional Loc."
 # Process column
-col_data = data[COLUMN_NAME].astype(str).str.lower()
+col_data = data[COLUMN_NAME].astype(str)
 results = []
 # Count occurrences for each keyword
 for kw in KEYWORDS:
