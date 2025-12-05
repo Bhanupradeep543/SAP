@@ -19,15 +19,20 @@ import streamlit as st
 import base64
 
 st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
+if "uploaded_file" not in st.session_state:
+    st.session_state.uploaded_file = None
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "xls", "csv"])
-if uploaded_file is not None :
+# Only update the session value when a NEW file is uploaded
+if uploaded_file is not None:
     st.session_state.uploaded_file = uploaded_file
-    # Read the uploaded file
-    if uploaded_file.name.endswith(".csv"):
-        data = pd.read_csv(uploaded_file)
+# ---------- 2) IF FILE EXISTS, PROCESS & SHOW OUTPUT ----------
+if st.session_state.uploaded_file is not None:
+    st.success("File loaded successfully")
+    # Load data
+    if st.session_state.uploaded_file.name.endswith(".csv"):
+        data = pd.read_csv(st.session_state.uploaded_file)
     else:
-        data = pd.read_excel(uploaded_file)
-    st.session_state.processed_data = data
+        data = pd.read_excel(st.session_state.uploaded_file)
 
 data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
 data1=data[data['Main WorkCtr']=='M400CWCT']
