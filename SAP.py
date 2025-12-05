@@ -33,7 +33,7 @@ data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
 data1=data[data['Main WorkCtr']=='M400CWCT']
 st.subheader('Total SAP notifications considered for analysis')
 st.subheader(data1.shape[0])
-st.subheader('Top 20 Repeated notifications in the station')
+st.subheader('Top 20 Repeated equipment notifications')
 data=data[data['equipment']!='KORBA STATION COMMON']
 repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
 repeated = repeat_defects[repeat_defects['Count'] > 50]
@@ -60,17 +60,15 @@ for kw in KEYWORDS:
     count = col_data.str.contains(kw).sum()
     final_name = KEYWORD_MAP.get(kw, kw)
     results.append({"Keyword": final_name,"Count": count})
-
     # Convert to dataframe
 result_df = pd.DataFrame(results)
-
  # Total count for % calculation
 total = result_df["Count"].sum()
 result_df["Percentage"] = (result_df["Count"] / total * 100).astype(int)
 # Sort descending
 result_df = result_df.sort_values(by="Count", ascending=False).reset_index(drop=True)
     # Display final result
-st.write("### Final Keyword Summary (Sorted)")
+st.write("system wise no.of defects in last 10 years")
 st.dataframe(result_df)
 # PC code without errors
 keywords = {"Stage-1": "S1COM","Stage-2": "S2COM","Stage-3": "S3COM" }
