@@ -135,7 +135,7 @@ if selected:
 
   data8=data2[data2['Description'].str.contains('oil|OIL|Oil')]
   data8["Year"] = data8['Notif.date'].dt.year
-  st.write("no.of valve issues in the selected stage",data8.shape[0])
+  st.write("no.of oil leak/ oil top up issues in the selected stage",data8.shape[0])
   yearly_count = data8.groupby("Year")['Notif.date'].count().reset_index()
   yearly_count.rename(columns={'Notif.date': "Oil leaks/ oil top up issues"}, inplace=True)
   st.subheader("📅 Year-wise Oil leaks/ oil top up issues")
@@ -143,7 +143,7 @@ if selected:
 
   data9=data2[data2['Description'].str.contains('reverse|REVERSE|Reverse|Decouple|decouple|DECOUPLE')]
   data8["Year"] = data9['Notif.date'].dt.year
-  st.write("no.of valve issues in the selected stage",data9.shape[0])
+  st.write("no.of pump/Fan shaft Decoupled/reverse rotational issues in the selected stage",data9.shape[0])
   yearly_count = data9.groupby("Year")['Notif.date'].count().reset_index()
   yearly_count.rename(columns={'Notif.date': "pump/Fan shaft jam/reverse rotational issues"}, inplace=True)
   st.subheader("📅 Year-wise pump/Fan shaft Decoupled/reverse rotational issues")
@@ -151,7 +151,7 @@ if selected:
      
   data10=data2[data2['Description'].str.contains('pipe|PIPE|LINE|Line|line|Pipe')]
   data8["Year"] = data10['Notif.date'].dt.year
-  st.write("no.of valve issues in the selected stage",data10.shape[0])
+  st.write("no.of Pipe leakage issues in the selected stage",data10.shape[0])
   yearly_count = data9.groupby("Year")['Notif.date'].count().reset_index()
   yearly_count.rename(columns={'Notif.date': "Pipe leakage issues"}, inplace=True)
   st.subheader("📅 Year-wise Pipe leakage issues")
