@@ -147,7 +147,7 @@ if selected:
   yearly_count = data9.groupby("Year")['Notif.date'].count().reset_index()
   yearly_count.rename(columns={'Notif.date': "pump/Fan shaft jam/reverse rotational issues"}, inplace=True)
   st.subheader("📅 Year-wise pump/Fan shaft Decoupled/reverse rotational issues")
-  st.bar_chart(data=yearly_count, x="Year", y="pump/Fan shaft Decoupled/reverse rotational issues")
+  st.bar_chart(data=yearly_count, x="Year", y="pump/Fan shaft jam/reverse rotational issues")
      
   data10=data2[data2['Description'].str.contains('pipe|PIPE|LINE|Line|line|Pipe')]
   data10["Year"] = data10['Notif.date'].dt.year
