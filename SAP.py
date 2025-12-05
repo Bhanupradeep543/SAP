@@ -19,15 +19,19 @@ import streamlit as st
 import base64
 
 st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
+if "uploaded_file" not in st.session_state:
+    st.session_state.uploaded_file = None
+# File uploader
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "xls", "csv"])
 
-if uploaded_file is not None:
+if uploaded_file is not None and uploaded_file != st.session_state.uploaded_file:
+    st.session_state.uploaded_file = uploaded_file
     # Read the uploaded file
     if uploaded_file.name.endswith(".csv"):
         data = pd.read_csv(uploaded_file)
     else:
         data = pd.read_excel(uploaded_file)
-
+    
     st.success("✅ Data loaded successfully!")
 #url = "https://raw.githubusercontent.com/Bhanupradeep543/SAP/master/korba_defects.xlsx"
 #data = pd.read_excel(url)
