@@ -62,15 +62,13 @@ for kw in KEYWORDS:
     results.append({"Keyword": final_name,"Count": count})
 
     # Convert to dataframe
-    result_df = pd.DataFrame(results)
+result_df = pd.DataFrame(results)
 
-    # Total count for % calculation
-    total = result_df["Count"].sum()
-    result_df["Percentage"] = (result_df["Count"] / total * 100).round(2)
-
-    # Sort descending
-    result_df = result_df.sort_values(by="Count", ascending=False).reset_index(drop=True)
-
+ # Total count for % calculation
+total = result_df["Count"].sum()
+result_df["Percentage"] = (result_df["Count"] / total * 100).round(2)
+# Sort descending
+result_df = result_df.sort_values(by="Count", ascending=False).reset_index(drop=True)
     # Display final result
 st.write("### Final Keyword Summary (Sorted)")
 st.dataframe(result_df)
