@@ -45,15 +45,15 @@ column = st.selectbox("Select the column for keyword search", data.columns)
 keyword_input = st.text_area("Enter keywords (comma separated)",placeholder="example: pump, bearing, vibration")
 if keyword_input:
     keywords = [k.strip().lower() for k in keyword_input.split(",")]
-    # Do the search
-    results = {}
+    # Accumulate results in a list (not printing in the loop)
+    results = []
     for kw in keywords:
-        results[kw] = data[column].astype(str).str.lower().str.contains(kw).sum()
-        # Display results
-        st.write("### Keyword Counts")
-        result_df = pd.DataFrame({"Keyword": list(results.keys()),"Count": list(results.values())})
+        count = df[column].astype(str).str.lower().str.contains(kw).sum()
+        results.append({"Keyword": kw, "Count": count})
+       # Convert final results to table
+        result_df = pd.DataFrame(results)
+        st.write("### Final Keyword Count Summary")
         st.dataframe(result_df)
-        # Optional: Download button
    
 keywords = {"Stage-1": "S1COM","Stage-2": "S2COM","Stage-3": "S3COM" }
 selected = st.multiselect("Select the stage:", list(keywords.keys()))
