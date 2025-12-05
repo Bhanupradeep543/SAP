@@ -39,6 +39,22 @@ repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
 repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
+ # Select column for search
+column = st.selectbox("Select the column for keyword search", data.columns)
+# Enter keywords
+keyword_input = st.text_area("Enter keywords (comma separated)",placeholder="example: pump, bearing, vibration")
+if keyword_input:
+    keywords = [k.strip().lower() for k in keyword_input.split(",")]
+    # Do the search
+    results = {}
+    for kw in keywords:
+        results[kw] = data[column].astype(str).str.lower().str.contains(kw).sum()
+        # Display results
+        st.write("### Keyword Counts")
+        result_df = pd.DataFrame({"Keyword": list(results.keys()),"Count": list(results.values())})
+        st.dataframe(result_df)
+        # Optional: Download button
+   
 keywords = {"Stage-1": "S1COM","Stage-2": "S2COM","Stage-3": "S3COM" }
 selected = st.multiselect("Select the stage:", list(keywords.keys()))
 if selected:
