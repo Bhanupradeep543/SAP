@@ -157,6 +157,14 @@ if selected:
   st.subheader("📅 Year-wise Pipe leakage issues")
   st.bar_chart(data=yearly_count, x="Year", y="Pipe leakage issues")
   
+  data11=data2[data2['Description'].str.contains('overload|OVERLOAD|Overload|O/L|o/l|current|CURRENT|Current')]
+  data11["Year"] = data11['Notif.date'].dt.year
+  st.write("no.of Over loading/ tripping issues in the selected stage",data11.shape[0])
+  yearly_count = data11.groupby("Year")['Notif.date'].count().reset_index()
+  yearly_count.rename(columns={'Notif.date': "Over loading/ tripping issues"}, inplace=True)
+  st.subheader("📅 Year-wise Pipe leakage issues")
+  st.bar_chart(data=yearly_count, x="Year", y="Over loading/ tripping issues")
+  
  
   date_col = st.selectbox("Select Date column", data2.columns)
   equip_col = st.selectbox("Select Equipment column", data2.columns)
