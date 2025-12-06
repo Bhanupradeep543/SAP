@@ -162,7 +162,7 @@ if selected:
   st.write("no.of Over loading/ tripping issues in the selected stage",data11.shape[0])
   yearly_count = data11.groupby("Year")['Notif.date'].count().reset_index()
   yearly_count.rename(columns={'Notif.date': "Over loading/ tripping issues"}, inplace=True)
-  st.subheader("📅 Year-wise Pipe leakage issues")
+  st.subheader("📅 Year-wise Over loading/ tripping issues")
   st.bar_chart(data=yearly_count, x="Year", y="Over loading/ tripping issues")
   
  
