@@ -125,7 +125,7 @@ if selected:
   st.subheader("📅 Year-wise NRV passings")
   st.bar_chart(data=yearly_count, x="Year", y="NRV passing")
  
-  data7=data2[data2['Description'].str.contains('valve|VALVE|vlv|VLV|Valve|v/v')]
+  data7=data2[data2['Description'].str.contains('valve|VALVE|vlv|VLV|Valve|v/v|BFV|bfv')]
   data7["Year"] = data7['Notif.date'].dt.year
   st.write("no.of valve issues in the selected stage",data7.shape[0])
   yearly_count = data7.groupby("Year")['Notif.date'].count().reset_index()
@@ -156,6 +156,7 @@ if selected:
   yearly_count.rename(columns={'Notif.date': "Pipe leakage issues"}, inplace=True)
   st.subheader("📅 Year-wise Pipe leakage issues")
   st.bar_chart(data=yearly_count, x="Year", y="Pipe leakage issues")
+  
  
   date_col = st.selectbox("Select Date column", data2.columns)
   equip_col = st.selectbox("Select Equipment column", data2.columns)
