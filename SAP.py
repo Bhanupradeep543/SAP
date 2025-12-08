@@ -33,6 +33,7 @@ if st.session_state.uploaded_file is not None:
         data = pd.read_csv(st.session_state.uploaded_file)
     else:
         data = pd.read_excel(st.session_state.uploaded_file)
+        
 data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
 data1=data[data['Main WorkCtr']=='M400CWCT']
 st.subheader('Total SAP notifications considered for analysis')
