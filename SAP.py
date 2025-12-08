@@ -51,12 +51,10 @@ if st.session_state.uploaded_file is not None:
     # Your remaining analytics code goes here
     # (move ALL the logic INSIDE this block)
     
-    data1 = data[data['Main WorkCtr']=='M400CWCT']
-    st.subheader('Total SAP notifications considered for analysis')
-    st.subheader(data1.shape[0])
+data1 = data[data['Main WorkCtr']=='M400CWCT']
+st.subheader('Total SAP notifications considered for analysis')
+st.subheader(data1.shape[0])
     
-    # (Continue with rest of your repeated code)
-
 st.subheader('Top 20 Repeated equipment notifications')
 data=data[data['equipment']!='KORBA STATION COMMON']
 repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
