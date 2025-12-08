@@ -166,8 +166,8 @@ if selected:
   st.bar_chart(data=yearly_count, x="Year", y="Over loading/ tripping issues")
   
  
-  date_col = st.selectbox("Select Date column", data2.columns)
-  equip_col = st.selectbox("Select Equipment column", data2.columns)
+  date_col = "Notif.date"
+  equip_col = "equipment"
   # Convert to datetime
   data2[date_col] = pd.to_datetime(data2[date_col], errors='coerce')
   data2 = data2.dropna(subset=[date_col, equip_col])
