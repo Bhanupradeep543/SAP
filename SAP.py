@@ -17,6 +17,8 @@ import streamlit as st
 import random
 import streamlit as st   
 import base64
+from prophet import Prophet
+from sklearn.metrics import mean_absolute_percentage_error
 
 st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
 if "uploaded_file" not in st.session_state:
@@ -180,25 +182,66 @@ if selected:
   st.subheader("⚙️ Equipment-wise defect frequency")
   st.dataframe(equip_count)
   #    Let user pick one or more equipments
-  selected_equips = st.multiselect("Select equipment(s) to forecast:",options=equip_count[equip_count['Defect_Count'] > 0][equip_col].tolist(),
-  help="You can select multiple equipments for prediction.")
-  forecast_results = []
-  if selected_equips:
-   for eq in selected_equips:
-    eq_data = data2[data2[equip_col] == eq].sort_values(by=date_col)
-    eq_dates = eq_data[date_col].dropna().sort_values()
-    if len(eq_dates) > 1:
-    # Calculate gaps between defects
-     gaps = eq_dates.diff().dt.days.dropna()
-     avg_gap = gaps.mean()
-     last_date = eq_dates.max()
-     next_pred_date = last_date + pd.Timedelta(days=avg_gap)
-     forecast_results.append({"Equipment": eq,"Total_Defects": len(eq_dates),"Average_Gap_(days)": round(avg_gap, 1),
-     "Last_Defect_Date": last_date.date(),"Predicted_Next_Defect": next_pred_date.date()})
-     if forecast_results:
-      result_df = pd.DataFrame(forecast_results)
-      st.subheader("📅 Forecasted Next Defect Dates")
-      st.dataframe(result_df)
-    
+  selected_equips = st.multiselect("Select equipment(s) to forecast:",
+  options=equip_count[equip_count['Defect_Count'] > 0][equip_col].tolist(),
+    help="You can select multiple equipments for prediction." )
+
+forecast_results = []
+
+if selected_equips:
+    for eq in selected_equips:
+        eq_data = data2[data2[equip_col] == eq].sort_values(by=date_col)
+
+        # Prepare time-series format for Prophet
+        ts = eq_data[[date_col]].dropna()
+        ts = ts.rename(columns={date_col: "ds"})
+        ts["y"] = 1  # each defect counts as 1 event
+
+        if len(ts) < 5:
+            continue  # not enough data for ML forecasting
+
+        # Train-test split (80/20)
+        train_size = int(len(ts) * 0.8)
+        train = ts[:train_size]
+        test = ts[train_size:]
+
+        # Build model
+        model = Prophet(
+            daily_seasonality=False,
+            weekly_seasonality=False,
+            yearly_seasonality=True
+        )
+        model.fit(train)
+
+        # Predict on the test set
+        future_test = model.make_future_dataframe(periods=len(test), freq='D')
+        forecast_test = model.predict(future_test)
+
+        # Extract predictions only for actual test dates
+        pred_test = forecast_test[forecast_test['ds'].isin(test['ds'])]
+
+        # Calculate accuracy
+        mape = mean_absolute_percentage_error(test['y'], pred_test['yhat'])
+        accuracy = max(0, round((1 - mape) * 100, 2))
+
+        # Predict next future defect date
+        future = model.make_future_dataframe(periods=120, freq='D')
+        forecast_future = model.predict(future)
+
+        # Next date where predicted defect intensity crosses threshold
+        threshold = 0.5
+        next_defect = forecast_future[forecast_future['yhat'] > threshold]['ds'].min()
+
+        forecast_results.append({
+            "Equipment": eq,
+            "Total_Defects": len(ts),
+            "Model_Accuracy(%)": accuracy,
+            "Next_Predicted_Defect_Date": next_defect.date() if pd.notnull(next_defect) else "No prediction",
+        })
+
+    if forecast_results:
+        st.subheader("📅 AI-Based Forecasted Defect Dates (Prophet Model)")
+        result_df = pd.DataFrame(forecast_results)
+        st.dataframe(result_df)
 
         
