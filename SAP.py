@@ -196,8 +196,19 @@ if selected:
      continue  # not enough data for ML forecasting
     # Train-test split (80/20)
     train_size = int(len(ts) * 0.8)
-    train = ts[:train_size]
-    test = ts[train_size:]
+    # Ensure at least 1 sample in test set
+    if train_size == len(ts) or len(ts) - train_size < 1:
+    # Not enough data for accuracy calculation
+     forecast_results.append({
+        "Equipment": eq,
+        "Total_Defects": len(ts),
+        "Model_Accuracy(%)": "Not enough data",
+        "Next_Predicted_Defect_Date": "Insufficient history"
+    })
+    continue  # Skip this equipment and move on
+
+train = ts[:train_size]
+test = ts[train_size:]
     # Build model
     model = Prophet(daily_seasonality=False,weekly_seasonality=False,
     yearly_seasonality=True)
