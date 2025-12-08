@@ -13,27 +13,39 @@ import random
 import base64
 from prophet import Prophet
 from sklearn.metrics import mean_absolute_percentage_error
-import warnings
-st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
-if "uploaded_file" not in st.session_state:
-    st.session_state.uploaded_file = None
+# File uploader
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "xls", "csv"])
-# Only update the session value when a NEW file is uploaded
 if uploaded_file is not None:
     st.session_state.uploaded_file = uploaded_file
-# ---------- 2) IF FILE EXISTS, PROCESS & SHOW OUTPUT ----------
+
+# -------------------------------
+# PROCESS ONLY IF FILE IS LOADED
+# -------------------------------
 if st.session_state.uploaded_file is not None:
+
     st.success("File loaded successfully")
-    # Load data
+
+    # Read data
     if st.session_state.uploaded_file.name.endswith(".csv"):
         data = pd.read_csv(st.session_state.uploaded_file)
     else:
         data = pd.read_excel(st.session_state.uploaded_file)
-        
-data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
-data1=data[data['Main WorkCtr']=='M400CWCT']
-st.subheader('Total SAP notifications considered for analysis')
-st.subheader(data1.shape[0])
+
+    # Now safe to use "data"
+    data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
+
+    # Your remaining analytics code goes here
+    # (move ALL the logic INSIDE this block)
+    
+    data1 = data[data['Main WorkCtr']=='M400CWCT']
+    st.subheader('Total SAP notifications considered for analysis')
+    st.subheader(data1.shape[0])
+    
+    # (Continue with rest of your repeated code)
+    
+else:
+    st.warning("Please upload a file to proceed")
+
 st.subheader('Top 20 Repeated equipment notifications')
 data=data[data['equipment']!='KORBA STATION COMMON']
 repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
