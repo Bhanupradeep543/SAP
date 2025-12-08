@@ -45,9 +45,6 @@ if st.session_state.uploaded_file is not None:
     # *** Your entire analysis code goes HERE ***
     st.write("Data loaded successfully. Proceeding with analysis...")
 
-else:
-    st.info("Upload a file to start analysis.")
-
     # Now safe to use "data"
     data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
 
