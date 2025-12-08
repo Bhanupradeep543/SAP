@@ -180,7 +180,7 @@ if selected:
   st.subheader("⚙️ Equipment-wise defect frequency")
   st.dataframe(equip_count)
   #    Let user pick one or more equipments
-  selected_equips = st.multiselect("Select equipment(s) to forecast:",options=equip_count[equip_count['Defect_Count'] > 0][equip_col].tolist(),
+  "selected_equips = st.multiselect("Select equipment(s) to forecast:",options=equip_count[equip_count['Defect_Count'] > 0][equip_col].tolist(),
   help="You can select multiple equipments for prediction.")
   forecast_results = []
   if selected_equips:
@@ -198,6 +198,7 @@ if selected:
      if forecast_results:
       result_df = pd.DataFrame(forecast_results)
       st.subheader("📅 Forecasted Next Defect Dates")
-      st.dataframe(result_df)  
+      st.dataframe(result_df)"
+    
 
         
