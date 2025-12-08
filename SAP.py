@@ -163,7 +163,7 @@ if selected:
   # Show equipment list with counts
   st.subheader("⚙️ Equipment-wise defect frequency")
   st.dataframe(equip_count)
-   selected_equips = st.multiselect("Select equipment(s) to forecast:",options=equip_count[equip_count['Defect_Count'] > 0][equip_col].tolist(),
+  selected_equips = st.multiselect("Select equipment(s) to forecast:",options=equip_count[equip_count['Defect_Count'] > 0][equip_col].tolist(),
   help="You can select multiple equipments for prediction.")
   forecast_results = []
   if selected_equips:
