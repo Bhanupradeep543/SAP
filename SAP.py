@@ -175,8 +175,8 @@ if selected_equips:
    forecast_results.append({"Equipment": eq,"Total_Defects": len(eq_dates),"Average_Gap_(days)": round(avg_gap, 1),
    "Last_Defect_Date": last_date.date(),"Predicted_Next_Defect": next_pred_date.date()})
    if forecast_results:
-    result_df = pd.DataFrame(forecast_results)
+    result = pd.DataFrame(forecast_results)
 st.subheader("📅 Forecasted Next Defect Dates")
-st.dataframe(result_df) 
+st.dataframe(result) 
 
 
