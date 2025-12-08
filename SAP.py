@@ -166,8 +166,7 @@ if selected:
   yearly_count.rename(columns={'Notif.date': "Over loading/ tripping issues"}, inplace=True)
   st.subheader("📅 Year-wise Over loading/ tripping issues")
   st.bar_chart(data=yearly_count, x="Year", y="Over loading/ tripping issues")
-  
- 
+   
   date_col = "Notif.date"
   equip_col = "equipment"
   # Convert to datetime
@@ -181,67 +180,48 @@ if selected:
   # Show equipment list with counts
   st.subheader("⚙️ Equipment-wise defect frequency")
   st.dataframe(equip_count)
+     
   #    Let user pick one or more equipments
   selected_equips = st.multiselect("Select equipment(s) to forecast:",
   options=equip_count[equip_count['Defect_Count'] > 0][equip_col].tolist(),
-    help="You can select multiple equipments for prediction." )
-
-forecast_results = []
-
-if selected_equips:
-    for eq in selected_equips:
-        eq_data = data2[data2[equip_col] == eq].sort_values(by=date_col)
-
-        # Prepare time-series format for Prophet
-        ts = eq_data[[date_col]].dropna()
-        ts = ts.rename(columns={date_col: "ds"})
-        ts["y"] = 1  # each defect counts as 1 event
-
-        if len(ts) < 5:
-            continue  # not enough data for ML forecasting
-
-        # Train-test split (80/20)
-        train_size = int(len(ts) * 0.8)
-        train = ts[:train_size]
-        test = ts[train_size:]
-
-        # Build model
-        model = Prophet(
-            daily_seasonality=False,
-            weekly_seasonality=False,
-            yearly_seasonality=True
-        )
-        model.fit(train)
-
-        # Predict on the test set
-        future_test = model.make_future_dataframe(periods=len(test), freq='D')
-        forecast_test = model.predict(future_test)
-
-        # Extract predictions only for actual test dates
-        pred_test = forecast_test[forecast_test['ds'].isin(test['ds'])]
-
-        # Calculate accuracy
-        mape = mean_absolute_percentage_error(test['y'], pred_test['yhat'])
-        accuracy = max(0, round((1 - mape) * 100, 2))
-
-        # Predict next future defect date
-        future = model.make_future_dataframe(periods=120, freq='D')
-        forecast_future = model.predict(future)
-
-        # Next date where predicted defect intensity crosses threshold
-        threshold = 0.5
-        next_defect = forecast_future[forecast_future['yhat'] > threshold]['ds'].min()
-
-        forecast_results.append({
-            "Equipment": eq,
-            "Total_Defects": len(ts),
-            "Model_Accuracy(%)": accuracy,
-            "Next_Predicted_Defect_Date": next_defect.date() if pd.notnull(next_defect) else "No prediction",
+  help="You can select multiple equipments for prediction." )
+  forecast_results = []
+  if selected_equips:
+   for eq in selected_equips:
+    eq_data = data2[data2[equip_col] == eq].sort_values(by=date_col)
+    # Prepare time-series format for Prophet
+    ts = eq_data[[date_col]].dropna()
+    ts = ts.rename(columns={date_col: "ds"})
+    ts["y"] = 1  # each defect counts as 1 event
+    if len(ts) < 5:
+     continue  # not enough data for ML forecasting
+    # Train-test split (80/20)
+    train_size = int(len(ts) * 0.8)
+    train = ts[:train_size]
+    test = ts[train_size:]
+    # Build model
+    model = Prophet(daily_seasonality=False,weekly_seasonality=False,
+    yearly_seasonality=True)
+    model.fit(train)
+   # Predict on the test set
+    future_test = model.make_future_dataframe(periods=len(test), freq='D')
+    forecast_test = model.predict(future_test)
+    # Extract predictions only for actual test dates
+    pred_test = forecast_test[forecast_test['ds'].isin(test['ds'])]
+    # Calculate accuracy
+    mape = mean_absolute_percentage_error(test['y'], pred_test['yhat'])
+    accuracy = max(0, round((1 - mape) * 100, 2))
+    # Predict next future defect date
+    future = model.make_future_dataframe(periods=120, freq='D')
+    forecast_future = model.predict(future)
+    # Next date where predicted defect intensity crosses threshold
+    threshold = 0.5
+    next_defect = forecast_future[forecast_future['yhat'] > threshold]['ds'].min()
+    forecast_results.append({"Equipment": eq,"Total_Defects": len(ts),
+            "Model_Accuracy(%)": accuracy,"Next_Predicted_Defect_Date": next_defect.date() if pd.notnull(next_defect) else "No prediction",
         })
-
-    if forecast_results:
-        st.subheader("📅 AI-Based Forecasted Defect Dates (Prophet Model)")
-        result_df = pd.DataFrame(forecast_results)
-        st.dataframe(result_df)
-
-        
+   if forecast_results:
+    st.subheader("📅 AI-Based Forecasted Defect Dates (Prophet Model)")
+    result_df = pd.DataFrame(forecast_results)
+    st.dataframe(result_df)
+       
