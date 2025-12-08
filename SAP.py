@@ -18,8 +18,6 @@ import base64
 from prophet import Prophet
 from sklearn.metrics import mean_absolute_percentage_error
 import warnings
-
-
 st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
 if "uploaded_file" not in st.session_state:
     st.session_state.uploaded_file = None
