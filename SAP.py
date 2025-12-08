@@ -11,45 +11,13 @@ import io
 from datetime import datetime
 import random 
 import base64
-from prophet import Prophet
-from sklearn.metrics import mean_absolute_percentage_error
 # Initialize session state safely
-if "uploaded_file" not in st.session_state:
-    st.session_state.uploaded_file = None
+
 st.title("NTPC SAP Notifications Analysis")
-if "uploaded_file" not in st.session_state:
-    st.session_state.uploaded_file = None
-# FILE UPLOADER
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)",
 type=["xlsx", "xls", "csv"])
-
-if uploaded_file is not None:
-    st.session_state.uploaded_file = uploaded_file
-
-# -------------------------------------------------
-# PROCESS ONLY IF FILE EXISTS IN SESSION STATE
-# -------------------------------------------------
-if st.session_state.uploaded_file is not None:
-
-    # Load data
-    if st.session_state.uploaded_file.name.endswith(".csv"):
-        data = pd.read_csv(st.session_state.uploaded_file)
-    else:
-        data = pd.read_excel(st.session_state.uploaded_file)
-
-    st.success("File loaded successfully")
-
-    # Now safe to use data
-data['Notif.date'] = pd.to_datetime(data['Notif.date'], errors='coerce')
-
-    # *** Your entire analysis code goes HERE ***
-st.write("Data loaded successfully. Proceeding with analysis...")
-
-    # Now safe to use "data"
+data = pd.read_excel(st.session_state.uploaded_file)
 data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
-
-    # Your remaining analytics code goes here
-    # (move ALL the logic INSIDE this block)
     
 data1 = data[data['Main WorkCtr']=='M400CWCT']
 st.subheader('Total SAP notifications considered for analysis')
