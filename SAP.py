@@ -14,9 +14,15 @@ import base64
 # Initialize session state safely
 
 st.title("NTPC SAP Notifications Analysis")
-uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)",
-type=["xlsx", "xls", "csv"])
-data = pd.read_excel(uploaded_file)
+uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)",type=["xlsx", "xls", "csv"])
+if uploaded_file is not None:
+    # Read Excel or CSV safely
+    if uploaded_file.name.endswith(".csv"):
+        data = pd.read_csv(uploaded_file)
+    else:
+        data = pd.read_excel(uploaded_file)
+
+    st.success("File loaded successfully")
 data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
     
 data1 = data[data['Main WorkCtr']=='M400CWCT']
