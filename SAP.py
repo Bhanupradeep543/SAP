@@ -40,13 +40,13 @@ if st.session_state.uploaded_file is not None:
     st.success("File loaded successfully")
 
     # Now safe to use data
-    data['Notif.date'] = pd.to_datetime(data['Notif.date'], errors='coerce')
+data['Notif.date'] = pd.to_datetime(data['Notif.date'], errors='coerce')
 
     # *** Your entire analysis code goes HERE ***
-    st.write("Data loaded successfully. Proceeding with analysis...")
+st.write("Data loaded successfully. Proceeding with analysis...")
 
     # Now safe to use "data"
-    data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
+data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
 
     # Your remaining analytics code goes here
     # (move ALL the logic INSIDE this block)
