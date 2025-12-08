@@ -59,9 +59,6 @@ else:
     st.subheader(data1.shape[0])
     
     # (Continue with rest of your repeated code)
-    
-else:
-    st.warning("Please upload a file to proceed")
 
 st.subheader('Top 20 Repeated equipment notifications')
 data=data[data['equipment']!='KORBA STATION COMMON']
