@@ -18,8 +18,6 @@ import base64
 from prophet import Prophet
 from sklearn.metrics import mean_absolute_percentage_error
 import warnings
-from statsmodels.tsa.statespace.sarimax import SARIMAX
-from datetime import timedelta
 
 
 st.title("""NTPC SAP Notifications Analysis """) # Tittle addition
