@@ -17,15 +17,11 @@ from sklearn.metrics import mean_absolute_percentage_error
 if "uploaded_file" not in st.session_state:
     st.session_state.uploaded_file = None
 st.title("NTPC SAP Notifications Analysis")
-
 if "uploaded_file" not in st.session_state:
     st.session_state.uploaded_file = None
 # FILE UPLOADER
-
-uploaded_file = st.file_uploader(
-    "Upload your defect data (Excel/CSV)", 
-    type=["xlsx", "xls", "csv"]
-)
+uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)",
+type=["xlsx", "xls", "csv"])
 
 if uploaded_file is not None:
     st.session_state.uploaded_file = uploaded_file
