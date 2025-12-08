@@ -209,29 +209,29 @@ if selected:
 
 train = ts[:train_size]
 test = ts[train_size:]
-    # Build model
-    model = Prophet(daily_seasonality=False,weekly_seasonality=False,
-    yearly_seasonality=True)
-    model.fit(train)
-   # Predict on the test set
-    future_test = model.make_future_dataframe(periods=len(test), freq='D')
-    forecast_test = model.predict(future_test)
-    # Extract predictions only for actual test dates
-    pred_test = forecast_test[forecast_test['ds'].isin(test['ds'])]
-    # Calculate accuracy
-    mape = mean_absolute_percentage_error(test['y'], pred_test['yhat'])
-    accuracy = max(0, round((1 - mape) * 100, 2))
-    # Predict next future defect date
-    future = model.make_future_dataframe(periods=120, freq='D')
-    forecast_future = model.predict(future)
-    # Next date where predicted defect intensity crosses threshold
-    threshold = 0.5
-    next_defect = forecast_future[forecast_future['yhat'] > threshold]['ds'].min()
-    forecast_results.append({"Equipment": eq,"Total_Defects": len(ts),
-            "Model_Accuracy(%)": accuracy,"Next_Predicted_Defect_Date": next_defect.date() if pd.notnull(next_defect) else "No prediction",
-        })
-   if forecast_results:
-    st.subheader("📅 AI-Based Forecasted Defect Dates (Prophet Model)")
-    result_df = pd.DataFrame(forecast_results)
-    st.dataframe(result_df)
+# Build model
+model = Prophet(daily_seasonality=False,weekly_seasonality=False,
+yearly_seasonality=True)
+model.fit(train)
+# Predict on the test set
+future_test = model.make_future_dataframe(periods=len(test), freq='D')
+forecast_test = model.predict(future_test)
+# Extract predictions only for actual test dates
+pred_test = forecast_test[forecast_test['ds'].isin(test['ds'])]
+# Calculate accuracy
+mape = mean_absolute_percentage_error(test['y'], pred_test['yhat'])
+accuracy = max(0, round((1 - mape) * 100, 2))
+# Predict next future defect date
+future = model.make_future_dataframe(periods=120, freq='D')
+forecast_future = model.predict(future)
+# Next date where predicted defect intensity crosses threshold
+threshold = 0.5
+next_defect = forecast_future[forecast_future['yhat'] > threshold]['ds'].min()
+forecast_results.append({"Equipment": eq,"Total_Defects": len(ts),
+"Model_Accuracy(%)": accuracy,"Next_Predicted_Defect_Date": next_defect.date() if pd.notnull(next_defect) else "No prediction",
+ })
+if forecast_results:
+ st.subheader("📅 AI-Based Forecasted Defect Dates (Prophet Model)")
+ result_df = pd.DataFrame(forecast_results)
+ st.dataframe(result_df)
        
