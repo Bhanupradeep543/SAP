@@ -27,47 +27,39 @@ repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
 COLUMN_NAME = "Functional Loc."
-df = data1.copy()
+def validate_row(text):
+    s = str(text).strip()
 
-def extract_parent(value):
-    if not isinstance(value, str):
-        return None
+    # Count hyphens
+    hyphens = s.count("-")
     
-    parts = value.split('-')
+    # Rule 1: minimum 2, maximum 3 hyphens
+    if hyphens < 2 or hyphens > 3:
+        return None  # row removed
 
-    # Remove strings with <2 or >3 hyphens (so <3 or >4 parts)
-    if len(parts) < 3 or len(parts) > 4:
+    # Break into segments
+    parts = s.split("-")
+
+    # Everything after the 2nd hyphen combined
+    after_second = "-".join(parts[2:])
+
+    # Rule 2: if ANY digit appears after 2nd hyphen → remove row
+    if re.search(r'\d', after_second):
         return None
 
-    # Check 3rd segment starts with digit → reject entire string
-    if re.match(r'^\d', parts[2]):
-        return None
+    return s  # row is valid
 
-    # Parent = first 3 segments only
-    parent = '-'.join(parts[:3])
-    return parent
+# Apply the validation
+valid_rows = data1[COLUMN_NAME].astype(str).apply(validate_row)
 
-# Apply transformation
-df["Parent"] = df["equipment"].apply(extract_parent)
+# Filter out removed rows (None)
+filtered = valid_rows.dropna().unique()
 
-# Filter valid parents only
-df_clean = df.dropna(subset=["Parent"])
+# Convert to DataFrame
+result_df = pd.DataFrame({"Valid_Equipment": sorted(filtered)})
 
-# Group original values under each parent
-result = (
-    df_clean.groupby("Parent")
-    .agg({
-        "equipment": lambda x: list(x),   # list of child strings
-        "Parent": "count"                 # occurrence count
-    })
-    .rename(columns={"Parent": "Count", "equipment": "Original_Rows"})
-    .reset_index()
-)
-
-# Display in Streamlit
-st.write("### Final Output: Parent Strings with Mapped Values")
-st.dataframe(result)
-
+st.write("Filtered Equipment (2–3 hyphens, no digits after 2nd hyphen)")
+st.dataframe(result_df)
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
 "1017-S1COM-CWS","1017-S1COM-CWS-SWP","1017-S1COM-CWS-TWS","1017-S2COM-CLT-T4A","1017-S2COM-CLT-T4B","1017-S2COM-CLT-T5A","1017-S2COM-CLT-T5B",
