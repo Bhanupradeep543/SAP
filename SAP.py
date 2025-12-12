@@ -26,7 +26,7 @@ repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
 repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
-COLUMN_NAME = "equipment"
+COLUMN_NAME = "Functional Loc."
 
 # Function to split into sentences
 def split_sentences(text):
