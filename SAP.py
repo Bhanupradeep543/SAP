@@ -146,7 +146,7 @@ if selected:
   st.subheader("📅 Year-wise Over loading/ tripping issues")
   st.bar_chart(data=yearly_count, x="Year", y="Over loading/ tripping issues")
 
-  data12=data2[data2['Description'].str.contains('pr low|PR LOW|DEVELOP|develop|Develop|pressure|PRESSURE')]
+  data12=data2[data2['Description'].str.contains('pr low|PR LOW|DEVELOP|develop|Develop|pressure|PRESSURE|devlp')]
   data12["Year"] = data12['Notif.date'].dt.year
   st.write("no.of pump pressure related issues in the selected stage",data12.shape[0])
   yearly_count = data12.groupby("Year")['Notif.date'].count().reset_index()
