@@ -28,20 +28,31 @@ repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, Tru
 st.write(repeated)
 COLUMN_NAME = "Functional Loc."
 def get_parent(equip):
-    parts = str(equip).split("-")
-    
-    # Keep only the first 3 segments as parent
-    if len(parts) >= 3:
-        parent = "-".join(parts[:3])
-    else:
-        parent = equip  # fallback (rare case)
-        
-    return parent
+    equip = str(equip)
+    parts = equip.split("-")
 
-# Apply parent extraction
+    # Must have at least 3 hyphens → 4 parts
+    if len(parts) >= 4:
+        parent = "-".join(parts[:3])   # Keep first 3 segments
+        ext = parts[3]                 # Extension after 3rd hyphen
+
+        # Check if extension is removable
+        # cases:
+        # 123, P01, DUC1A, A, B, C
+        if re.fullmatch(r"[A-Za-z0-9]+", ext):
+            # Remove extension
+            return parent
+        else:
+            # If extension is something unexpected, still keep parent
+            return parent
+    else:
+        # If fewer than 3 hyphens → nothing to strip
+        return equip
+
+# Apply to the dataset
 parents = data1[COLUMN_NAME].astype(str).apply(get_parent)
 
-# Extract unique parents
+# Unique parent list
 unique_parents = sorted(set(parents))
 
 # Convert to DataFrame
