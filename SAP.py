@@ -70,7 +70,7 @@ def extract_parent(s):
 data1["parent"] = data1[COL].astype(str).apply(extract_parent)
 
 # Keep only valid parent rows
-df_valid = df[df["parent"].apply(is_valid_parent)]
+df_valid = data1[data1["parent"].apply(is_valid_parent)]
 
 # Drop duplicates based on parent only
 df_final = df_valid.drop_duplicates(subset=["parent"])[["parent", EQUIP]]
