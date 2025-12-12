@@ -28,37 +28,41 @@ repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, Tru
 st.write(repeated)
 COLUMN_NAME = "Functional Loc."
 
-# Function to split into sentences
 def split_sentences(text):
     if pd.isna(text):
         return []
-    # Split by ".", ";", ":" or newline
+    # Split by ., ;, :, newline
     parts = re.split(r'[.;:\n]+', str(text))
-    # Strip extra spaces
     return [p.strip() for p in parts if p.strip()]
 
-# Function to check if sentence ends with a number
 def ends_with_number(sentence):
     return bool(re.search(r'\d+$', sentence))
 
-# Process column
-all_sentences = []
+# List to store sentence sets from each row
+sentence_sets = []
 
 for row in data1[COLUMN_NAME].astype(str):
+    # Split into sentences
     sentences = split_sentences(row)
 
-    # Keep only sentences NOT ending in a number
+    # Filter out sentences ending with numbers
     filtered = [s for s in sentences if not ends_with_number(s)]
-    all_sentences.extend(filtered)
 
-# Extract unique set
-unique_sentences = sorted(set(all_sentences))
+    # Convert to set for intersection later
+    sentence_sets.append(set(filtered))
 
-# Convert to dataframe
-result_df = pd.DataFrame({"Unique_Sentences": unique_sentences})
+# If no rows exist, avoid error
+if sentence_sets:
+    # Intersection of all sentence sets → only common sentences remain
+    common_sentences = set.intersection(*sentence_sets)
+else:
+    common_sentences = set()
 
-# Display
-st.write("Unique filtered sentences from Equipment column")
+# Convert to DataFrame
+result_df = pd.DataFrame(sorted(common_sentences), columns=["Common_Sentences"])
+
+# Display results
+st.write("Common Sentences Across All Rows (after filtering)")
 st.dataframe(result_df)
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
