@@ -27,26 +27,27 @@ repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
 COLUMN_NAME = "Functional Loc."
-# Function to extract parent string
-def get_parent(text):
-    text = str(text).strip()
-
-    # Remove last segment after - or _ or .
-    # Example: AAA-BBB-CCC-01 → AAA-BBB-CCC
-    parent = re.sub(r'[-_.][A-Za-z0-9]+$', '', text)
-
+def get_parent(equip):
+    parts = str(equip).split("-")
+    
+    # Keep only the first 3 segments as parent
+    if len(parts) >= 3:
+        parent = "-".join(parts[:3])
+    else:
+        parent = equip  # fallback (rare case)
+        
     return parent
 
-# Apply to entire column
+# Apply parent extraction
 parents = data1[COLUMN_NAME].astype(str).apply(get_parent)
 
-# Extract unique parent values
-unique_parents = sorted(parents.unique())
+# Extract unique parents
+unique_parents = sorted(set(parents))
 
-# Prepare output dataframe
-result_df = pd.DataFrame({"Parent_String": unique_parents})
+# Convert to DataFrame
+result_df = pd.DataFrame({"Parent": unique_parents})
 
-st.write("Unique Parent Equipment Strings")
+st.write("Unique Parent Equipment Codes")
 st.dataframe(result_df)
 
 # Hardcoded keywords
