@@ -27,52 +27,42 @@ repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
 COLUMN_NAME = "Functional Loc."
-def validate_and_extract_parent(equip_string):
-    text = str(equip_string).strip()
-    parts = text.split("-")
-    
-    # Allow only 2 or 3 hyphens → meaning 3 or 4 parts
-    if len(parts) < 3 or len(parts) > 4:
-        return None, None   # invalid row
-    
-    # Segment after 2nd hyphen (index 2)
-    third = parts[2]
-    
-    # If third segment contains any numericals → remove row
-    if re.search(r'\d', third):
-        return None, None
-    
-    # For 3-part string: parent = entire string
-    if len(parts) == 3:
-        parent = text
-    
-    # For 4-part string: ensure the 4th part has NO numericals
-    elif len(parts) == 4:
-        fourth = parts[3]
-        
-        # If fourth segment has numericals → invalid
-        if re.search(r'\d', fourth):
-            return None, None
-        
-        parent = text  # full string is parent since both segments are alphabetic
-    
-    return parent, text  # parent + original row
+def get_parent(value):
+    """Return parent if valid, else None"""
+    parts = value.split("-")
+    hyphen_count = len(parts) - 1
+
+    # keep only if min 2 hyphens and max 3 hyphens
+    if hyphen_count < 2 or hyphen_count > 3:
+        return None
+
+    # Check the segment after 2nd hyphen
+    third_part = parts[2]  # the segment after 2nd hyphen
+
+    # If starts with numeric → reject whole row
+    if re.match(r'^\d', third_part):
+        return None
+
+    # Parent is first 3 parts (2 hyphens)
+    parent = "-".join(parts[:3])
+    return parent
 
 
-parent_map = []  # to store tuples of (parent, original_row)
+records = []
 
-for row in data1[COLUMN_NAME].astype(str):
-    parent, original = validate_and_extract_parent(row)
-    if parent is not None:
-        parent_map.append((parent, original))
+for idx, val in data1[COLUMN].astype(str).items():
+    parent = get_parent(val)
+    if parent:
+        records.append((parent, val))
 
-# Convert to DataFrame
-result_df = pd.DataFrame(parent_map, columns=["Parent", "Original_Equipment"])
 
-# Sort by Parent
-result_df = result_df.sort_values(by="Parent").reset_index(drop=True)
+# Create dataframe
+result_df = pd.DataFrame(records, columns=["Parent", "Original_Equipment"])
 
-st.write("Filtered Unique Equipment Parent Strings With Original Rows")
+# Keep unique parents but show all matching original rows
+result_df = result_df.sort_values(["Parent", "Original_Equipment"]).reset_index(drop=True)
+
+st.write("Filtered Parent Strings with Corresponding Equipment Rows")
 st.dataframe(result_df)
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
