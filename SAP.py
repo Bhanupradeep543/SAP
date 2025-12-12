@@ -26,44 +26,60 @@ repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
 repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
-COLUMN = "Functional Loc."
-def get_parent(value):
-    """Return parent if valid, else None"""
-    parts = value.split("-")
-    hyphen_count = len(parts) - 1
+# Column names
+COL = "Functional Loc."
+EQUIP = "equipment"
 
-    # keep only if min 2 hyphens and max 3 hyphens
-    if hyphen_count < 2 or hyphen_count > 3:
-        return None
+def is_valid_parent(s):
+    """
+    Accept only patterns with:
+    - minimum 2 and maximum 3 hyphens
+    - after the 2nd hyphen: only alphabets allowed, NO digits
+    """
 
-    # Check the segment after 2nd hyphen
-    third_part = parts[2]  # the segment after 2nd hyphen
+    # Count hyphens
+    hyphens = s.count("-")
+    if hyphens < 2 or hyphens > 3:
+        return False
 
-    # If starts with numeric → reject whole row
-    if re.match(r'^\d', third_part):
-        return None
+    # Split into parts
+    parts = s.split("-")
 
-    # Parent is first 3 parts (2 hyphens)
-    parent = "-".join(parts[:3])
-    return parent
+    # Part after second hyphen
+    third_part = parts[2] if len(parts) >= 3 else ""
 
+    # If third part contains ANY digit => reject row
+    if re.search(r"\d", third_part):
+        return False
 
-records = []
-
-for idx, val in data1[COLUMN].astype(str).items():
-    parent = get_parent(val)
-    if parent:
-        records.append((parent, val))
+    return True
 
 
-# Create dataframe
-result_df = pd.DataFrame(records, columns=["Parent", "Original_Equipment"])
+def extract_parent(s):
+    """
+    Extract only: prefix + 2nd hyphen part (parent)
+    Example:
+       1017-S1COM-ACW-ACL  -> 1017-S1COM-ACW-ACL (already parent)
+       1017-S1COM-CTS-DUC  -> 1017-S1COM-CTS-DUC (allowed)
+    """
+    parts = s.split("-")
+    return "-".join(parts[:3]) if len(parts) >= 3 else s
 
-# Keep unique parents but show all matching original rows
-result_df = result_df.sort_values(["Parent", "Original_Equipment"]).reset_index(drop=True)
 
-st.write("Filtered Parent Strings with Corresponding Equipment Rows")
-st.dataframe(result_df)
+# Apply filtering
+data1["parent"] = data1[COL].astype(str).apply(extract_parent)
+
+# Keep only valid parent rows
+df_valid = df[df["parent"].apply(is_valid_parent)]
+
+# Drop duplicates based on parent only
+df_final = df_valid.drop_duplicates(subset=["parent"])[["parent", EQUIP]]
+
+# Rename column back for display
+df_final = df_final.rename(columns={"parent": COL})
+
+st.write("Filtered Parent Functional Locations With Equipment")
+st.dataframe(df_final)
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
 "1017-S1COM-CWS","1017-S1COM-CWS-SWP","1017-S1COM-CWS-TWS","1017-S2COM-CLT-T4A","1017-S2COM-CLT-T4B","1017-S2COM-CLT-T5A","1017-S2COM-CLT-T5B",
