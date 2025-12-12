@@ -154,11 +154,11 @@ if selected:
   st.subheader("📅 Year-wise pump pressure issues")
   st.bar_chart(data=yearly_count, x="Year", y="pump pressure issues")
 
-  tc=data3.shape[0]+data4.shape[0]+data5.shape[0]+data6.shape[0]+data7.shape[0]+data8.shape[0]
-  +data9.shape[0]+data10.shape[0]+data11.shape[0]+data12.shape[0]
+  tc=data3.shape[0]+data4.shape[0]+data5.shape[0]+data6.shape[0]+data7.shape[0]+data8.shape[0]+data9.shape[0]+data10.shape[0]+data11.shape[0]+data12.shape[0]
   per=(tc/data2.shape[0])*100
- 
-  st.write("% of notifications divided into various categories",per)   
+  per=int(per)
+  st.write("% of notifications divided into various categories",per)
+     
   date_col = "Notif.date"
   equip_col = "equipment"
   # Convert to datetime
