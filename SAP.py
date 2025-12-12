@@ -11,6 +11,7 @@ import io
 from datetime import datetime
 import random 
 import base64
+import re
 st.title("NTPC SAP Notifications Analysis")
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)",type=["xlsx", "xls", "csv"])
 data = pd.read_excel(uploaded_file)
@@ -25,6 +26,40 @@ repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
 repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
+COLUMN_NAME = "equipment"
+
+# Function to split into sentences
+def split_sentences(text):
+    if pd.isna(text):
+        return []
+    # Split by ".", ";", ":" or newline
+    parts = re.split(r'[.;:\n]+', str(text))
+    # Strip extra spaces
+    return [p.strip() for p in parts if p.strip()]
+
+# Function to check if sentence ends with a number
+def ends_with_number(sentence):
+    return bool(re.search(r'\d+$', sentence))
+
+# Process column
+all_sentences = []
+
+for row in data1[COLUMN_NAME].astype(str):
+    sentences = split_sentences(row)
+
+    # Keep only sentences NOT ending in a number
+    filtered = [s for s in sentences if not ends_with_number(s)]
+    all_sentences.extend(filtered)
+
+# Extract unique set
+unique_sentences = sorted(set(all_sentences))
+
+# Convert to dataframe
+result_df = pd.DataFrame({"Unique_Sentences": unique_sentences})
+
+# Display
+st.write("Unique filtered sentences from Equipment column")
+st.dataframe(result_df)
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
 "1017-S1COM-CWS","1017-S1COM-CWS-SWP","1017-S1COM-CWS-TWS","1017-S2COM-CLT-T4A","1017-S2COM-CLT-T4B","1017-S2COM-CLT-T5A","1017-S2COM-CLT-T5B",
