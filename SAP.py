@@ -53,7 +53,7 @@ df_valid = data1[data1["parent"].apply(is_valid_parent)]
 df_unique = df_valid.drop_duplicates(subset=["parent"])[["parent", EQUIP]]
 
 # Count appearances in the full master dataset
-appearance = df.groupby("parent").size().reset_index(name="Appearances")
+appearance = data1.groupby("parent").size().reset_index(name="Appearances")
 
 # Merge with unique mapping
 df_final = df_unique.merge(appearance, on="parent", how="left")
