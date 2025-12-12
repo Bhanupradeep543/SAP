@@ -48,7 +48,7 @@ def extract_parent(value):
     return parent
 
 # Apply transformation
-df["Parent"] = df["Equipment"].apply(extract_parent)
+df["Parent"] = df["equipment"].apply(extract_parent)
 
 # Filter valid parents only
 df_clean = df.dropna(subset=["Parent"])
@@ -57,10 +57,10 @@ df_clean = df.dropna(subset=["Parent"])
 result = (
     df_clean.groupby("Parent")
     .agg({
-        "Equipment": lambda x: list(x),   # list of child strings
+        "equipment": lambda x: list(x),   # list of child strings
         "Parent": "count"                 # occurrence count
     })
-    .rename(columns={"Parent": "Count", "Equipment": "Original_Rows"})
+    .rename(columns={"Parent": "Count", "equipment": "Original_Rows"})
     .reset_index()
 )
 
