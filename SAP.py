@@ -27,42 +27,38 @@ repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
 COLUMN_NAME = "Functional Loc."
-def clean_equipment(equip):
-    text = str(equip).strip()
+def validate_row(text):
+    s = str(text).strip()
+
+    # Count hyphens
+    hyphens = s.count("-")
     
-    # Split by hyphens
-    parts = text.split("-")
+    # Rule 1: minimum 2, maximum 3 hyphens
+    if hyphens < 2 or hyphens > 3:
+        return None  # row removed
 
-    # Must have at least 2 hyphens → 3 parts minimum
-    if len(parts) < 3:
-        return text
+    # Break into segments
+    parts = s.split("-")
 
-    # First two parts remain exactly
-    first_two = parts[:2]
+    # Everything after the 2nd hyphen combined
+    after_second = "-".join(parts[2:])
 
-    # Third part exists → remove trailing digits only
-    third = re.sub(r'\d+$', '', parts[2])
+    # Rule 2: if ANY digit appears after 2nd hyphen → remove row
+    if re.search(r'\d', after_second):
+        return None
 
-    # If more parts exist, keep them but remove trailing digits from each
-    cleaned_extra = []
-    for seg in parts[3:]:
-        cleaned_extra.append(re.sub(r'\d+$', '', seg))
+    return s  # row is valid
 
-    # Recombine
-    final = "-".join(first_two + [third] + cleaned_extra)
+# Apply the validation
+valid_rows = data1[COLUMN_NAME].astype(str).apply(validate_row)
 
-    return final
-
-# Apply the cleaning logic
-cleaned_parents = data1 [COLUMN_NAME].astype(str).apply(clean_equipment)
-
-# Unique results
-unique_parents = sorted(set(cleaned_parents))
+# Filter out removed rows (None)
+filtered = valid_rows.dropna().unique()
 
 # Convert to DataFrame
-result_df = pd.DataFrame({"Parent": unique_parents})
+result_df = pd.DataFrame({"Valid_Equipment": sorted(filtered)})
 
-st.write("Unique Parent Equipment Strings (minimum 2 hyphens, numeric extensions removed)")
+st.write("Filtered Equipment (2–3 hyphens, no digits after 2nd hyphen)")
 st.dataframe(result_df)
 
 # Hardcoded keywords
