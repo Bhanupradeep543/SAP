@@ -27,56 +27,46 @@ repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
 COLUMN_NAME = "Functional Loc."
-def validate_and_extract_parent(text):
-    raw = str(text).strip()
+def filter_row(equip):
+    s = str(equip).strip()
 
     # Count hyphens
-    hyphens = raw.count("-")
+    hyphens = s.count("-")
+
+    # Reject if hyphens < 2 or hyphens > 3
     if hyphens < 2 or hyphens > 3:
-        return None   # reject
-
-    parts = raw.split("-")
-
-    # After 2nd hyphen → part index 2
-    after_2 = parts[2]
-
-    # If it begins with a digit → reject row
-    if re.match(r'^\d', after_2):
         return None
 
-    # This row is valid; return parent string (full accepted text)
-    return raw
+    # Split into parts
+    parts = s.split("-")
 
+    # Part after the 2nd hyphen:
+    # (index 2 exists because hyphens >= 2)
+    third_part = parts[2]
 
-# Total master row count (before filtering)
-master_total = len(data)
+    # If third_part contains any numeric → reject
+    if any(char.isdigit() for char in third_part):
+        return None
 
-# Apply validation to all rows
-validated = data1[COLUMN_NAME].astype(str).apply(validate_and_extract_parent)
+    # If 3rd hyphen exists, check 4th segment as well
+    if len(parts) == 4:
+        fourth = parts[3]
+        if any(char.isdigit() for char in fourth):
+            return None
 
-# Remove rejected rows
-cleaned = validated.dropna()
+    # Passed all rules → keep original string
+    return s
 
-# Unique parent strings (in natural order)
-unique_parents = list(dict.fromkeys(cleaned.tolist()))
+# Apply filter to column
+filtered = data1[COLUMN_NAME].apply(filter_row)
 
-# Count frequency of each parent in full dataset
-counts = {parent: (validated == parent).sum() for parent in unique_parents}
+# Keep non-null results
+result = filtered.dropna().unique()
 
-# Compute percentages
-percentage = {
-    parent: round((counts[parent] / master_total) * 100, 2)
-    for parent in unique_parents
-}
+# Convert to DataFrame
+result_df = pd.DataFrame({"Valid_Parents": result})
 
-# Prepare result DataFrame
-result_df = pd.DataFrame({
-    "Parent": unique_parents,
-    "Count": [counts[p] for p in unique_parents],
-    "Percentage": [percentage[p] for p in unique_parents]
-})
-
-st.write("Filtered Parent Equipment Codes with % Occurrence")
+st.write("Filtered Equipment Strings (2–3 hyphens, no numbers after 2nd hyphen)")
 st.dataframe(result_df)
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
