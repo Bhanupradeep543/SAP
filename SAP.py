@@ -26,7 +26,6 @@ repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
 repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
-# Column names
 COL = "Functional Loc."
 EQUIP = "equipment"
 
@@ -34,48 +33,45 @@ def is_valid_parent(s):
     hyphens = s.count("-")
     if hyphens < 2 or hyphens > 3:
         return False
-
     parts = s.split("-")
     third_part = parts[2] if len(parts) >= 3 else ""
-
-    # Reject if third part contains ANY digit
     if re.search(r"\d", third_part):
         return False
-
     return True
-
 
 def extract_parent(s):
     parts = s.split("-")
     return "-".join(parts[:3]) if len(parts) >= 3 else s
 
-
-# Extract parent for each entry
+# Extract parent
 data1["parent"] = data1[COL].astype(str).apply(extract_parent)
 
-# Get valid parents only
+# Keep only valid parents
 df_valid = data1[data1["parent"].apply(is_valid_parent)]
 
-# Drop duplicates to get only one representative row
+# Get unique rows for parent → equipment mapping
 df_unique = df_valid.drop_duplicates(subset=["parent"])[["parent", EQUIP]]
 
-# ---- NEW PART: COUNT APPEARANCE IN FULL MASTER DATA ----
-appearance = (
-    data1.groupby("parent")
-    .size()
-    .reset_index(name="Appearances")
-)
+# Count appearances in the full master dataset
+appearance = df.groupby("parent").size().reset_index(name="Appearances")
 
-# Merge unique parent rows with their appearance count
+# Merge with unique mapping
 df_final = df_unique.merge(appearance, on="parent", how="left")
-# Sort descending by appearance count
-df_final = df_final.sort_values(by="Appearances", ascending=False)
 
-# Drop index and present clean output
-df_final = df_final.reset_index(drop=True)
+# Filter: appearances > 40
+df_final = df_final[df_final["Appearances"] > 40]
+
+# Sort descending by appearances
+df_final = df_final.sort_values(by="Appearances", ascending=False).reset_index(drop=True)
+
+# Add % column
+total_appearances = df_final["Appearances"].sum()
+df_final["%"] = (df_final["Appearances"] / total_appearances * 100).round(2)
+
+# Rename column for display
 df_final = df_final.rename(columns={"parent": COL})
 
-st.write("Final Parent Functional Locations With Equipment & Appearance Count")
+st.write("Final Filtered Equipment Data (Appearances > 40, Descending Order with %)")
 st.dataframe(df_final)
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
