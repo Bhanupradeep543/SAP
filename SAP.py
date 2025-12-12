@@ -68,6 +68,8 @@ appearance = (
 
 # Merge unique parent rows with their appearance count
 df_final = df_unique.merge(appearance, on="parent", how="left")
+# Sort descending by appearance count
+df_final = df_final.sort_values(by="Appearances", ascending=False)
 
 # Drop index and present clean output
 df_final = df_final.reset_index(drop=True)
