@@ -31,38 +31,46 @@ COLUMN_NAME = "Functional Loc."
 def split_sentences(text):
     if pd.isna(text):
         return []
-    # Split by ., ;, :, newline
     parts = re.split(r'[.;:\n]+', str(text))
     return [p.strip() for p in parts if p.strip()]
 
+# Normalize by removing trailing - / _ / . + alphanumerics
+def normalize(sentence):
+    # Remove last segment: -XYZ12, _A, .01 etc.
+    base = re.sub(r'[-_.][A-Za-z0-9]+$', '', sentence)
+
+    # Also remove trailing raw alphanumerics without symbols
+    base = re.sub(r'[A-Za-z0-9]+$', '', base)
+
+    return base.strip()
+
+# Sentences ending with number should be ignored
 def ends_with_number(sentence):
     return bool(re.search(r'\d+$', sentence))
 
-# List to store sentence sets from each row
 sentence_sets = []
 
 for row in data1[COLUMN_NAME].astype(str):
-    # Split into sentences
     sentences = split_sentences(row)
 
-    # Filter out sentences ending with numbers
+    # Remove sentences ending with pure numbers
     filtered = [s for s in sentences if not ends_with_number(s)]
 
-    # Convert to set for intersection later
-    sentence_sets.append(set(filtered))
+    # Normalize to parent only
+    normalized = [normalize(s) for s in filtered]
 
-# If no rows exist, avoid error
+    # Store as set
+    sentence_sets.append(set(normalized))
+
+# Intersection across all rows — only common parents
 if sentence_sets:
-    # Intersection of all sentence sets → only common sentences remain
     common_sentences = set.intersection(*sentence_sets)
 else:
     common_sentences = set()
 
-# Convert to DataFrame
 result_df = pd.DataFrame(sorted(common_sentences), columns=["Common_Sentences"])
 
-# Display results
-st.write("Common Sentences Across All Rows (after filtering)")
+st.write("Common Parent Sentences Across All Rows")
 st.dataframe(result_df)
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
