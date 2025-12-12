@@ -27,31 +27,44 @@ repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
 COLUMN_NAME = "Functional Loc."
-def extract_parent(s):
-    parts = s.split('-')
-    if len(parts) < 3:
-        return s
+def get_parent(equip):
+    equip = str(equip).strip()
 
-    parent = '-'.join(parts[:3])
-    remainder = '-'.join(parts[3:]) if len(parts) > 3 else ""
+    # Count hyphens → need minimum 2 (3 segments)
+    if equip.count("-") < 2:
+        return None  # ignore this row entirely
 
-    # Remove numeric OR alphabetic extension (A/B/C etc.)
-    if re.fullmatch(r"[A-Za-z0-9]+", remainder):
-        return parent
+    parts = equip.split("-")
 
-    return s
+    # Parent = first 3 segments only
+    parent = "-".join(parts[:3])
 
-# Apply parent extraction on Functional Loc
-data1["Parent_FL"] = data1["Functional Loc"].astype(str).apply(extract_parent)
+    # If there is extension after 3rd hyphen:
+    if len(parts) > 3:
+        ext = parts[3]
 
-# Group and collect Equipment rows
-final_output = (
-    data1.groupby("Parent_FL")["equipment"]
-    .apply(lambda x: sorted(x.unique()))
-    .reset_index(name="Equipment_List")
-)
+        # If extension is letters/digits (A/B/C or numericals)
+        if re.fullmatch(r"[A-Za-z0-9]+", ext):
+            return parent  # strip extension
 
-print(final_output)
+    # No extension → return original parent
+    return parent
+
+
+# Apply parent extraction
+parents = data1[COLUMN_NAME].astype(str).apply(get_parent)
+
+# Remove None values (rows with less than 2 hyphens)
+parents = parents.dropna()
+
+# Unique parent list
+unique_parents = sorted(set(parents))
+
+result_df = pd.DataFrame({"Parent": unique_parents})
+
+st.write("Unique Parent Equipment Codes")
+st.dataframe(result_df)
+
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
 "1017-S1COM-CWS","1017-S1COM-CWS-SWP","1017-S1COM-CWS-TWS","1017-S2COM-CLT-T4A","1017-S2COM-CLT-T4B","1017-S2COM-CLT-T5A","1017-S2COM-CLT-T5B",
