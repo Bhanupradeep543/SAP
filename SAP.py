@@ -27,51 +27,28 @@ repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
 COLUMN_NAME = "Functional Loc."
+# Function to extract parent string
+def get_parent(text):
+    text = str(text).strip()
 
-def split_sentences(text):
-    if pd.isna(text):
-        return []
-    parts = re.split(r'[.;:\n]+', str(text))
-    return [p.strip() for p in parts if p.strip()]
+    # Remove last segment after - or _ or .
+    # Example: AAA-BBB-CCC-01 → AAA-BBB-CCC
+    parent = re.sub(r'[-_.][A-Za-z0-9]+$', '', text)
 
-# Normalize by removing trailing - / _ / . + alphanumerics
-def normalize(sentence):
-    # Remove last segment: -XYZ12, _A, .01 etc.
-    base = re.sub(r'[-_.][A-Za-z0-9]+$', '', sentence)
+    return parent
 
-    # Also remove trailing raw alphanumerics without symbols
-    base = re.sub(r'[A-Za-z0-9]+$', '', base)
+# Apply to entire column
+parents = data1[COLUMN_NAME].astype(str).apply(get_parent)
 
-    return base.strip()
+# Extract unique parent values
+unique_parents = sorted(parents.unique())
 
-# Sentences ending with number should be ignored
-def ends_with_number(sentence):
-    return bool(re.search(r'\d+$', sentence))
+# Prepare output dataframe
+result_df = pd.DataFrame({"Parent_String": unique_parents})
 
-sentence_sets = []
-
-for row in data1[COLUMN_NAME].astype(str):
-    sentences = split_sentences(row)
-
-    # Remove sentences ending with pure numbers
-    filtered = [s for s in sentences if not ends_with_number(s)]
-
-    # Normalize to parent only
-    normalized = [normalize(s) for s in filtered]
-
-    # Store as set
-    sentence_sets.append(set(normalized))
-
-# Intersection across all rows — only common parents
-if sentence_sets:
-    common_sentences = set.intersection(*sentence_sets)
-else:
-    common_sentences = set()
-
-result_df = pd.DataFrame(sorted(common_sentences), columns=["Common_Sentences"])
-
-st.write("Common Parent Sentences Across All Rows")
+st.write("Unique Parent Equipment Strings")
 st.dataframe(result_df)
+
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
 "1017-S1COM-CWS","1017-S1COM-CWS-SWP","1017-S1COM-CWS-TWS","1017-S2COM-CLT-T4A","1017-S2COM-CLT-T4B","1017-S2COM-CLT-T5A","1017-S2COM-CLT-T5B",
