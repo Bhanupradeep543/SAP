@@ -50,16 +50,16 @@ df_valid = data1[data1["parent"].apply(is_valid_parent)]
 # Get unique rows for parent → equipment mapping
 df_unique = df_valid.drop_duplicates(subset=["parent"])[["parent", EQUIP]]
 # Count appearances in the full master dataset
-appearance = data1.groupby("parent").size().reset_index(name="Appearances")
+appearance = data1.groupby("parent").size().reset_index(name="Total Count")
 # Merge with unique mapping
 df_final = df_unique.merge(appearance, on="parent", how="left")
 # Filter: appearances > 40
-df_final = df_final[df_final["Appearances"] > 40]
+df_final = df_final[df_final["Total Count"] > 40]
 # Sort descending by appearances
-df_final = df_final.sort_values(by="Appearances", ascending=False).reset_index(drop=True)
+df_final = df_final.sort_values(by="Total Count", ascending=False).reset_index(drop=True)
 # Add % column
-total_appearances = df_final["Appearances"].sum()
-df_final["%"] = (df_final["Appearances"] / total_appearances * 100).round().astype(int)
+total_appearances = df_final["Total Count"].sum()
+df_final["%"] = (df_final["Total Count"] / total_appearances * 100).round().astype(int)
 # Rename column for display
 df_final = df_final.rename(columns={"parent": COL})
 st.write("system wise no.of defects in last 10 years")
