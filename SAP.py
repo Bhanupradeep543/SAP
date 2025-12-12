@@ -28,39 +28,42 @@ repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, Tru
 st.write(repeated)
 COLUMN_NAME = "Functional Loc."
 def get_parent(equip):
-    equip = str(equip)
+    equip = str(equip).strip()
+
+    # Count hyphens → need minimum 2 (3 segments)
+    if equip.count("-") < 2:
+        return None  # ignore this row entirely
+
     parts = equip.split("-")
 
-    # Must have at least 3 hyphens → 4 parts
-    if len(parts) >= 4:
-        parent = "-".join(parts[:3])   # Keep first 3 segments
-        ext = parts[3]                 # Extension after 3rd hyphen
+    # Parent = first 3 segments only
+    parent = "-".join(parts[:3])
 
-        # Check if extension is removable
-        # cases:
-        # 123, P01, DUC1A, A, B, C
+    # If there is extension after 3rd hyphen:
+    if len(parts) > 3:
+        ext = parts[3]
+
+        # If extension is letters/digits (A/B/C or numericals)
         if re.fullmatch(r"[A-Za-z0-9]+", ext):
-            # Remove extension
-            return parent
-        else:
-            # If extension is something unexpected, still keep parent
-            return parent
-    else:
-        # If fewer than 3 hyphens → nothing to strip
-        return equip
+            return parent  # strip extension
 
-# Apply to the dataset
+    # No extension → return original parent
+    return parent
+
+
+# Apply parent extraction
 parents = data1[COLUMN_NAME].astype(str).apply(get_parent)
+
+# Remove None values (rows with less than 2 hyphens)
+parents = parents.dropna()
 
 # Unique parent list
 unique_parents = sorted(set(parents))
 
-# Convert to DataFrame
 result_df = pd.DataFrame({"Parent": unique_parents})
 
 st.write("Unique Parent Equipment Codes")
 st.dataframe(result_df)
-
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
 "1017-S1COM-CWS","1017-S1COM-CWS-SWP","1017-S1COM-CWS-TWS","1017-S2COM-CLT-T4A","1017-S2COM-CLT-T4B","1017-S2COM-CLT-T5A","1017-S2COM-CLT-T5B",
