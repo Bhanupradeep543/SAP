@@ -27,42 +27,42 @@ repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
 COLUMN_NAME = "Functional Loc."
-def get_parent(equip):
-    equip = str(equip).strip()
+def clean_equipment(equip):
+    text = str(equip).strip()
+    
+    # Split by hyphens
+    parts = text.split("-")
 
-    # Count hyphens → need minimum 2 (3 segments)
-    if equip.count("-") < 2:
-        return None  # ignore this row entirely
+    # Must have at least 2 hyphens → 3 parts minimum
+    if len(parts) < 3:
+        return text
 
-    parts = equip.split("-")
+    # First two parts remain exactly
+    first_two = parts[:2]
 
-    # Parent = first 3 segments only
-    parent = "-".join(parts[:3])
+    # Third part exists → remove trailing digits only
+    third = re.sub(r'\d+$', '', parts[2])
 
-    # If there is extension after 3rd hyphen:
-    if len(parts) > 3:
-        ext = parts[3]
+    # If more parts exist, keep them but remove trailing digits from each
+    cleaned_extra = []
+    for seg in parts[3:]:
+        cleaned_extra.append(re.sub(r'\d+$', '', seg))
 
-        # If extension is letters/digits (A/B/C or numericals)
-        if re.fullmatch(r"[A-Za-z0-9]+", ext):
-            return parent  # strip extension
+    # Recombine
+    final = "-".join(first_two + [third] + cleaned_extra)
 
-    # No extension → return original parent
-    return parent
+    return final
 
+# Apply the cleaning logic
+cleaned_parents = data1 [COLUMN_NAME].astype(str).apply(clean_equipment)
 
-# Apply parent extraction
-parents = data1[COLUMN_NAME].astype(str).apply(get_parent)
+# Unique results
+unique_parents = sorted(set(cleaned_parents))
 
-# Remove None values (rows with less than 2 hyphens)
-parents = parents.dropna()
-
-# Unique parent list
-unique_parents = sorted(set(parents))
-
+# Convert to DataFrame
 result_df = pd.DataFrame({"Parent": unique_parents})
 
-st.write("Unique Parent Equipment Codes")
+st.write("Unique Parent Equipment Strings (minimum 2 hyphens, numeric extensions removed)")
 st.dataframe(result_df)
 
 # Hardcoded keywords
