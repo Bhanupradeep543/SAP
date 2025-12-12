@@ -31,24 +31,14 @@ COL = "Functional Loc."
 EQUIP = "equipment"
 
 def is_valid_parent(s):
-    """
-    Accept only patterns with:
-    - minimum 2 and maximum 3 hyphens
-    - after the 2nd hyphen: only alphabets allowed, NO digits
-    """
-
-    # Count hyphens
     hyphens = s.count("-")
     if hyphens < 2 or hyphens > 3:
         return False
 
-    # Split into parts
     parts = s.split("-")
-
-    # Part after second hyphen
     third_part = parts[2] if len(parts) >= 3 else ""
 
-    # If third part contains ANY digit => reject row
+    # Reject if third part contains ANY digit
     if re.search(r"\d", third_part):
         return False
 
@@ -56,29 +46,34 @@ def is_valid_parent(s):
 
 
 def extract_parent(s):
-    """
-    Extract only: prefix + 2nd hyphen part (parent)
-    Example:
-       1017-S1COM-ACW-ACL  -> 1017-S1COM-ACW-ACL (already parent)
-       1017-S1COM-CTS-DUC  -> 1017-S1COM-CTS-DUC (allowed)
-    """
     parts = s.split("-")
     return "-".join(parts[:3]) if len(parts) >= 3 else s
 
 
-# Apply filtering
+# Extract parent for each entry
 data1["parent"] = data1[COL].astype(str).apply(extract_parent)
 
-# Keep only valid parent rows
+# Get valid parents only
 df_valid = data1[data1["parent"].apply(is_valid_parent)]
 
-# Drop duplicates based on parent only
-df_final = df_valid.drop_duplicates(subset=["parent"])[["parent", EQUIP]]
+# Drop duplicates to get only one representative row
+df_unique = df_valid.drop_duplicates(subset=["parent"])[["parent", EQUIP]]
 
-# Rename column back for display
+# ---- NEW PART: COUNT APPEARANCE IN FULL MASTER DATA ----
+appearance = (
+    df.groupby("parent")
+    .size()
+    .reset_index(name="Appearances")
+)
+
+# Merge unique parent rows with their appearance count
+df_final = df_unique.merge(appearance, on="parent", how="left")
+
+# Drop index and present clean output
+df_final = df_final.reset_index(drop=True)
 df_final = df_final.rename(columns={"parent": COL})
 
-st.write("Filtered Parent Functional Locations With Equipment")
+st.write("Final Parent Functional Locations With Equipment & Appearance Count")
 st.dataframe(df_final)
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
