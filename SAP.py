@@ -61,7 +61,7 @@ df_unique = df_valid.drop_duplicates(subset=["parent"])[["parent", EQUIP]]
 
 # ---- NEW PART: COUNT APPEARANCE IN FULL MASTER DATA ----
 appearance = (
-    df.groupby("parent")
+    data1.groupby("parent")
     .size()
     .reset_index(name="Appearances")
 )
