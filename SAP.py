@@ -27,46 +27,52 @@ repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
 COLUMN_NAME = "Functional Loc."
-def filter_row(equip):
-    s = str(equip).strip()
-
-    # Count hyphens
-    hyphens = s.count("-")
-
-    # Reject if hyphens < 2 or hyphens > 3
-    if hyphens < 2 or hyphens > 3:
-        return None
-
-    # Split into parts
-    parts = s.split("-")
-
-    # Part after the 2nd hyphen:
-    # (index 2 exists because hyphens >= 2)
-    third_part = parts[2]
-
-    # If third_part contains any numeric → reject
-    if any(char.isdigit() for char in third_part):
-        return None
-
-    # If 3rd hyphen exists, check 4th segment as well
-    if len(parts) == 4:
+def validate_and_extract_parent(equip_string):
+    text = str(equip_string).strip()
+    parts = text.split("-")
+    
+    # Allow only 2 or 3 hyphens → meaning 3 or 4 parts
+    if len(parts) < 3 or len(parts) > 4:
+        return None, None   # invalid row
+    
+    # Segment after 2nd hyphen (index 2)
+    third = parts[2]
+    
+    # If third segment contains any numericals → remove row
+    if re.search(r'\d', third):
+        return None, None
+    
+    # For 3-part string: parent = entire string
+    if len(parts) == 3:
+        parent = text
+    
+    # For 4-part string: ensure the 4th part has NO numericals
+    elif len(parts) == 4:
         fourth = parts[3]
-        if any(char.isdigit() for char in fourth):
-            return None
+        
+        # If fourth segment has numericals → invalid
+        if re.search(r'\d', fourth):
+            return None, None
+        
+        parent = text  # full string is parent since both segments are alphabetic
+    
+    return parent, text  # parent + original row
 
-    # Passed all rules → keep original string
-    return s
 
-# Apply filter to column
-filtered = data1[COLUMN_NAME].apply(filter_row)
+parent_map = []  # to store tuples of (parent, original_row)
 
-# Keep non-null results
-result = filtered.dropna().unique()
+for row in data1[COLUMN_NAME].astype(str):
+    parent, original = validate_and_extract_parent(row)
+    if parent is not None:
+        parent_map.append((parent, original))
 
 # Convert to DataFrame
-result_df = pd.DataFrame({"Valid_Parents": result})
+result_df = pd.DataFrame(parent_map, columns=["Parent", "Original_Equipment"])
 
-st.write("Filtered Equipment Strings (2–3 hyphens, no numbers after 2nd hyphen)")
+# Sort by Parent
+result_df = result_df.sort_values(by="Parent").reset_index(drop=True)
+
+st.write("Filtered Unique Equipment Parent Strings With Original Rows")
 st.dataframe(result_df)
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
