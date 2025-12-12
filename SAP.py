@@ -45,66 +45,27 @@ def extract_parent(s):
 
 # Extract parent
 data1["parent"] = data1[COL].astype(str).apply(extract_parent)
-
 # Keep only valid parents
 df_valid = data1[data1["parent"].apply(is_valid_parent)]
-
 # Get unique rows for parent → equipment mapping
 df_unique = df_valid.drop_duplicates(subset=["parent"])[["parent", EQUIP]]
-
 # Count appearances in the full master dataset
 appearance = data1.groupby("parent").size().reset_index(name="Appearances")
-
 # Merge with unique mapping
 df_final = df_unique.merge(appearance, on="parent", how="left")
-
 # Filter: appearances > 40
 df_final = df_final[df_final["Appearances"] > 40]
-
 # Sort descending by appearances
 df_final = df_final.sort_values(by="Appearances", ascending=False).reset_index(drop=True)
-
 # Add % column
 total_appearances = df_final["Appearances"].sum()
 df_final["%"] = (df_final["Appearances"] / total_appearances * 100).round().astype(int)
-
 # Rename column for display
 df_final = df_final.rename(columns={"parent": COL})
-
 st.write("system wise no.of defects in last 10 years")
 st.dataframe(df_final)
-# Hardcoded keywords
-KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
-"1017-S1COM-CWS","1017-S1COM-CWS-SWP","1017-S1COM-CWS-TWS","1017-S2COM-CLT-T4A","1017-S2COM-CLT-T4B","1017-S2COM-CLT-T5A","1017-S2COM-CLT-T5B",
-"1017-S2COM-CLT-T6A","1017-S2COM-CLT-T6B","1017-S2COM-CTS","1017-S2COM-CWS-CHL","1017-S2COM-CWS","1017-S2COM-CWS-SWP","1017-S2COM-CWS-TS",
-"1017-S3COM-CLT-T7A","1017-S3COM-CLT-T7B","1017-S3COM-CWS"]
-# Mapping keywords → final display name
-KEYWORD_MAP = {"1017-S1COM-ACW-ACL":"ADD.CLARIFIED PUMP SYSTEM","1017-S1COM-ACW-ACT":"ADD.CLARIFIED COOLING TOWERS","1017-S1COM-CLT-T01":"ST-1 COOLING TOWER-1","1017-S1COM-CLT-T02":"ST-1 COOLING TOWER-2",
-"1017-S1COM-CLT-T03":"ST-1 COOLING TOWER-3","1017-S1COM-CTS":"ST-1 CT PUMPS SYSTEM","1017-S1COM-CWS":"ST-1 CW SYSTEM","1017-S1COM-CWS-SWP":"ST-1 SCREEN WASH PUMPS SYSTEM","1017-S1COM-CWS-TWS":"ST-1 TWS SYSTEM",
-"1017-S2COM-CLT-T4A":"ST-2 COOLING TOWER 4A","1017-S2COM-CLT-T4B":"ST-2 COOLING TOWER 4B","1017-S2COM-CLT-T5A":"ST-2 COOLING TOWER 5A",
-"1017-S2COM-CLT-T5B":"ST-2 COOLING TOWER 5B","1017-S2COM-CLT-T6A":"ST-2 COOLING TOWER 6A","1017-S2COM-CLT-T6B":"ST-2 COOLING TOWER 6B",
-"1017-S2COM-CTS":"ST-2 CT PUMPS SYSTEM","1017-S2COM-CWS-CHL":"ST-2 CW CHLORINATION SYSTEM","1017-S2COM-CWS":"ST-2 CW SYSTEM","1017-S2COM-CWS-SWP":"ST-2 SCREEN WASH PUMP SYSTEM",
-"1017-S2COM-CWS-TS":"ST-2 TWS SYSTEM","1017-S3COM-CLT-T7A":"ST-3 COOLING TOWER 7A","1017-S3COM-CLT-T7B":"ST-3 COOLING TOWER 7B","1017-S3COM-CWS":"ST-3 CW SYSTEM"}
-COLUMN_NAME = "Functional Loc."
-# Process column
-col_data = data[COLUMN_NAME].astype(str)
-results = []
-# Count occurrences for each keyword
-for kw in KEYWORDS:
-    count = col_data.str.contains(kw).sum()
-    final_name = KEYWORD_MAP.get(kw, kw)
-    results.append({"Keyword": final_name,"Count": count})
-    # Convert to dataframe
-result_df = pd.DataFrame(results)
- # Total count for % calculation
-total = result_df["Count"].sum()
-result_df["Percentage"] = (result_df["Count"] / total * 100).astype(int)
-# Sort descending
-result_df = result_df.sort_values(by="Count", ascending=False).reset_index(drop=True)
-    # Display final result
-st.write("system wise no.of defects in last 10 years")
-st.dataframe(result_df)
-# PC code without errors
+
+
 keywords = {"Stage-1": "S1COM","Stage-2": "S2COM","Stage-3": "S3COM" }
 selected = st.multiselect("Select the stage:", list(keywords.keys()))
 if selected:
