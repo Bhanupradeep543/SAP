@@ -162,8 +162,7 @@ if selected:
   st.subheader("📅 Year-wise Line/ CT Nozzles chokage issues")
   st.bar_chart(data=yearly_count, x="Year", y="Line/ CT Nozzles chokage issues")
 
-  tc=data3.shape[0]+data4.shape[0]+data5.shape[0]+data6.shape[0]+data7.shape[0]+data8.shape[0]+
-  data9.shape[0]+data10.shape[0]+data11.shape[0]+data12.shape[0]+data13.shape[0]
+  tc=data3.shape[0]+data4.shape[0]+data5.shape[0]+data6.shape[0]+data7.shape[0]+data8.shape[0]+data9.shape[0]+data10.shape[0]+data11.shape[0]+data12.shape[0]+data13.shape[0]
   per=(tc/data2.shape[0])*100
   per=int(per)
   st.write("% of notifications divided into various categories",per)
