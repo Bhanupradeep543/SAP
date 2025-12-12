@@ -27,39 +27,48 @@ repeated = repeat_defects[repeat_defects['Count'] > 50]
 repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
 st.write(repeated)
 COLUMN_NAME = "Functional Loc."
-def validate_row(text):
+def validate_and_keep(text):
     s = str(text).strip()
 
     # Count hyphens
-    hyphens = s.count("-")
-    
-    # Rule 1: minimum 2, maximum 3 hyphens
-    if hyphens < 2 or hyphens > 3:
-        return None  # row removed
+    hyphen_count = s.count("-")
 
-    # Break into segments
-    parts = s.split("-")
-
-    # Everything after the 2nd hyphen combined
-    after_second = "-".join(parts[2:])
-
-    # Rule 2: if ANY digit appears after 2nd hyphen → remove row
-    if re.search(r'\d', after_second):
+    # Must have min 2 and max 3 hyphens
+    if hyphen_count < 2 or hyphen_count > 3:
         return None
 
-    return s  # row is valid
+    # Split into parts
+    parts = s.split("-")
 
-# Apply the validation
-valid_rows = data1[COLUMN_NAME].astype(str).apply(validate_row)
+    # After 2nd hyphen → check for numericals
+    # Example: 1017 - S1COM - CWS(3rd) - EXT(4th)
+    tail_parts = parts[2:]  # everything after 2nd hyphen
 
-# Filter out removed rows (None)
-filtered = valid_rows.dropna().unique()
+    # If ANY part contains digits → reject row
+    for segment in tail_parts:
+        if re.search(r'\d', segment):  # contains any digit
+            return None
 
-# Convert to DataFrame
-result_df = pd.DataFrame({"Valid_Equipment": sorted(filtered)})
+    return s  # keep the row as it is
+# Apply validation filter
+filtered = data1[COLUMN_NAME].astype(str).apply(validate_and_keep)
 
-st.write("Filtered Equipment (2–3 hyphens, no digits after 2nd hyphen)")
-st.dataframe(result_df)
+# Remove None values
+valid_rows = filtered.dropna()
+
+# Compute counts
+result = valid_rows.value_counts().reset_index()
+result.columns = ["Equipment_String", "Count"]
+
+# Percentage calculation
+total = result["Count"].sum()
+result["Percentage"] = (result["Count"] / total * 100).round(2)
+
+# Sort highest first
+result = result.sort_values(by="Count", ascending=False).reset_index(drop=True)
+
+st.write("Filtered Unique Parent Equipment Strings (Based on Final Rules)")
+st.dataframe(result)
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
 "1017-S1COM-CWS","1017-S1COM-CWS-SWP","1017-S1COM-CWS-TWS","1017-S2COM-CLT-T4A","1017-S2COM-CLT-T4B","1017-S2COM-CLT-T5A","1017-S2COM-CLT-T5B",
