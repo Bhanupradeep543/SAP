@@ -74,7 +74,7 @@ if selected:
   df['each notification interval in terms of weeks'] = ((multiplier)/df['Count']).round().astype(int)
   st.write(df)
    
-  data3=data2[data2['Description'].str.contains('gland|GLAND|Gland|galand')]
+  data3=data2[data2['Description'].str.contains('gland|GLAND|Gland|galand|GLD|gld']
   data3["Year"] = data3['Notif.date'].dt.year
   st.write("no.of gland leaks in the selected stage",data3.shape[0])
   yearly_count = data3.groupby("Year")['Notif.date'].count().reset_index()
