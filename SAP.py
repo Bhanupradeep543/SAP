@@ -145,6 +145,14 @@ if selected:
   yearly_count.rename(columns={'Notif.date': "Over loading/ tripping issues"}, inplace=True)
   st.subheader("📅 Year-wise Over loading/ tripping issues")
   st.bar_chart(data=yearly_count, x="Year", y="Over loading/ tripping issues")
+
+  data12=data2[data2['Description'].str.contains('pr low|DEVELOP|develop|Develop|pressure|PRESSURE')]
+  data12["Year"] = data12['Notif.date'].dt.year
+  st.write("no.of pump pressure related issues in the selected stage",data12.shape[0])
+  yearly_count = data12.groupby("Year")['Notif.date'].count().reset_index()
+  yearly_count.rename(columns={'Notif.date': "pump pressure issues"}, inplace=True)
+  st.subheader("📅 Year-wise pump pressure issues")
+  st.bar_chart(data=yearly_count, x="Year", y="pump pressure issues")
    
   date_col = "Notif.date"
   equip_col = "equipment"
@@ -159,7 +167,8 @@ if selected:
   # Show equipment list with counts
   st.subheader("⚙️ Equipment-wise defect count in selected stage")
   st.dataframe(equip_count)
-  tc=data3.shape[0]+data4.shape[0]+data5.shape[0]+data6.shape[0]+data7.shape[0]+data8.shape[0]+data9.shape[0]+data10.shape[0]+data11.shape[0]
+  tc=data3.shape[0]+data4.shape[0]+data5.shape[0]+data6.shape[0]+data7.shape[0]+data8.shape[0]
+  +data9.shape[0]+data10.shape[0]+data11.shape[0]+data12.shape[0]
   per=(tc/data2.shape[0])*100
   per=int(per)
   st.write("% of notifications divided into various categories",per)   
