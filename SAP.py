@@ -66,12 +66,12 @@ df_final = df_final.sort_values(by="Appearances", ascending=False).reset_index(d
 
 # Add % column
 total_appearances = df_final["Appearances"].sum()
-df_final["%"] = (df_final["Appearances"] / total_appearances * 100).round(2)
+df_final["%"] = (df_final["Appearances"] / total_appearances * 100).round().astype(int)
 
 # Rename column for display
 df_final = df_final.rename(columns={"parent": COL})
 
-st.write("Final Filtered Equipment Data (Appearances > 40, Descending Order with %)")
+st.write("system wise no.of defects in last 10 years")
 st.dataframe(df_final)
 # Hardcoded keywords
 KEYWORDS = ["1017-S1COM-ACW-ACL","1017-S1COM-ACW-ACT","1017-S1COM-CLT-T01","1017-S1COM-CLT-T02","1017-S1COM-CLT-T03","1017-S1COM-CTS",
