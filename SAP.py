@@ -150,7 +150,8 @@ st.subheader("📊 Defect Summary")
 st.dataframe(summary_df)
 
 keywords = {"Stage-1": "S1COM","Stage-2": "S2COM","Stage-3": "S3COM" }
-selected = st.multiselect("Select the stage fro detailed Analysis:", list(keywords.keys()))
+st.subheader("Select the stage for detailed Analysis:")
+selected = st.multiselect(list(keywords.keys()))
 if selected:
  selected_keywords = [keywords[s] for s in selected]
  for k in selected_keywords:
