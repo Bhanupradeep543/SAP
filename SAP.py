@@ -104,7 +104,7 @@ ax.axis('equal')
 # Display in Streamlit
 st.pyplot(fig)
 # Total defects in selected stage
-total_stage_defects = data2.shape[0]
+total_stage_defects = data.shape[0]
 
 # Defect category patterns
 defect_patterns = {
@@ -121,40 +121,29 @@ defect_patterns = {
     "Choking Issues": r"CHOKE|choke|Choke",
     "Jamming Issues": r"JAM|jam"
 }
-
 # Summary table
 summary = []
-
 for defect_name, pattern in defect_patterns.items():
-
-    defect_data = data2[
-        data2['Description']
+    defect_data = data[
+        data['Description']
         .astype(str)
         .str.contains(pattern, na=False)
     ]
-
     defect_count = defect_data.shape[0]
-
     defect_percent = round(
-        (defect_count / total_stage_defects) * 100,
-        2
-    )
-
+        (defect_count / total_stage_defects) * 100,2)
     summary.append({
         "Defect Category": defect_name,
         "Count": defect_count,
         "% of Total Stage Defects": defect_percent
     })
-
 # Convert to dataframe
 summary_df = pd.DataFrame(summary)
-
 # Sort descending
 summary_df = summary_df.sort_values(
     by="Count",
     ascending=False
 ).reset_index(drop=True)
-
 # Display
 st.subheader("📊 Stage-wise Defect Summary")
 
