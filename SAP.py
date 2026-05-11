@@ -113,7 +113,7 @@ ax.set_title("Stage-wise Defect Distribution")
 ax.axis('equal')
 # Display in Streamlit
 st.pyplot(fig)
-)
+
 # Total defects in selected stage
 total_stage_defects = data2.shape[0]
 
