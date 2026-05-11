@@ -108,16 +108,16 @@ total_stage_defects = data.shape[0]
 
 # Defect category patterns
 defect_patterns = {
-    "Gland Leak": r"gland|GLAND|Gland|galand|GLD|gld",
-    "Vibration Issues": r"Vibration|vibration|VIBRATION|vib|VIB",
-    "Bearing/Coupling": r"sound|SOUND|Sound|bearing|BEARING|Bearing|brng|BRNG|thrust|THRUST|Thrust",
+    "Gland Leak Related": r"gland|GLAND|Gland|galand|GLD|gld",
+    "Vibrational Related": r"Vibration|vibration|VIBRATION|vib|VIB",
+    "Bearing/Coupling Abnormalities": r"sound|SOUND|Sound|bearing|BEARING|Bearing|brng|BRNG|thrust|THRUST|Thrust",
     "NRV Passing": r"nrv|NRV|Nrv",
     "Valve Issues": r"valve|VALVE|vlv|VLV|Valve|v/v|BFV|bfv",
     "Oil Leakage": r"oil|OIL|Oil",
     "Reverse Rotation/Decoupled": r"reverse|REVERSE|Reverse|Decouple|decouple|DECOUPLE",
-    "Pipe Leakage": r"pipe|PIPE|LINE|Line|line|Pipe|hdr|HDR|header|HEADER",
+    "Pipe Leakages": r"pipe|PIPE|LINE|Line|line|Pipe|hdr|HDR|header|HEADER",
     "Overloading/Tripping": r"overload|OVERLOAD|OL|Overload|O/L|o/l|current|CURRENT|Current|curren",
-    "Pressure Issues": r"pr low|PR LOW|DEVELOP|develop|Develop|pressure|PRESSURE|devlp",
+    "Pump Pressure Issues": r"pr low|PR LOW|DEVELOP|develop|Develop|pressure|PRESSURE|devlp",
     "Choking Issues": r"CHOKE|choke|Choke",
     "Jamming Issues": r"JAM|jam"
 }
@@ -145,7 +145,7 @@ summary_df = summary_df.sort_values(
     ascending=False
 ).reset_index(drop=True)
 # Display
-st.subheader("📊 Stage-wise Defect Summary")
+st.subheader("📊 Defect Summary")
 
 st.dataframe(summary_df)
 
