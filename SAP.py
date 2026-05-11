@@ -83,37 +83,36 @@ for stage_name, keyword in keywords.items():
         .astype(str)
         .str.contains(keyword, na=False)
     ]
-
     # Total defects in that stage
     total_defects = data2.shape[0]
-
     # Append results
     stage_summary.append({
         "Stage": stage_name,
         "Total Defects": total_defects
     })
-
 # Create dataframe
 stage_df = pd.DataFrame(stage_summary)
-
 # Calculate grand total
 grand_total = stage_df["Total Defects"].sum()
-
 # Percentage contribution
 stage_df["% Contribution"] = (
     stage_df["Total Defects"] / grand_total * 100
 ).round(2)
-
 # Display output
 st.subheader("📊 All Stage-wise Defect Summary")
-
 st.dataframe(stage_df)
-
-# Optional chart
-st.bar_chart(
-    data=stage_df,
-    x="Stage",
-    y="Total Defects"
+fig, ax = plt.subplots(figsize=(7,7))
+ax.pie(
+    stage_df["Total Defects"],
+    labels=stage_df["Stage"],
+    autopct='%1.1f%%',
+    startangle=90
+)
+ax.set_title("Stage-wise Defect Distribution")
+# Equal aspect ratio
+ax.axis('equal')
+# Display in Streamlit
+st.pyplot(fig)
 )
 # Total defects in selected stage
 total_stage_defects = data2.shape[0]
