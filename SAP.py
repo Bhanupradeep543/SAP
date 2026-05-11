@@ -28,7 +28,6 @@ repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, Tru
 st.write(repeated)
 COL = "Functional Loc."
 EQUIP = "equipment"
-
 def is_valid_parent(s):
     hyphens = s.count("-")
     if hyphens < 2 or hyphens > 3:
@@ -38,11 +37,9 @@ def is_valid_parent(s):
     if re.search(r"\d", third_part):
         return False
     return True
-
 def extract_parent(s):
     parts = s.split("-")
     return "-".join(parts[:3]) if len(parts) >= 3 else s
-
 # Extract parent
 data1["parent"] = data1[COL].astype(str).apply(extract_parent)
 # Keep only valid parents
@@ -70,19 +67,12 @@ keywords = {
     "Stage-2": "S2COM",
     "Stage-3": "S3COM"
 }
-
 # Empty list to store results
 stage_summary = []
-
 # Loop through all stages automatically
 for stage_name, keyword in keywords.items():
-
     # Filter stage-wise data
-    data2 = data[
-        data['Functional Loc.']
-        .astype(str)
-        .str.contains(keyword, na=False)
-    ]
+    data2 = data[data['Functional Loc.'].astype(str).str.contains(keyword, na=False)]
     # Total defects in that stage
     total_defects = data2.shape[0]
     # Append results
@@ -97,7 +87,7 @@ grand_total = stage_df["Total Defects"].sum()
 # Percentage contribution
 stage_df["% Contribution"] = (
     stage_df["Total Defects"] / grand_total * 100
-).round(2)
+).round(0)
 # Display output
 st.subheader("📊 All Stage-wise Defect Summary")
 st.dataframe(stage_df)
