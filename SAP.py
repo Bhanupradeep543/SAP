@@ -65,63 +65,6 @@ df_final = df_final.rename(columns={"parent": COL})
 st.write("system wise no.of defects in last 10 years")
 st.dataframe(df_final)
 
-# Total defects in selected stage
-total_stage_defects = data2.shape[0]
-
-# Defect category patterns
-defect_patterns = {
-    "Gland Leak": r"gland|GLAND|Gland|galand|GLD|gld",
-    "Vibration Issues": r"Vibration|vibration|VIBRATION|vib|VIB",
-    "Bearing/Coupling": r"sound|SOUND|Sound|bearing|BEARING|Bearing|brng|BRNG|thrust|THRUST|Thrust",
-    "NRV Passing": r"nrv|NRV|Nrv",
-    "Valve Issues": r"valve|VALVE|vlv|VLV|Valve|v/v|BFV|bfv",
-    "Oil Leakage": r"oil|OIL|Oil",
-    "Reverse Rotation/Decoupled": r"reverse|REVERSE|Reverse|Decouple|decouple|DECOUPLE",
-    "Pipe Leakage": r"pipe|PIPE|LINE|Line|line|Pipe|hdr|HDR|header|HEADER",
-    "Overloading/Tripping": r"overload|OVERLOAD|OL|Overload|O/L|o/l|current|CURRENT|Current|curren",
-    "Pressure Issues": r"pr low|PR LOW|DEVELOP|develop|Develop|pressure|PRESSURE|devlp",
-    "Choking Issues": r"CHOKE|choke|Choke",
-    "Jamming Issues": r"JAM|jam"
-}
-
-# Summary table
-summary = []
-
-for defect_name, pattern in defect_patterns.items():
-
-    defect_data = data2[
-        data2['Description']
-        .astype(str)
-        .str.contains(pattern, na=False)
-    ]
-
-    defect_count = defect_data.shape[0]
-
-    defect_percent = round(
-        (defect_count / total_stage_defects) * 100,
-        2
-    )
-
-    summary.append({
-        "Defect Category": defect_name,
-        "Count": defect_count,
-        "% of Total Stage Defects": defect_percent
-    })
-
-# Convert to dataframe
-summary_df = pd.DataFrame(summary)
-
-# Sort descending
-summary_df = summary_df.sort_values(
-    by="Count",
-    ascending=False
-).reset_index(drop=True)
-
-# Display
-st.subheader("📊 Stage-wise Defect Summary")
-
-st.dataframe(summary_df)
-
 keywords = {"Stage-1": "S1COM","Stage-2": "S2COM","Stage-3": "S3COM" }
 selected = st.multiselect("Select the stage:", list(keywords.keys()))
 if selected:
@@ -254,6 +197,62 @@ if selected:
   # Show equipment list with counts
   st.subheader("⚙️ Equipment-wise defect count in selected stage")
   st.dataframe(equip_count)
+  # Total defects in selected stage
+total_stage_defects = data2.shape[0]
+
+# Defect category patterns
+defect_patterns = {
+    "Gland Leak": r"gland|GLAND|Gland|galand|GLD|gld",
+    "Vibration Issues": r"Vibration|vibration|VIBRATION|vib|VIB",
+    "Bearing/Coupling": r"sound|SOUND|Sound|bearing|BEARING|Bearing|brng|BRNG|thrust|THRUST|Thrust",
+    "NRV Passing": r"nrv|NRV|Nrv",
+    "Valve Issues": r"valve|VALVE|vlv|VLV|Valve|v/v|BFV|bfv",
+    "Oil Leakage": r"oil|OIL|Oil",
+    "Reverse Rotation/Decoupled": r"reverse|REVERSE|Reverse|Decouple|decouple|DECOUPLE",
+    "Pipe Leakage": r"pipe|PIPE|LINE|Line|line|Pipe|hdr|HDR|header|HEADER",
+    "Overloading/Tripping": r"overload|OVERLOAD|OL|Overload|O/L|o/l|current|CURRENT|Current|curren",
+    "Pressure Issues": r"pr low|PR LOW|DEVELOP|develop|Develop|pressure|PRESSURE|devlp",
+    "Choking Issues": r"CHOKE|choke|Choke",
+    "Jamming Issues": r"JAM|jam"
+}
+
+# Summary table
+summary = []
+
+for defect_name, pattern in defect_patterns.items():
+
+    defect_data = data2[
+        data2['Description']
+        .astype(str)
+        .str.contains(pattern, na=False)
+    ]
+
+    defect_count = defect_data.shape[0]
+
+    defect_percent = round(
+        (defect_count / total_stage_defects) * 100,
+        2
+    )
+
+    summary.append({
+        "Defect Category": defect_name,
+        "Count": defect_count,
+        "% of Total Stage Defects": defect_percent
+    })
+
+# Convert to dataframe
+summary_df = pd.DataFrame(summary)
+
+# Sort descending
+summary_df = summary_df.sort_values(
+    by="Count",
+    ascending=False
+).reset_index(drop=True)
+
+# Display
+st.subheader("📊 Stage-wise Defect Summary")
+
+st.dataframe(summary_df)
 
 selected_equips = st.multiselect("Select equipment(s) to forecast:",options=equip_count[equip_count['Defect_Count'] > 0][equip_col].tolist(),
 help="You can select multiple equipments for prediction.")
