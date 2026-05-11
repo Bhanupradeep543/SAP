@@ -62,7 +62,7 @@ total_appearances = df_final["Total Count"].sum()
 df_final["%"] = (df_final["Total Count"] / total_appearances * 100).round().astype(int)
 # Rename column for display
 df_final = df_final.rename(columns={"parent": COL})
-st.write("system wise no.of defects in last 10 years")
+st.subheader("system wise no.of defects in last 10 years")
 st.dataframe(df_final)
 # Stage keywords
 keywords = {
