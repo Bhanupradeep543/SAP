@@ -13,17 +13,17 @@ if uploaded_file is not None:
      if uploaded_file.name.endswith(".xlsx"):
       data = pd.read_excel(uploaded_file,engine="openpyxl")
       st.success("File loaded successfully!")
-data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
-data1 = data[data['Main WorkCtr'] == 'M400CWCT']
-st.subheader('Total SAP notifications considered for analysis')
-st.subheader(data1.shape[0])
-st.subheader('Top 20 Repeated equipment notifications')
-'''data=data[data['equipment']!='KORBA STATION COMMON']
-repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
-repeated = repeat_defects[repeat_defects['Count'] > 50]
-repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
-st.write(repeated)
-COL = "Functional Loc."
+      data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
+      data1 = data[data['Main WorkCtr'] == 'M400CWCT']
+      st.subheader('Total SAP notifications considered for analysis')
+      st.subheader(data1.shape[0])
+      st.subheader('Top 20 Repeated equipment notifications')
+      data=data[data['equipment']!='KORBA STATION COMMON']
+      repeat_defects = (data.groupby(['equipment']).size().reset_index(name='Count'))
+      repeated = repeat_defects[repeat_defects['Count'] > 50]
+      repeated = repeated.sort_values(by=['Count', 'equipment'], ascending=[False, True]).head(20)
+      st.write(repeated)
+      '''COL = "Functional Loc."
 EQUIP = "equipment"
 def is_valid_parent(s):
     hyphens = s.count("-")
