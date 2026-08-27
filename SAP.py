@@ -21,9 +21,6 @@ if uploaded_file is not None:
         data["equipment"] = data["equipment"].astype(str)
         data["Description"] = data["Description"].astype(str)
 
-        # Main Work Center
-        data1 = data[data["Main WorkCtr"] == "M400CWCT"].copy()
-
         st.subheader("Total SAP notifications considered for analysis")
         st.subheader(data1.shape[0])
 
