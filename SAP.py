@@ -1,206 +1,133 @@
 import pandas as pd
 import numpy as np
 import streamlit as st
-import re
 import matplotlib.pyplot as plt
-st.title("NTPC SAP Notifications Analysis")
-uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "csv"])
-if uploaded_file is not None:
-    try:
-        if uploaded_file.name.endswith(".xlsx"):
-            data = pd.read_excel(uploaded_file)
-        elif uploaded_file.name.endswith(".csv"):
-            data = pd.read_csv(uploaded_file)
-        else:
-            st.error("Unsupported file format.")
-            st.stop()
-        st.success("File loaded successfully!")
+import io, re
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
 
-        # Date conversion
-        data["Notif.date"] = pd.to_datetime(data["Notif.date"], format="%Y%m%d", errors="coerce")
-        data["Functional Loc."] = data["Functional Loc."].astype(str)
-        data["equipment"] = data["equipment"].astype(str)
-        data["Description"] = data["Description"].astype(str)
-        data1=data
-        st.subheader("Total SAP notifications considered for analysis")
-        st.subheader(data1.shape[0])
+st.set_page_config(page_title="NTPC SAP Analysis", layout="wide")
+st.title("🏭 NTPC SAP Notifications Analysis")
 
-        # Top repeated equipment
-        st.subheader("Top 20 Repeated equipment notifications")
-        temp = data[data["equipment"] != "KORBA STATION COMMON"].copy()
-        repeat_defects = temp.groupby("equipment").size().reset_index(name="Count")
-        repeated = repeat_defects[repeat_defects["Count"] > 50].sort_values(["Count", "equipment"], ascending=[False, True]).head(20)
-        st.dataframe(repeated)
+patterns = {"Gland Leak":r"gland|galand|GLD","Vibration":r"vibration|vib","Bearing/Coupling":r"sound|bearing|brng|thrust","NRV Passing":r"nrv","Valve Issues":r"valve|vlv|v/v|bfv","Oil Leakage":r"oil","Reverse/Decoupled":r"reverse|decouple","Pipe Leakage":r"pipe|line|hdr|header","Overloading/Tripping":r"overload|OL|O/L|current|curren","Pump Pressure":r"pr low|develop|pressure|devlp","Choking":r"choke","Jamming":r"jam"}
 
-        # System-wise analysis
-        COL = "Functional Loc."
-        EQUIP = "equipment"
+def defect_summary(df):
+    return pd.DataFrame([{"Defect Category":n,"Count":df["Description"].str.contains(p,case=False,na=False).sum()} for n,p in patterns.items()]).sort_values("Count",ascending=False)
 
-        def is_valid_parent(s):
-            hyphens = s.count("-")
-            if hyphens < 2 or hyphens > 3:
-                return False
-            parts = s.split("-")
-            return not re.search(r"\d", parts[2] if len(parts) >= 3 else "")
+def pdf_report(data,plant_df,plant):
+    b=io.BytesIO(); doc=SimpleDocTemplate(b,pagesize=landscape(A4)); styles=getSampleStyleSheet(); elements=[Paragraph("NTPC SAP Notifications Analysis Report",styles["Title"]),Paragraph(f"Plant: {plant}",styles["Heading2"]),Spacer(1,15)]
+    ps=data.groupby("Plant").size().reset_index(name="Notifications"); elements.append(Paragraph("Plant-wise Summary",styles["Heading2"])); elements.append(Table([["Plant","Notifications"]]+ps.values.tolist(),repeatRows=1))
+    ds=defect_summary(plant_df); elements.append(Spacer(1,15)); elements.append(Paragraph("Defect Category Summary",styles["Heading2"])); elements.append(Table([["Defect Category","Count"]]+ds.values.tolist(),repeatRows=1))
+    eq=plant_df["equipment"].value_counts().head(20).reset_index(); eq.columns=["Equipment","Count"]; elements.append(Spacer(1,15)); elements.append(Paragraph("Top 20 Equipment",styles["Heading2"])); elements.append(Table([["Equipment","Count"]]+eq.values.tolist(),repeatRows=1))
+    for t in elements[1:]:
+        if isinstance(t,Table): t.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,0),colors.grey),("TEXTCOLOR",(0,0),(-1,0),colors.white),("GRID",(0,0),(-1,-1),0.5,colors.black)]))
+    doc.build(elements); b.seek(0); return b
 
-        def extract_parent(s):
-            parts = s.split("-")
-            return "-".join(parts[:3]) if len(parts) >= 3 else s
+files=st.file_uploader("Upload Excel/CSV files from different plants",type=["xlsx","csv"],accept_multiple_files=True)
 
-        data1["parent"] = data1[COL].apply(extract_parent)
-        df_valid = data1[data1["parent"].apply(is_valid_parent)].copy()
-        df_unique = df_valid.drop_duplicates("parent")[["parent", EQUIP]]
-        appearance = data1.groupby("parent").size().reset_index(name="Total Count")
-        df_final = df_unique.merge(appearance, on="parent", how="left")
-        df_final = df_final[df_final["Total Count"] > 40].sort_values("Total Count", ascending=False).reset_index(drop=True)
+if files:
+    st.subheader("🏭 Assign Plant Name")
+    file_data=[]
+    for i,f in enumerate(files):
+        c1,c2=st.columns([2,1])
+        with c1: st.write(f"📄 {f.name}")
+        with c2: plant=st.text_input("Plant Name",key=f"plant{i}",placeholder="Korba")
+        if plant: file_data.append((f,plant))
 
-        total_appearances = df_final["Total Count"].sum()
-        df_final["%"] = ((df_final["Total Count"] / total_appearances) * 100).round().astype(int) if total_appearances > 0 else 0
-        df_final.rename(columns={"parent": COL}, inplace=True)
+    if file_data:
+        frames=[]
+        for f,plant in file_data:
+            try:
+                d=pd.read_excel(f,engine="openpyxl") if f.name.endswith(".xlsx") else pd.read_csv(f)
+                d["Plant"]=plant; frames.append(d)
+            except Exception as e: st.error(f"{f.name}: {e}")
 
-        st.subheader("System wise no. of defects in last 10 years")
-        st.dataframe(df_final)
+        if frames:
+            data=pd.concat(frames,ignore_index=True)
+            required=["Notif.date","equipment","Description","Functional Loc."]
+            missing=[c for c in required if c not in data.columns]
+            if missing: st.error(f"Missing columns: {missing}"); st.stop()
 
-        # Stage-wise summary
-        stages = {"Stage-1": "S1COM", "Stage-2": "S2COM", "Stage-3": "S3COM"}
-        stage_summary = []
+            data["Notif.date"]=pd.to_datetime(data["Notif.date"],format="%Y%m%d",errors="coerce")
+            for c in ["equipment","Description","Functional Loc."]: data[c]=data[c].astype(str)
 
-        for stage, keyword in stages.items():
-            count = data["Functional Loc."].str.contains(keyword, na=False).sum()
-            stage_summary.append({"Stage": stage, "Total Defects": count})
+            st.success(f"{len(data):,} notifications loaded from {data['Plant'].nunique()} plants.")
 
-        stage_df = pd.DataFrame(stage_summary)
-        grand_total = stage_df["Total Defects"].sum()
-        stage_df["% Contribution"] = ((stage_df["Total Defects"] / grand_total) * 100).round(0) if grand_total > 0 else 0
+            # ==================== OVERALL DASHBOARD ====================
+            st.header("📊 Overall Dashboard")
+            c1,c2,c3,c4=st.columns(4)
+            c1.metric("Total Notifications",f"{len(data):,}")
+            c2.metric("Plants",data["Plant"].nunique())
+            c3.metric("Equipment",data["equipment"].nunique())
+            c4.metric("Years",data["Notif.date"].dt.year.nunique())
 
-        st.subheader("📊 All Stage-wise Defect Summary")
-        st.dataframe(stage_df)
+            plant_summary=data.groupby("Plant").size().reset_index(name="Notifications").sort_values("Notifications",ascending=False)
+            st.subheader("🏭 Plant-wise Notifications")
+            st.dataframe(plant_summary,use_container_width=True)
+            st.bar_chart(plant_summary.set_index("Plant"))
 
-        fig, ax = plt.subplots(figsize=(7, 7))
-        ax.pie(stage_df["Total Defects"], labels=stage_df["Stage"], autopct="%1.1f%%", startangle=90)
-        ax.set_title("Stage-wise Defect Distribution")
-        ax.axis("equal")
-        st.pyplot(fig)
+            # ==================== PLANT × DEFECT ====================
+            dashboard=[]
+            for plant in data["Plant"].unique():
+                d=data[data["Plant"]==plant]; row={"Plant":plant,"Total":len(d)}
+                row.update({n:d["Description"].str.contains(p,case=False,na=False).sum() for n,p in patterns.items()}); dashboard.append(row)
+            dashboard_df=pd.DataFrame(dashboard)
+            st.subheader("🔧 Plant-wise Defect Dashboard")
+            st.dataframe(dashboard_df,use_container_width=True)
 
-        # Defect categories
-        defect_patterns = {
-            "Gland Leak Related": r"gland|galand|GLD",
-            "Vibrational Related": r"vibration|vib",
-            "Bearing/Coupling Abnormalities": r"sound|bearing|brng|thrust",
-            "NRV Passing": r"nrv",
-            "Valve Issues": r"valve|vlv|v/v|bfv",
-            "Oil Leakage": r"oil",
-            "Reverse Rotation/Decoupled": r"reverse|decouple",
-            "Pipe Leakages": r"pipe|line|hdr|header",
-            "Overloading/Tripping": r"overload|OL|O/L|current|curren",
-            "Pump Pressure Issues": r"pr low|develop|pressure|devlp",
-            "Choking Issues": r"choke",
-            "Jamming Issues": r"jam"
-        }
+            st.subheader("📈 Overall Defect Distribution")
+            overall=defect_summary(data)
+            st.dataframe(overall,use_container_width=True)
+            st.bar_chart(overall.set_index("Defect Category"))
 
-        summary = []
+            # ==================== PLANT SELECTION ====================
+            st.header("🔍 Detailed Plant Analysis")
+            selected_plant=st.selectbox("Select Plant",sorted(data["Plant"].unique()))
+            pdf_data=data[data["Plant"]==selected_plant].copy()
 
-        for defect_name, pattern in defect_patterns.items():
-            count = data["Description"].str.contains(pattern, case=False, na=False).sum()
-            percent = round((count / len(data)) * 100, 2) if len(data) > 0 else 0
-            summary.append({"Defect Category": defect_name, "Count": count, "% of Total": percent})
+            c1,c2,c3,c4=st.columns(4)
+            c1.metric("Notifications",len(pdf_data))
+            c2.metric("Equipment",pdf_data["equipment"].nunique())
+            c3.metric("First Notification",str(pdf_data["Notif.date"].min().date()) if pdf_data["Notif.date"].notna().any() else "N/A")
+            c4.metric("Last Notification",str(pdf_data["Notif.date"].max().date()) if pdf_data["Notif.date"].notna().any() else "N/A")
 
-        summary_df = pd.DataFrame(summary).sort_values("Count", ascending=False).reset_index(drop=True)
+            # ==================== DEFECT ANALYSIS ====================
+            st.subheader(f"📊 Defect Analysis - {selected_plant}")
+            detail=defect_summary(pdf_data)
+            detail["%"]=round(detail["Count"]/len(pdf_data)*100,2) if len(pdf_data)>0 else 0
+            st.dataframe(detail,use_container_width=True)
 
-        st.subheader("📊 Defect Summary")
-        st.dataframe(summary_df)
+            # ==================== YEAR-WISE DEFECT ====================
+            st.subheader("📅 Year-wise Defect Analysis")
+            selected_defect=st.selectbox("Select Defect Category",list(patterns.keys()))
+            temp=pdf_data[pdf_data["Description"].str.contains(patterns[selected_defect],case=False,na=False)].copy()
+            yearly=temp.groupby(temp["Notif.date"].dt.year).size().reset_index(name="Count")
+            st.write(f"Total {selected_defect}: {len(temp)}")
+            st.bar_chart(yearly.set_index("Notif.date"))
 
-        # Stage selection
-        st.subheader("Select the stage for detailed Analysis:")
-        selected = st.multiselect("Select:", list(stages.keys()))
+            # ==================== EQUIPMENT ====================
+            st.subheader("⚙️ Equipment-wise Notifications")
+            eq=pdf_data["equipment"].value_counts().reset_index()
+            eq.columns=["Equipment","Count"]
+            eq["Interval (weeks)"]=(520/eq["Count"]).round().astype(int)
+            st.dataframe(eq.head(20),use_container_width=True)
 
-        if selected:
-            for stage in selected:
-                data2 = data[data["Functional Loc."].str.contains(stages[stage], na=False)].copy()
+            # ==================== FORECAST ====================
+            st.subheader("🔮 Equipment Defect Forecast")
+            selected_eq=st.multiselect("Select Equipment",eq["Equipment"].tolist(),key=f"eq_{selected_plant}")
+            forecasts=[]
+            for equipment in selected_eq:
+                dates=pdf_data.loc[pdf_data["equipment"]==equipment,"Notif.date"].dropna().sort_values()
+                if len(dates)>1:
+                    gap=dates.diff().dt.days.dropna().mean(); last=dates.max()
+                    forecasts.append({"Equipment":equipment,"Defects":len(dates),"Average Gap (days)":round(gap,1),"Last Defect":last.date(),"Predicted Next Defect":(last+pd.Timedelta(days=gap)).date()})
+            if forecasts: st.dataframe(pd.DataFrame(forecasts),use_container_width=True)
+            elif selected_eq: st.info("Forecast requires at least two notifications for the selected equipment.")
 
-                st.subheader(f"{stage} - Total defects")
-                st.write(data2.shape[0])
-
-                # Top 10 repeated equipment
-                repeat_defects = data2.groupby("equipment").size().reset_index(name="Count")
-                repeated = repeat_defects[repeat_defects["Count"] > 10].sort_values(["Count", "equipment"], ascending=[False, True]).head(10).copy()
-                repeated["Each notification interval in terms of weeks"] = (520 / repeated["Count"]).round().astype(int)
-
-                st.subheader("TOP 10 repeated defects in the selected stage")
-                st.dataframe(repeated)
-
-                # Detailed defect categories
-                detailed_patterns = {
-                    "Gland Leak": r"gland|galand|GLD",
-                    "Vibrational Issues": r"vibration|vib",
-                    "Bearing/Coupling Issues": r"sound|bearing|brng|thrust",
-                    "NRV Passing": r"nrv",
-                    "Valve Issues": r"valve|vlv|v/v|bfv",
-                    "Oil Leak/Oil Top-up": r"oil",
-                    "Reverse/Decoupled": r"reverse|decouple",
-                    "Pipe Leakage": r"pipe|line|hdr|header",
-                    "Overloading/Tripping": r"overload|OL|O/L|current|curren",
-                    "Pump Pressure": r"pr low|develop|pressure|devlp",
-                    "Line/CT Nozzle Choking": r"choke",
-                    "Valve/Pump/Gearbox Jamming": r"jam"
-                }
-
-                category_counts = {}
-
-                for name, pattern in detailed_patterns.items():
-                    temp = data2[data2["Description"].str.contains(pattern, case=False, na=False)].copy()
-                    temp["Year"] = temp["Notif.date"].dt.year
-                    category_counts[name] = len(temp)
-
-                    st.subheader(f"📅 Year-wise {name}")
-
-                    yearly_count = temp.groupby("Year").size().reset_index(name="Count")
-                    st.bar_chart(yearly_count, x="Year", y="Count")
-
-                    st.write(f"No. of {name}: {len(temp)}")
-
-                # Category coverage
-                total_categories = sum(category_counts.values())
-                percentage = int((total_categories / len(data2)) * 100) if len(data2) > 0 else 0
-                st.write("% of notifications divided into various categories:", percentage, "%")
-
-                # Equipment-wise defects
-                equip_count = data2["equipment"].value_counts().reset_index()
-                equip_count.columns = ["equipment", "Defect_Count"]
-
-                st.subheader("⚙️ Equipment-wise defect count in selected stage")
-                st.dataframe(equip_count)
-
-                # Forecast selection
-                selected_equips = st.multiselect(
-                    f"Select equipment(s) to forecast for {stage}:",
-                    equip_count["equipment"].tolist(),
-                    key=f"equipment_{stage}"
-                )
-
-                forecast_results = []
-
-                for eq in selected_equips:
-                    eq_dates = data2.loc[data2["equipment"] == eq, "Notif.date"].dropna().sort_values()
-
-                    if len(eq_dates) > 1:
-                        gaps = eq_dates.diff().dt.days.dropna()
-                        avg_gap = gaps.mean()
-                        last_date = eq_dates.max()
-                        next_pred_date = last_date + pd.Timedelta(days=avg_gap)
-
-                        forecast_results.append({
-                            "Equipment": eq,
-                            "Total Defects": len(eq_dates),
-                            "Average Gap (days)": round(avg_gap, 1),
-                            "Last Defect Date": last_date.date(),
-                            "Predicted Next Defect": next_pred_date.date()
-                        })
-
-                if forecast_results:
-                    result = pd.DataFrame(forecast_results)
-                    st.subheader("📅 Forecasted Next Defect Dates")
-                    st.dataframe(result)
-
-    except Exception as e:
-        st.error(f"Error while processing the file: {e}")
+            # ==================== PDF ====================
+            st.subheader("📄 PDF Report")
+            if st.button("Generate PDF Report",type="primary"):
+                pdf=pdf_report(data,pdf_data,selected_plant)
+                st.download_button("⬇️ Download PDF",pdf,file_name=f"{selected_plant}_SAP_Report.pdf",mime="application/pdf")
