@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 import re
-
 st.title("NTPC SAP Notifications Analysis")
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "csv"])
 if uploaded_file is not None:
@@ -14,7 +13,6 @@ if uploaded_file is not None:
         else:
             st.error("Unsupported file format.")
             st.stop()
-
         st.success("File loaded successfully!")
 
         # Date conversion
