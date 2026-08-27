@@ -298,5 +298,3 @@ if selected_equips:
     result = pd.DataFrame(forecast_results)
 st.subheader("📅 Forecasted Next Defect Dates")
 st.dataframe(result) '''
-
-
