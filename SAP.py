@@ -7,8 +7,20 @@ import io
 from datetime import datetime
 st.title("NTPC SAP Notifications Analysis")
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)",type=["xlsx", "csv"])
-data = pd.read_excel(uploaded_file, engine="openpyxl")
-st.success("File loaded successfully")
+if uploaded_file is not None:
+    try:
+        # Read Excel file
+        if uploaded_file.name.endswith(".xlsx"):
+            data = pd.read_excel(
+                uploaded_file,
+                engine="openpyxl"
+            )
+        # Read CSV file
+        elif uploaded_file.name.endswith(".csv"):
+            data = pd.read_csv(uploaded_file)
+
+        # Success message
+        st.success("File loaded successfully!")
 data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
 data1 = data[data['Main WorkCtr'] == 'M400CWCT']
 st.subheader('Total SAP notifications considered for analysis')
