@@ -2,6 +2,10 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 import re
+import openpyxl
+print("Python:", sys.executable)
+print("Pandas:", pd.__version__)
+print("Openpyxl:", openpyxl.__version__)
 st.title("NTPC SAP Notifications Analysis")
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["xlsx", "csv"])
 if uploaded_file is not None:
