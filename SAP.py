@@ -5,7 +5,6 @@ import pandas as pd
 import streamlit as st
 import io
 from datetime import datetime
-
 st.title("NTPC SAP Notifications Analysis")
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)",type=["xlsx", "xls", "csv"])
 data = pd.read_excel(uploaded_file)
