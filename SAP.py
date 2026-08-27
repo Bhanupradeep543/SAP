@@ -7,7 +7,7 @@ uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)", type=["x
 if uploaded_file is not None:
     try:
         if uploaded_file.name.endswith(".xlsx"):
-            data = pd.read_excel(uploaded_file, engine="openpyxl")
+            data = pd.read_excel(uploaded_file)
         elif uploaded_file.name.endswith(".csv"):
             data = pd.read_csv(uploaded_file)
         else:
