@@ -20,7 +20,7 @@ if uploaded_file is not None:
         data["Functional Loc."] = data["Functional Loc."].astype(str)
         data["equipment"] = data["equipment"].astype(str)
         data["Description"] = data["Description"].astype(str)
-
+        data1=data
         st.subheader("Total SAP notifications considered for analysis")
         st.subheader(data1.shape[0])
 
