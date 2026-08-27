@@ -7,7 +7,7 @@ import io
 from datetime import datetime
 st.title("NTPC SAP Notifications Analysis")
 uploaded_file = st.file_uploader("Upload your defect data (Excel/CSV)",type=["xlsx", "xls", "csv"])
-data = pd.read_excel(uploaded_file)
+data = pd.read_excel(uploaded_file, engine="openpyxl")
 st.success("File loaded successfully")
 data['Notif.date'] = pd.to_datetime(data['Notif.date'], format='%Y%m%d')
 data1 = data[data['Main WorkCtr'] == 'M400CWCT']
