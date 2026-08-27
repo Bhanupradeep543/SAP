@@ -1,6 +1,5 @@
 import pandas as pd
 import pickle
-from scipy import stats
 import numpy as np
 import pandas as pd
 import seaborn as sb
